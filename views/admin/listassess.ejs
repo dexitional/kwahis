@@ -1,0 +1,105 @@
+<script>
+		// Messages on Records 
+		<% if(msg === 'saved'){ %>
+			  toastr.success('', 'Record Saved Successfully!');					 
+		<% }%>
+
+		<% if(msg === 'deleted'){ %>
+			  toastr.danger('', 'Deleted Successfully!');					 
+		<% }%>
+
+		<% if(msg === 'reset'){ %>
+			  toastr.success('', 'Password Reset Successfully!');					 
+		<% }%>
+
+		 <% if(msg === 'pwdchanged'){ %>
+			  toastr.success('', 'Password Changed Successfully!');					 
+		<% }%>
+		
+		
+		
+		// JQuery Logics
+		 $(function(){
+			$('#excel').on('change',function(){
+				var cm = confirm('Do you want to upload updated Results?');
+				if(cm != false){					
+					$('#excelform').submit();
+				}					
+			});
+
+			$('#rexcel').on('change',function(){
+				var cm = confirm('Do you want to upload updated Results?');
+				if(cm != false){					
+					$('#excelform2').submit();
+				}					
+			});
+		 });
+
+	</script>
+
+
+
+	<div class="row clearfix">
+
+		  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			  <div class="card">                            
+				  <div class="header">
+					  <h3><i class="fa fa-pay"></i> CUMULATIVE ASSESSMENT | <%- academ.name+' ACADEMIC YEAR, TERM '+academ.term %>  </h3>						
+				  </div>
+				  <div class="body">
+					<%	if(session.privilege == '1'){ %>
+					 <h5><a class="btn btn-primary" href="/assess/add" title="Add New User" onclick="if(!confirm('Add Assessor?'))return false;"><i class="fa fa-plus"></i> Add New Assessor</a>
+						<a href="javascript:;" onclick="document.getElementById('excel').click()" class="btn btn-info" style="margin:0 1px"><i class="fa fa-upload"></i> <b>UPLOAD RESULTS ( EXCEL )</b></a>
+						<form style="display:inline;margin:0" action="/assess/excel" method="post" enctype="multipart/form-data" id="excelform"> 
+							<input type="file"  name="excel" id="excel" style="display:none;"/>
+						</form> 
+						<a href="/public/res_sample.xls" class="btn btn-info" style="margin:0 1px"><i class="fa fa-download"></i> <b>EXCEL SAMPLE</b></a>
+					 </h5>
+					<% }%>
+					 <div class="table-responsive">
+						  
+						  <table class="table table-bordered table-striped table-hover">
+							  <thead>
+								  <tr role="row">
+									  <th>TUTOR</th>
+									  <th width="700px">SCORESHEET & REMARKS-SHEET</th>
+																												 
+									  <th width="200px"><a onclick="alert('INSTRUCTIONS:\n\n1. Please ensure all Classes are not empty ( otherwise class wont show on assessment page when assigned )!\n2.Please make sure that all Classes are matching Programs respectively ( otherwise class wont show as part of the classes for assignment)!')" class="btn btn-info btn-sm font-weight-800"><i class="fa fa-info"></i></a></th>
+								  </tr>
+							  </thead>								  
+							  <tbody> 
+								<!-- RESULTS -->
+								<% rows.map((row,i) => { %>
+								  <tr class="odd">											
+										<td><b><em><%- row.fname+' '+row.lname %></em><br>( SCORESHEETS )</b></td>
+										<td><b><%- row.output %></b></td>	
+										<td>
+											<% if(row.user !== null){%>
+												<%	if(session.privilege == '1'){ %>
+												<div class="btn-group">													 
+													<a href="/assess/edit/<%- row.mid %>" title="Edit Assessor" style="margin-right:5px;" class="btn btn-success btn-sm"  onclick="return confirm('Edit Assessor?')"><i class="fa fa-edit"></i></a>
+													<a href="/assess/del/<%- row.mid %>" title="Delete Assessor" style="margin-right:5px;" class="btn btn-danger btn-sm"  onclick="return confirm('Delete Assessor?')"><i class="fa fa-trash"></i></a>
+												</div>
+												<% }%>
+											<% }%>
+										</td>                                                                                         
+								   </tr>
+								<% }) %>
+
+                               <!-- REMARKS & PROMOTION -->
+								<% rows.map((row,i) => { %>
+									<tr class="odd">											
+										  <td><b><em><%- row.fname+' '+row.lname %></em><br>( CLASS REMARKS )</b></td>
+										  <td><b><%- row.perform %></b></td>	
+										  <td>&nbsp;</td>                                                                                     
+									 </tr>
+								  <% }) %>
+								</tbody>
+							  </tbody>
+						   </table>
+						  
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+	  </div>

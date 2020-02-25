@@ -1,0 +1,87 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'activated'){ %>
+				  toastr.success('', 'Academic Calendar Activated Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'registered'){ %>
+				  toastr.success('', 'Students registered Successfully!');					 
+			<% }%>		
+			
+			
+			
+			// JQuery Logics
+			 $(function(){               
+		
+		
+
+			 });
+
+		</script>
+
+
+
+		<div class="row clearfix">
+
+			  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				  <div class="card">                            
+					  <div class="header">
+						  <h3><i class="fa fa-pay"></i> CALENDAR  </h3>						
+					  </div>
+					  <div class="body">
+						 <h5>
+							 <a class="btn btn-primary" href="/calendar/add" title="Add New Calendar" onclick="if(!confirm('Add Calendar?'))return false;"><i class="fa fa-plus"></i> Add New Academic Term</a>
+							 <a class="btn btn-primary" href="#" title="Add New Registration" onclick="if(!confirm('Add Registration?')){return false;}else{var p = prompt('Enter Index Number');if(p != undefined){ window.location = '/calendar/registerst/'+p.split('/').join('_');}}"><i class="fa fa-plus"></i> Register Student</a>
+							 <a class="btn btn-primary" href="#" title="Remove Registration" onclick="if(!confirm('Delete Registration?')){return false;}else{var p = prompt('Enter Index Number');if(p != undefined){ window.location = '/calendar/unregisterst/'+p.split('/').join('_');}}"><i class="fa fa-plus"></i> Un-register Student</a>
+							 <a class="btn btn-primary" href="#" title="Special Program Registration" onclick="if(!confirm('Register Student to Program ?')){return false;}else{var p = prompt('Enter Index Number');if(p != undefined){ var m = prompt('Enter Program ID ...');if(m != undefined){window.location = '/calendar/registerst/'+p.split('/').join('_')+'/'+m;}}}"><i class="fa fa-plus"></i> Register Different Program</a>
+						 </h5>
+				    	 <div class="table-responsive">
+							  
+							  <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+								  <thead>
+									  <tr role="row">
+										  <th>Code</th>
+										  <th width="200px">Academic Year</th>
+										  <th>Year</th>
+										  <th>Term</th>
+										  <th>Registration</th>
+										  <th>Assessment</th>
+										  <th>Status</th>										  									  
+										  <th width="100px">Action</th>
+									  </tr>
+								  </thead>								  
+								  <tbody> 
+									
+									<% rows.map((row,i) => { %>
+									  <tr class="odd">											
+											<td><b><%- row.academ %></b></td>
+											<td><b><%- row.name %><b></td>
+											<td><b><%- row.year %></b></td>	
+											<td><b><%- row.term %></b></td>	
+											<td><%- row.registered == '0' && row.active == '1' ? '<a href="/stageres" title="Register Students" style="margin-right:5px;" class="btn btn-success btn-sm"  onclick="return confirm(\'Register Students?\')">REGISTER</a>': (row.registered == '1' && row.active == '1' ? '<small style="padding:5px;border-radius:15px;background:pink;display:block;font-weight:bolder;letter-spacing:0.25em"><center>COMPLETE</center></small>' : '' ) %></td>
+											<td><small style="padding:5px;border-radius:15px;background:pink;display:block;font-weight:bolder;letter-spacing:0.25em"><center><%- row.assessed == '0' ? '<em>INCOMPLETE</em>': 'COMPLETE' %></center></small><%- row.assessed != '0' && row.promoted == '0' && row.term == '3' ? '<hr>':''; %>
+											    <center><b><%- row.assessed == '1' && row.promoted == '0' && row.term == '3' && row.active == '1' ? '<a href="/promote/class" title="Promote Classes" style="margin-right:5px;" class="btn btn-success btn-mimi text-center"  onclick="return confirm(\'Promote Classes?\')"><small>PROMOTE</small></a>': '' %></b></center>
+											</td>	
+											<td><b><%- row.active == '0' ? '<a href="/calendar/activate/'+row.id+'" title="Activate" style="margin-right:5px;" class="btn btn-success btn-sm"  onclick="return confirm(\'Activate Academic Term?\')"><i class="fa fa-check"></i> Set as Default</a>': '<small style="padding:5px;border-radius:15px;background:#cbf1ca;display:block;font-weight:bolder;letter-spacing:0.25em"><center>ACTIVE</center></small>' %></b></td>
+											<td>
+												<% if(row.user !== null){%>
+												<div class="btn-group">
+													<a href="/calendar/edit/<%- row.id %>" title="Edit Calendar" style="margin-right:5px;" class="btn btn-success btn-sm"  onclick="return confirm('Edit Calendar?')"><i class="fa fa-edit"></i></a>
+													<a href="/calendar/del/<%- row.id %>" title="Delete Calendar" style="margin-right:5px;" class="btn btn-danger btn-sm"  onclick="return confirm('Delete Calendar?')"><i class="fa fa-trash"></i></a>
+												</div>
+											    <% }%>
+											</td>                                                                                         
+									   </tr>
+									<% }) %>
+								  </tbody>
+							   </table>
+							  
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>

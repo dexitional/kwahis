@@ -1,0 +1,93 @@
+<?php
+    if(!isset($_SESSION)){
+        session_start();
+    }
+
+    require_once '../../class/class.php';
+    $db = new DbHandler();
+
+    if(isset($_GET) && $_GET['id'] > 0){
+      $sl = $db->getOneRecord("select * from academ where id = '{$_GET['id']}'");
+    }else{
+      $sl = null;
+    }
+?>
+
+
+<form action="postacad" method="post">
+
+<div class="modal-header">
+    <h4 class="modal-title" id="defaultModalLabel"><?= isset($_GET) && $_GET['id'] > 0 ? ($_GET['action'] == 'v' ? 'CALENDAR' : 'UPDATE CALENDAR') : 'ADD CALENDAR';?></h4>
+</div>
+<div class="modal-body  bg-indigo">
+        <div class="card">                                                       
+                <div class="body">                                                            
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="text" name="academ" value="<?= !is_null($sl)? $sl['academ']:'';?>" class="form-control" <?= isset($_GET) && $_GET['action'] == 'v' ? 'disabled="disabled"' : '';?>>
+                                    <label class="form-label" style="margin-top:-20px;font-size:11px;">Academ</label>
+                                </div>
+                            </div>
+                        </div>                                                                
+                        <div class="col-sm-12">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" name="name" value="<?= !is_null($sl)? $sl['name']:'';?>" class="form-control" <?= isset($_GET) && $_GET['action'] == 'v' ? 'disabled="disabled"' : '';?>>
+                                        <label class="form-label" style="margin-top:-20px;font-size:11px;">Name</label>
+                                    </div>
+                                </div>
+                        </div> 
+                        <div class="col-sm-12">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="number" name="year" value="<?= !is_null($sl)? $sl['year']:'';?>" class="form-control" <?= isset($_GET) && $_GET['action'] == 'v' ? 'disabled="disabled"' : '';?>>
+                                        <label class="form-label" style="margin-top:-20px;font-size:11px;">Year</label>
+                                    </div>
+                                </div>
+                        </div> 
+                        <div class="col-sm-12">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="number" name="semester" value="<?= !is_null($sl)? $sl['semester']:'';?>" class="form-control" <?= isset($_GET) && $_GET['action'] == 'v' ? 'disabled="disabled"' : '';?>>
+                                        <label class="form-label" style="margin-top:-20px;font-size:11px;">Semester</label>
+                                    </div>
+                                </div>
+                        </div>
+
+                        <div class="col-sm-12">   
+                            <div class="form-group form-float">                                                                        
+                                <div class="form-line">
+                                    <select class="form-control" name="registered" <?= isset($_GET) && $_GET['action'] == 'v' ? 'disabled="disabled"' : '';?>>
+                                            <option value="0" <?= !is_null($sl) && $sl['registered'] == '0'? 'selected="selected"':'';?>>Registration Not Started </option>
+                                            <option value="1" <?= !is_null($sl) && $sl['registered'] == '1'? 'selected="selected"':'';?>>Registration Completed</option>                                                                                    
+                                    </select>
+                                    <label class="form-label" style="margin-top:-20px;font-size:11px;">Registration Process</label>                                                                            
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">   
+                            <div class="form-group form-float">                                                                        
+                                <div class="form-line">
+                                    <select class="form-control" name="registered" <?= isset($_GET) && $_GET['action'] == 'v' ? 'disabled="disabled"' : '';?>>
+                                            <option value="0" <?= !is_null($sl) && $sl['assessed'] == '0'? 'selected="selected"':'';?>>Assessment Not Started </option>
+                                            <option value="1" <?= !is_null($sl) && $sl['assessed'] == '1'? 'selected="selected"':'';?>>Assessment Completed</option>                                                                                    
+                                    </select>
+                                    <label class="form-label" style="margin-top:-20px;font-size:11px;">Assessment Process</label>                                                                            
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>                                                           
+                </div>
+            </div>
+</div>
+<div class="modal-footer">
+    <input type="hidden" name="id" value="<?= isset($_GET) && $_GET['id'] > 0 ? $_GET['id']:0?>"/>
+    <button type="submit" class="btn btn-link waves-effect" <?= isset($_GET) && $_GET['action'] == 'v' ? 'disabled="disabled"' : '';?>>SAVE CHANGES</button>
+    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+</div>
+
+</form>

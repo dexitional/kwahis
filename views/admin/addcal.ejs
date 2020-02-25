@@ -1,0 +1,61 @@
+<form name="" action="/calendar/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+				    <div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Academ</label>							
+							    <input type="text" name="academ" value="<%- row.academ %>" class="form-control">
+							</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Name</label>							
+								<input type="text" name="name" value="<%- row.name %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Year</label>								
+								<input type="number" name="year" value="<%- row.year %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Term</label>								
+								<input type="number" name="term" value="<%- row.term %>" class="form-control">																
+							</div>
+					</div> 
+					<!--
+					<div class="col-sm-12">   
+							<div class="form-group"> 
+									<label class="form-label kobby">Registration Process</label>          
+									<select class="form-control" name="registered">
+										<option value="0" <%= row.registered == '0'? 'selected="selected"':'';%>>Registration Not Started</option>
+										<option value="1" <%= row.registered == '1'? 'selected="selected"':'';%>>Registration Not Completed</option>                            
+									</select>	
+							</div>
+					</div>
+				     -->	
+					<div class="col-sm-12">   
+							<div class="form-group"> 
+									<label class="form-label kobby">Assessment Process</label>          
+									<select class="form-control" name="assessed">
+										<option value="0" <%= row.assessed == '0'? 'selected="selected"':'';%>>Assessment Not Started</option>
+										<option value="1" <%= row.assessed == '1'? 'selected="selected"':'';%>>Assessment Not Completed</option>                            
+									</select>	
+							</div>
+					</div>					
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/calendar/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

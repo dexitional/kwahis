@@ -1,0 +1,180 @@
+<form name="" action="/student/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>
+
+			<h3>Personal Information</h3><hr>	
+			<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Surname</label>							
+								<input type="text" name="lname" value="<%- row.lname %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Other Name(s)</label>								
+								<input type="text" name="fname" value="<%= row.fname %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">   
+							<div class="form-group"> 
+									<label class="form-label kobby">Gender</label>          
+									<select class="form-control" name="gender">
+										<option value="" <%= row.gender == ''? 'selected="selected"':'';%>>Choose Gender</option>
+										<option value="M" <%= row.gender == 'M'? 'selected="selected"':'';%>>Male</option>
+										<option value="F" <%= row.gender == 'F'? 'selected="selected"':'';%>>Female</option>                            
+									</select>	
+							</div>
+						</div>
+	
+						<div class="col-sm-12">
+								<div class="form-group">	
+										<label class="form-label kobby">Date of Birth</label>						
+										<input type="date" name="dob" value="<%- row.dob %>" class="form-control">									
+								</div>
+						</div>
+					<div class="col-sm-12">
+						<div class="form-group">	
+								<label class="form-label kobby">Hometown</label>						
+								<input type="text" name="hometown" value="<%- row.hometown %>" class="form-control">									
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Student's Phone <em><small>( If any )</small></em></label>							
+							<input type="tel" name="phone" value="<%= row.phone %>" class="form-control">
+						</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Student's E-mail <em><small>( If any )</small></em></label>							
+								<input type="email" name="email" value="<%= row.email %>" class="form-control">
+							</div>
+					</div> 
+				</div>
+
+				<h3><hr/>Guardian/Parent Information</h3><hr/>	
+				<div class="row">					
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Guardian</label>						
+							<input type="text" name="guardian" value="<%- row.guardian %>" class="form-control">									
+						</div>
+					</div>
+					<div class="col-sm-12">   
+						<div class="form-group">                                                                       
+							<label class="form-label kobby">Guardian Relation</label> 
+							<select class="form-control" name="guardian_relation">
+									<option value=""  <%= row.guardian_relation == ''? 'selected="selected"':''%>>Choose Relation</option>
+									<option value="FATHER"  <%= row.guardian_relation == 'FATHER'? 'selected="selected"':''%>>FATHER</option>
+									<option value="MOTHER"  <%= row.guardian_relation == 'MOTHER'? 'selected="selected"':''%>>MOTHER</option>
+									<option value="AUNT"  <%= row.guardian_relation == 'AUNT'? 'selected="selected"':''%>>AUNT</option>                                                                                   
+							        <option value="UNCLE"  <%= row.guardian_relation == 'UNCLE'? 'selected="selected"':''%>>UNCLE</option>                                                                                   
+									<option value="COUSIN"  <%= row.guardian_relation == 'COUSIN'? 'selected="selected"':''%>>COUSIN</option>                                                                                   
+									<option value="BROTHER"  <%= row.guardian_relation == 'BROTHER'? 'selected="selected"':''%>>BROTHER</option>                                                                                   
+									<option value="SISTER"  <%= row.guardian_relation == 'SISTER'? 'selected="selected"':''%>>SISTER</option>                                                                                   
+									<option value="GRANDPARENT"  <%= row.guardian_relation == 'GRANDPARENT'? 'selected="selected"':''%>>GRAND PARENT</option>                                                                                   
+							        <option value="CARETAKER"  <%= row.guardian_relation == 'CARETAKER'? 'selected="selected"':''%>>CARE TAKER</option>                                                                                   
+							
+					    	</select>	
+						</div>
+					</div>
+
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Guardian Mobile Phone</label>						
+							<input type="tel" name="guardian_mobile" value="<%- row.guardian_mobile %>" class="form-control">									
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Guardian Office Phone </label>						
+							<input type="tel" name="guardian_office" value="<%- row.guardian_office %>" class="form-control">									
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Guardian E-mail Address </label>						
+							<input type="email" name="guardian_email" value="<%- row.guardian_email %>" class="form-control">									
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Guardian Occupation </label>						
+							<input type="text" name="guardian_occupa" value="<%- row.guardian_occupa %>" class="form-control">									
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Residential Address</label>							
+							<input type="text" name="address" value="<%= row.address %>" class="form-control">
+						</div>
+				    </div>
+				</div>
+
+				<h3><hr/>Academic Information</h3><hr/>	
+				<div class="row">				    
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Student ID NO.</label>							
+							<input type="text" name="index_number" value="<%= row.index_number %>" class="form-control">
+						</div>
+					</div> 
+					
+					
+					<!--<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Level / Year</label>							
+							    <input type="text" name="level" value="<%= row.level %>" class="form-control">
+							</div>
+					</div> -->	
+					<div class="col-sm-12">   
+						<div class="form-group">
+							<label class="form-label kobby">Programme</label>         
+							<select class="form-control" name="program_id">
+								<option value="" <%= row.program_id == '0'? 'selected="selected"':'' %>>Choose Programme</option>
+								<% progs.map((prog,i) => {	%>											
+								<%- '<option value="'+prog.id+'"'%>
+								<%- prog.id == row.program_id ? 'selected="selected"':'' %>
+								<%- '>'+prog.name+'</option>'%>
+								<%  });	%>									   
+							</select>
+						</div>
+					</div>
+
+					<div class="col-sm-12">   
+							<div class="form-group">
+								<label class="form-label kobby">Class</label>         
+								<select class="form-control" name="year_group">
+										<option value="" <%- row.year_group == '0'? 'selected="selected"':'' %>> Choose Year Group</option>
+										<% groups.map((group,i) => {	%>
+										<%- '<option value="'+group.id+' "'+(group.id == row.year_group ? 'selected="selected"':'')+'>'+group.name+'</option>' %>
+										<%  });	%>									   
+								</select>
+							</div>
+					</div>  					
+					<div class="col-sm-12">   
+						<div class="form-group">                                                                       
+							<label class="form-label kobby">Academic Status</label> 
+							<select class="form-control" name="academic_status">
+									<option value=""  <%= row.academic_status == ''? 'selected="selected"':''%>>Choose Academic Status</option>
+									<option value="ACTIVE"  <%= row.academic_status == 'ACTIVE'? 'selected="selected"':''%>>Active</option>
+									<option value="GRADUATED"  <%= row.academic_status == 'GRADUATED'? 'selected="selected"':''%>>Graduated</option>
+									<option value="EXPELLED"  <%= row.academic_status == 'EXPELLED'? 'selected="selected"':''%>>Inactive</option>                                                                                   
+							</select>	
+						</div>
+					</div>
+
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/student/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

@@ -1,0 +1,22 @@
+<% if(status){ %>
+    <section>  
+    <ul class="list-group">
+        <% sl.map(s => { %>
+        <li class="list-group-item"><a class="stpay" style="color:#333;cursor:pointer" data-id="<%= s.index_number %>" ><img src="<%= s.photo != null ? s.photo : '/public/none.png'  %>" style="width:40px;float:left;margin-right:10px;"><strong>STUDENT : </strong><span><%= s.fname +' '+s.lname %> <em>(<%= s.index_number %>)</em></span></a></li> 
+        <% }) %> 
+    </ul>
+    </section>
+    
+<% }else{ %>
+       <section>  
+            <ul class="list-group">
+                <li class="list-group-item active">
+                    <center><strong><em>Student not found..!</em></strong></center>
+                </li>      
+                <li class="list-group-item">                                                        
+                        <center><a href="/pay/list"  class="btn btn-primary btn-lg" id="try_again">Try Again</a></center>
+                </li>                                                                                                    
+            </ul>
+        </section>
+    
+    <% } %>

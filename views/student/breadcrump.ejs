@@ -1,0 +1,22 @@
+<div class="page-title hidden-print" style="background-color:#f1f2f3; background-image: url();background-repeat:no-repeat;background-position:90% 50%;">
+		<% 
+			
+			let title = null;
+			switch(active){
+				case 'st_result': title = 'Student Results History'; break;
+				case 'st_dash': title = 'Student Dashboard'; break;
+				case 'st_inbox': title = 'Student Inbox'; break;
+				case 'st_compose': title = 'Compose Mail'; break;
+				case 'st_bill': title = 'Student Bill History'; break;
+				case 'st_fee': title = 'Student Fees History'; break;
+				case 'st_resource': title = 'Student Resources'; break;
+				default : title = 'Student Dashboard';
+			}					 
+		%>		
+				<h3><%= title;%></h3>
+				<div class="page-breadcrumb hidden-print">		     
+					<ol class="breadcrumb">
+						<li><a href="/st_dash"><b><%- settings.instituteLong; %></b></a></li>	
+					</ol>
+				</div>
+</div>

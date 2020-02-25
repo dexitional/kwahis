@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html>
+   <head>
+        
+        <!-- Title -->
+        <title><%- settings.instituteLong; %></title>
+        
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <meta charset="UTF-8">
+        <meta name="description" content="Student Management System />
+        <meta name="keywords" content="Students,Records,Results Checker" />
+        <meta name="author" content="K-Soft (GH)" />
+        
+        <!-- Styles -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+        <link href="/public/st_assets/plugins/pace-master/themes/blue/pace-theme-flash.css" rel="stylesheet"/>
+        <link href="/public/st_assets/plugins/uniform/css/uniform.default.min.css" rel="stylesheet"/>
+        <link href="/public/st_assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/public/st_assets/plugins/fontawesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+        <link href="/public/st_assets/plugins/line-icons/simple-line-icons.css" rel="stylesheet" type="text/css"/>	
+        <link href="/public/st_assets/plugins/offcanvasmenueffects/css/menu_cornerbox.css" rel="stylesheet" type="text/css"/>	
+        <link href="/public/st_assets/plugins/waves/waves.min.css" rel="stylesheet" type="text/css"/>	
+        <link href="/public/st_assets/plugins/switchery/switchery.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/public/st_assets/plugins/3d-bold-navigation/css/style.css" rel="stylesheet" type="text/css"/>			
+        <link href="/public/st_assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
+		
+		<% if(active == 'st_dash'){ %>
+		 <!-- Dashboard --> 
+		 <link href="/public/st_assets/plugins/weather-icons-master/css/weather-icons.min.css" rel="stylesheet" type="text/css"/>	
+         <link href="/public/st_assets/plugins/metrojs/MetroJs.min.css" rel="stylesheet" type="text/css"/>
+		 
+		<% }%>		
+		
+		<% if(active == 'st_inbox' || active == 'st_compose'){ %>
+		  <!-- Compose Message -->
+		<link href="/public/st_assets/plugins/summernote-master/summernote.css" rel="stylesheet" type="text/css"/>    
+		<% }%>
+		
+		<% if(active == 'st_fee' || active == 'st_result' || active == 'st_resource' || active == 'st_bill'){ %>
+		<!-- Data tables -->		
+		<link href="/public/st_assets/plugins/datatables/css/jquery.datatables.min.css" rel="stylesheet" type="text/css"/>	
+        <link href="/public/st_assets/plugins/datatables/css/jquery.datatables_themeroller.css" rel="stylesheet" type="text/css"/>	
+        <% }%>
+        
+        <!-- Theme Styles -->
+        <link href="/public/st_assets/css/modern.min.css" rel="stylesheet" type="text/css"/>
+       
+        <script src="/public/st_assets/plugins/3d-bold-navigation/js/modernizr.js"></script>
+        <script src="/public/st_assets/plugins/offcanvasmenueffects/js/snap.svg-min.js"></script>
+
+        <style type="text/css">
+            body{
+                background-image:url(<%- settings.bg; %>)
+            }
+
+            .page-inner{
+                min-height:615px;
+            }
+
+            .page-content {
+                background: <%- settings.loginColor; %>;
+            }
+            
+            .navbar .logo-box {
+                background: #fff;
+            }
+            
+            .navbar .logo-box a {
+                color: #5f5f5f;
+            }
+            
+            .sidebar {
+                background: <%- settings.primaryColor; %>;
+            }
+            
+            .sidebar-header {
+                background: <%- settings.primaryColor; %>;
+            }
+            
+            .sidebar-profile span small {
+                color: #E8E074;
+            }
+            
+            .menu {
+                background: <%- settings.loginColor; %>;
+            }
+            
+            .menu.accordion-menu a {
+                color: <%- settings.secondColor; %>;
+            }
+            
+            .menu.accordion-menu a:hover {
+                background: <%- settings.secondColor; %>;
+                color: <%- settings.primaryColor; %>;
+            }
+            
+            .menu.accordion-menu > li.active > a,
+            .menu.accordion-menu > li.active.open > a {
+                background: <%- settings.primaryColor; %>;
+                color: <%- settings.accentColor; %>;
+                font-weight:bolder;
+            }
+            
+            .small-sidebar:not(.page-sidebar-fixed) .accordion-menu li.droplink:hover > a,
+            .horizontal-bar .accordion-menu li.droplink:hover > a,
+            .menu.accordion-menu ul,
+            .menu.accordion-menu li.open > a,
+            .hover-menu .accordion-menu li.droplink:hover > a {
+                background: <%- settings.primaryColor; %>;
+                color: <%- settings.secondColor; %>;
+            }
+            
+            .menu.accordion-menu ul li a:hover,
+            .menu.accordion-menu ul li.active a {
+                background: <%- settings.secondColor; %>;
+                color: <%- settings.primaryColor; %>;
+            }
+            
+            .menu.accordion-menu ul li a {
+                color: <%- settings.secondColor; %>;
+            }
+ 
+            .panel-custom {
+                background:<%- settings.loginColor; %> /*rgba(70, 8, 28, 0.7)*/;
+                color: white;
+            }
+
+            .page-title h3 {
+                font-weight: bolder;
+                color: <%- settings.primaryColor %>;
+                text-transform:uppercase;
+            }
+          
+        </style>
+      
+        
+    </head>
+    <body class="page-header-fixed">
+        <div class="overlay"></div>
+		<!-- Popup Navigation onclick of Profile Photo -->
+        <div class="menu-wrap hidden-print">
+            <nav class="profile-menu">
+                <div class="profile"><img src="<%- session.photo != null ? session.photo : '/public/none.png' %>" width="200px" alt=" "/><br><center><span><%- session.fname+' '+session.lname %></span></center></div>
+            </nav>
+            <button class="close-button" id="close-button">Close Menu</button>
+        </div><!-- # End of Photo -->		
+      
+        <main class="page-content content-wrap container">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="sidebar-pusher">
+                        <a href="javascript:void(0);" class="waves-effect waves-button waves-classic push-sidebar">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="logo-box hidden-print">
+                        <a href="" class="logo-text"><span><%- settings.appName; %>&nbsp;<sup>&reg;</sup></span></a>
+                    </div><!-- Logo Box -->
+                    <div class="search-button hidden-print">
+                        <a href="javascript:void(0);" class="waves-effect waves-button waves-classic show-search"><i class="fa fa-search"></i></a>
+                    </div>
+                    <div class="topmenu-outer">
+                        <div class="top-menu">
+                            <ul class="nav navbar-nav navbar-left">
+                                <li>		
+                                    <a href="javascript:void(0);" class="waves-effect waves-button waves-classic sidebar-toggle"><i class="fa fa-bars"></i></a>
+                                </li>
+                              <!--  <li>
+                                    <a href="#cd-nav" class="waves-effect waves-button waves-classic cd-nav-trigger"><i class="fa fa-diamond"></i></a>
+                                </li> -->
+                                <li>		
+                                    <a href="javascript:void(0);" class="waves-effect waves-button waves-classic toggle-fullscreen"><i class="fa fa-expand"></i></a>
+                                </li>
+								
+								
+                            </ul>
+							
+							<!-- New Messages -- Limit 5 -->
+                            <ul class="nav navbar-nav navbar-right">					
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic" data-toggle="dropdown">
+                                        <span class="user-name"><%- session.fname+' '+session.lname %> <i class="fa fa-angle-down"></i></span>
+                                        <img class="img-circle avatar" src="<%- session.photo != null ? settings.logo : '/public/none.png' %>"  height="50" alt="">
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-list" role="menu">
+                                      <li role="presentation"><a href="javascript:;"><i class="fa fa-user"></i>Profile</a></li>
+                                        <li role="presentation"><a target="_blank" href="javascript:;" onclick="if(!confirm('Do you want to Change Password!')){return false;}else{var ins = prompt('Enter New Password'); if(ins != null){ var xns = prompt('Confirm New Password');}else{return false;} if(xns == ins){ alert('Password changed successfully!');window.location='/st_setpwd/<%- session.id %>/'+ins;}else{ alert('Passwords don\'t match!\n\nRe-try again');return false;}}"><i class="fa fa-lock m-r-xs"></i> Change Password </a></li>
+                                        <li role="presentation"><a href="/logout" onclick="if(!confirm('You are logging out!'))return false;"><i class="fa fa-sign-out m-r-xs"></i>Log out</a></li>
+                                    </ul>
+                                </li>                               
+                            </ul><!-- Nav -->
+                        </div><!-- Top Menu -->
+                    </div>
+                </div>
+            </div><!-- Navbar -->
+            <div class="page-sidebar sidebar hidden-print">
+                <div class="page-sidebar-inner slimscroll">
+                    <div class="sidebar-header">
+                        <div class="sidebar-profile">
+                            <a href="javascript:void(0);" id="profile-menu-link">
+                                <div class="sidebar-profile-image">
+                                    <img src="<%- session.photo != null ? session.photo : '/public/none.png' %>" class="img-circle img-responsive" alt="">
+                                </div>
+                                <div class="sidebar-profile-details">
+                                    <span><%- session.fname+' '+session.lname %><br><small><%- session.index_number %></small></span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="menu accordion-menu">
+                            
+                        
+                        <li class="<%- (active == 'st_dash')? 'active':'';%>"><a href="/st_dash" class="waves-effect waves-button"><span class="menu-icon glyphicon glyphicon-home"></span><p>Dashboard</p></a></li>
+                        <ul class="sub-menu" style="text-align: left;">
+                                <li class="<%- (active == 'st_result')? 'active':'';%>"> <a href="/st_result"><span class="fa fa-mortar-board "></span> RESULTS &nbsp;&nbsp;&nbsp;</a></li>
+                                <li class="<%- (active == 'st_fee')? 'active':'';%>"><a href="/st_fee"><span class="fa fa-mortar-board "></span> FEES DATA </a></li>
+                                <li class="<%- (active == 'st_bill')? 'active':'';%>"><a href="/st_bill"><span class="fa fa-mortar-board "></span> BILLS DATA </a></li>
+                        </ul>
+                        <!-- <li><a href="profile.html" class="waves-effect waves-button"><span class="menu-icon glyphicon glyphicon-user"></span><p>Profile</p></a></li>-->
+                       <!-- <li class="droplink <%- (active == 'st_inbox' || active == 'st_read' || active == 'st_compose')? 'open active':'';%>"><a href="#" class="waves-effect waves-button"><span class="menu-icon glyphicon glyphicon-envelope"></span><p>Mailbox</p><span class="arrow"></span></a>
+                            <ul class="sub-menu">
+                                <li class="<%- (active == 'st_compose')? 'active':'';%>"><a href="">Compose</a></li>
+								<li class="<%- (active == 'st_inbox')? 'active':'';%>"><a href="">Inbox</a></li>                               
+							</ul>
+                        </li>
+                       
+                        <li class="droplink <%- (active == 'st_result' || active == 'st_resource')? 'open active':'';%>"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-mortar-board "></span><p>Academics</p><span class="arrow"></span></a>
+                            <ul class="sub-menu">
+                                <li class="<%- (active == 'st_result')? 'active':'';%>"><a href="/st_result">Results History</a></li>
+								<li class="<%- (active == 'st_resource')? 'active':'';%>"><a href="/st_resource">Student Resources</a></li>
+								
+                            </ul>
+                        </li>
+
+                        <li class="droplink <%- (active == 'st_fee' || active == 'st_bill')? 'active open':'';%>"><a href="#" class="waves-effect waves-button"><span class="menu-icon glyphicon glyphicon-th"></span><p>Transactions</p><span class="arrow"></span></a>
+                            <ul class="sub-menu">
+                                <li class="<%- (active == 'st_fee')? 'active':'';%>"><a href="/st_fee">Fees History</a></li>
+                                <li class="<%- (active == 'st_bill')? 'active':'';%>"><a href="/st_bill">Bills History</a></li>
+                            </ul>
+                        </li> -->
+                   </ul>
+                </div><!-- Page Sidebar Inner -->
+            </div><!-- Page Sidebar -->

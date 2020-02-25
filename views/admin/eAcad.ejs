@@ -1,0 +1,633 @@
+<% include 'header.php';%>
+
+	<!-- Icons -->
+	<section class="generic">		
+			
+			<div class="row">				
+				
+                <div class="col-sm-12">
+								
+				<!-- Main Content -->
+				
+				<% if(isset($scheme)){%>
+				
+					 <!-- Academic Profile -->
+					 <h5 class="sidebar-title">Academic Schemes  <span class="badge badge-success"><%= !is_null($std)? count($std) : 0 ;%></span>  |     <a href="<%= $app->urlFor('addscheme');%>" class="">[ <i class="fa fa-plus"></i> Add Scheme ]</a></h5>
+					 <ul class="media-list">
+                          <% 						      
+						     if(!is_null($std)){							  
+							    foreach($std as $st){						      
+						   %>								 
+							<li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['title'];%></a> <small> | Created: <%= date('F j, Y',strtotime($st['dateCreated']));%> | Promotional Cutoff: <%= $st['cutoff'] != '' ? $st['cutoff'] : ' <em>none specified</em>';%></small></h5>									
+									<ul class="tags">
+										<li><a href="<%= $app->urlFor('delscheme',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editscheme',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:18px;"><i class="fa fa-edit fa-lg"></i></a></li>
+										<li><a href="javascript:;">Scoring { <%
+                                               $s = explode(',',$st['score']);$g = explode(',',$st['grade']); $r = explode(',',$st['remark']);
+										    /**/    for($i = 0; $i < count($s);$i++){
+											echo $s[$i].' - '.$g[$i].' ( <em>'.$r[$i].'</em> )'.($i == count($s)-1 ? ' }':', ');
+												}
+										%></a></li>
+																		
+										<li><a href="<%= $app->urlFor('enablescheme',array('id'=> $st['id'])); %>" style="<%= $st['active'] == 1 ? 'background:#eee;color:#666;' : '';%>" onclick="if(!confirm('This function will change the current Scheme !'))return false;"><%= $st['active'] == 1 ? 'Active' : 'Inactive';%></a></li>
+																			
+									</ul>									
+								</div><hr/>
+							</li>
+						   <% }}%>								
+					</ul>
+				<% }%>		
+				
+				
+				
+				
+				<!-- Academic Profile Add & Update  -->
+				<% if(isset($addscheme)){%>
+					 <h5 class="sidebar-title">Scheme Registration</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/postscheme" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Title of Scheme</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name"  placeholder="Title of Scheme" name="title" value="<%= isset($std)? $std['title'] : '';%>"></i>
+										</div>										
+										<div class="form-group">
+											<label for="phone" class="kobby">Scores</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" id="phone" name="score" placeholder="Scores" value="<%= isset($std)? $std['score'] : '';%>"></i>
+										</div>
+                                        <div class="form-group">
+											<label for="phone" class="kobby">Cutoff</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" id="phone" name="cutoff" placeholder="Cutoff ex: [ 4:E8,46.8 ]" value="<%= isset($std)? $std['cutoff'] : '';%>"></i>
+										</div>										
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="subject" class="kobby">Grades</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control subject" id="subject" name="grade" placeholder="Grades" value="<%= isset($std)? $std['grade'] : '';%>"></i>
+										</div>
+																			
+										<div class="form-group">
+											<label for="name" class="kobby">Remarks</label>
+											<input type="text" class="form-control" id="name" name="remark" placeholder="Remarks" value="<%= isset($std)? $std['remark'] : '';%>">
+										</div>																				
+									</div>
+								</div>
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">		
+							</form>
+						</div>
+					 </div>
+					<% }%>	
+					
+					
+					
+					
+					
+					
+					<% if(isset($hall)){%>
+				
+					 <!-- Academic Profile -->
+					 <h5 class="sidebar-title">School Houses <span class="badge badge-success"><%= !is_null($std)? count($std) : 0 ;%></span> |     <a href="<%= $app->urlFor('addhall');%>" class="">[ <i class="fa fa-plus"></i> Add Hall/House ]</a></h5>
+					 <ul class="media-list">
+                          <% 						      
+						     if(!is_null($std)){							  
+							    foreach($std as $st){						      
+						   %>								 
+							<li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['hallName'];%></a> <small> | Profile: <%= $st['hallDesc'];%></small></h5>									
+									<ul class="tags">
+									   <% if($st['active'] == 1){ %>
+										  <li><a href="<%= $app->urlFor('hsactive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable House or Hall!'))return false;" style="color:#93db3b;background:none;" title="Disable House or Hall"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }else{%>
+										  <li><a href="<%= $app->urlFor('hsactive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable House or Hall!'))return false;" style="color:#eb7395;background:none;" title="Enable House or Hall"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }%>
+										<li><a href="<%= $app->urlFor('delhall',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('edithall',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:18px;"><i class="fa fa-edit fa-lg"></i></a></li>
+									</ul>									
+								</div><hr/>
+							</li>
+						   <% }}%>								
+					</ul>
+				<% }%>		
+				
+				
+				
+				
+					 <!-- Academic Profile Add & Update  -->
+				<% if(isset($addhall)){%>
+					 <h5 class="sidebar-title">Hall/House Registration</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/posthall" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Name of House/Hall</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" name="hallName" placeholder="Name of House/Hall" value="<%= isset($std)? $std['hallName'] : '';%>"></i>
+										</div>										
+										<div class="form-group">
+												<label for="classCode" class="kobby">House/Hall Master</label>
+												<select class="form-control" id="tutor1" name="tutor1">
+												<% 
+												   $cl = $db->getAllRecord("select sr.*,dt.deptName from user sr,department dt where sr.SiteID = '{$_SESSION['SiteID']}' and sr.deptCode = dt.deptCode and sr.privilege = 2 and sr.active = 1");
+												   if(!is_null($cl)){
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['userCode'].'" '.(isset($std) && ($std['tutor1'] == $op['userCode']) ? 'selected="selected"' : '').'>'.$op['fName'].' '.$op['lName'].' ( Dept : '.$op['deptName'].' )</option>';
+												   }}
+												%>											 												
+												</select>
+										</div>                                        									
+                                        									
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="subject" class="kobby">Hall/House Profile</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control hallDesc" id="hallDesc" name="hallDesc" placeholder="Hall/House Profile" value="<%= isset($std)? $std['hallDesc'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+												<label for="classCode" class="kobby">Asst. House/Hall Master</label>
+												<select class="form-control" id="tutor2" name="tutor2">
+												<% 
+												   $cl = $db->getAllRecord("select sr.*,dt.deptName from user sr,department dt where sr.SiteID = '{$_SESSION['SiteID']}' and sr.deptCode = dt.deptCode and sr.privilege = 2 and sr.active = 1");
+												   if(!is_null($cl)){
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['userCode'].'" '.(isset($std) && ($std['tutor2'] == $op['userCode']) ? 'selected="selected"' : '').'>'.$op['fName'].' '.$op['lName'].' ( Dept : '.$op['deptName'].' )</option>';
+												   }}
+												%>											 												
+												</select>
+										</div>		
+                                        <div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>											
+									</div>
+								</div>
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">		
+							</form>
+						</div>
+					 </div>
+					<% }%>	
+					
+					
+				
+				
+				
+				
+				<% if(isset($academ)){%>
+				
+					 <!-- Academic Profile -->
+					 <h5 class="sidebar-title">Academic Profile  <span class="badge badge-success"><%= !is_null($std)? count($std) : 0 ;%></span>  |     <a href="<%= $app->urlFor('addacad');%>" class="">[ <i class="fa fa-plus"></i> Add New Profile ]</a>  |     <a href="<%= $app->urlFor('checktemp');%>" class="btn btn-primary"> <i class="fa fa-refresh"></i> Refresh Current Academ </a></h5>
+					 <ul class="media-list">
+                          <% 						      
+						     if(!is_null($std)){							  
+							    foreach($std as $st){						      
+						   %>								 
+							<li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['academName'];%></a> <small> | Created: <%= date('F j, Y',strtotime($st['dateCreated']));%><%= $st['classPromo'] == 1 && $_SESSION['settings']['academTerm'] == 3 ? ' | Class Promoted' : '';%><%= $st['resultReview'] == 2 && $_SESSION['settings']['academTerm'] == 3 ? ' | Reviewed' : '';%><%= $st['resultReview'] == 1 && $_SESSION['settings']['academTerm'] == 3 ? ' | Reviewing' : '';%></small></h5>									
+									<ul class="tags">
+										<li><a href="<%= $app->urlFor('delacad',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editacad',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:18px;"><i class="fa fa-edit fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('enableacad',array('id'=> $st['id'])); %>" style="<%= $st['active'] == 1 ? 'background:#eee;color:#666;' : '';%>" onclick="if(!confirm('This function will change the current Academic Term !'))return false;"><%= $st['active'] == 1 ? 'ACTIVE' : 'INACTIVE';%></a></li>
+										<li><a href="javascript:;">CODE : <%= $st['academCode'];%></a></li>
+										<li><a href="javascript:;">TERM : <%= $st['academTerm'];%></a></li>
+										<li><a href="javascript:;">YEAR : <%= $st['academYear'];%></a></li>
+								        <li><% if($st['resultCertified'] == 1 && $st['active'] == 1):%><a href="<%= $app->urlFor('restage');%>" onclick="if(!confirm('Do you want to Re-stage Results for continuous entry?'))return false;">RESTAGE ENTRIES</a><% elseif($st['resultCertified'] == 0  && $st['active'] == 1):%><a href="<%= $app->urlFor('certres');%>" onclick="if(!confirm('Publish Final Results?'))return false;">PUBLISH RESULTS</a><% endif;%></li>										
+									</ul>									
+								</div><hr/>
+							</li>
+						   <% }}%>								
+					</ul>
+				<% }%>		
+				
+				
+					 <!-- Academic Profile Add & Update  -->
+				<% if(isset($addacad)){%>
+					 <h5 class="sidebar-title">Academic Profile</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/postacad" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Title Academic Profile</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" name="academName" placeholder="Title Academic Profile" value="<%= isset($std)? $std['academName'] : '';%>"></i>
+										</div>										
+										<div class="form-group">
+											<label for="phone" class="kobby">Academic Term</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" id="phone" name="academTerm" placeholder="Academic Term" value="<%= isset($std)? $std['academTerm'] : '';%>"></i>
+										</div>
+                                        <div class="form-group">
+											<label for="phone" class="kobby">Academic Term Start Period</label>
+											<input type="date" class="form-control" id="dateCreated" name="dateCreated" placeholder="Academic Term Start Period" value="<%= isset($std)? $std['dateCreated'] : '';%>">
+										</div>
+                                        <div class="form-group">
+											<label for="phone" class="kobby">Academic Calendar</label>
+											<textarea class="form-control" id="academCalendar" name="academCalendar" placeholder="[date:activity:duration; 2017-02-28:Examination:2 Weeks;...]"><%= isset($std) ? $std['academCalendar'] : '';%></textarea>
+										</div>												
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="subject" class="kobby">Academic Year</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control subject" id="subject" name="academYear" placeholder="Academic Year" value="<%= isset($std)? $std['academYear'] : '';%>"></i>
+										</div>
+																			
+										<div class="form-group">
+											<label for="name" class="kobby">Academic Code ( Academ )</label>
+											<input type="text" class="form-control" id="name" name="academCode" placeholder="Academic Code (Academ)" value="<%= isset($std)? $std['academCode'] : '';%>">
+										</div>
+                                        <div class="form-group">
+											<label for="phone" class="kobby">Academic Term End Period</label>
+											<input type="date" class="form-control" id="phone" name="endDate" placeholder="Academic Term End Period" value="<%= isset($std)? $std['endDate'] : '';%>">
+										</div>											
+									</div>
+								</div>
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">		
+							</form>
+						</div>
+					 </div>
+					<% }%>	
+					
+					
+					<!-- School Profile Add & Update  -->
+					<% if(isset($institute)){
+					         if(!is_null($std)){ 
+                                foreach($std as $st){							 
+					%>	
+					<h5 class="sidebar-title">School Profile - View</h5>
+					<div class="row">
+						<div class="col-sm-5 hidden-xs">
+							<figure>
+								<img src="<%= $st['logo'].'?'.rand();%>" class="img-responsive" alt="">
+							</figure>
+						</div>
+						<div class="col-sm-7">
+							<div class="tag-text">
+								<h4><%= $st['title'];%></h4>
+								<span><%= $st['motto'];%> | <a href="<%= $app->urlFor('editinst',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;">Edit profile</a> | <a href="<%= $app->urlFor('updatetoken'); %>" onclick="if(!confirm('Update Student Tokens ?'))return false;">Update Student Tokens</a> | <br><a href="<%= $app->urlFor('rminst',array('action'=> 1,'id'=> $st['id']));%>" onclick="if(!confirm('Remove Logo!'))return false;">Remove Logo</a> | <a href="<%= $app->urlFor('rminst',array('action'=> 2,'id'=> $st['id']));%>" onclick="if(!confirm('Remove Signature!'))return false;">Remove Signature</a> | <a href="<%= $app->urlFor('rminst',array('action'=> 3,'id'=> $st['id']));%>" onclick="if(!confirm('Remove Teaser!'))return false;">Remove Teaser</a> | <a href="<%= $app->urlFor('rminst',array('action'=> 4,'id'=> $st['id']));%>" onclick="if(!confirm('Remove ID Card Template!'))return false;">Remove ID Card Template</a></span>
+								<p><%= $st['profile'];%></p>
+							</div>
+							<h5 class="alternative-title">School Address</h5>
+							<div class="tag-text">
+								<p><%= $st['address'];%></p>
+							</div>	
+                           
+                            <h5 class="alternative-title">School Population</h5>
+							<div class="tag-text">
+							<%
+							  $sl = $db->getAllRecord("select count(*) as num from student where SiteID = '{$_SESSION['SiteID']}' and gradDate IS NULL and active = 1");
+							  $sv = $db->getAllRecord("select count(*) as num from user where SiteID = '{$_SESSION['SiteID']}' and privilege = 2 and active = 1");
+							%>
+								<p>Total Students : <%= $sl[0]['num'];%>,<br>Total Tutors :  <%= $sv[0]['num'];%><% if($st['sms_active'] == 1):%> <br>SMS :  <%= $st['sms_account'];%> <% endif;%>
+								</p>
+							</div>							   
+						</div>
+					</div>
+					<% } 
+					}else{ %>
+					       <h5 class="sidebar-title">School Profile</h5>
+					       <div class="row">
+								<div class="col-sm-12 hidden-xs">
+									<figure>
+										<a href="<%= $app->urlFor('addinst');%>" title="Create New School Profile" >Create New School Profile</a>
+									</figure>
+								</div>
+						   </div>
+					
+					<% }}%>
+					
+					
+					
+					<% if(isset($addinst)){%>
+					 <!-- School Profile Add & Update  -->
+					 <h5 class="sidebar-title">School Profile - Update</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						   <div class="row">
+						     <div class="col-sm-3">						   
+								<form action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="formlogo"> 
+										<div class="profile-doctor generic">
+												<div class="test-content">
+													<figure id="logo_feed">
+														<img class="img-circle" src="<%= isset($_SESSION)? $_SESSION['settings']['logo'].'?'.rand() : $_SESSION['settings']['logo'].'?'.rand();%>" alt="">
+													</figure>
+													<input type="file" name="logo" id="logo" style="opacity:0;"/>
+													<a onclick="document.getElementById('logo').click();" class="btn btn-primary"><i class="fa fa-photo"></i> <span> Upload Logo</span></a>
+												</div>
+										</div>					
+								</form>
+                             </div>							 
+							 <div class="col-sm-3">						   
+								<form action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="formsign"> 
+										<div class="profile-doctor generic">
+												<div class="test-content">
+													<figure id="sign_feed">
+														<img class="img-circle" src="<%= isset($_SESSION)? $_SESSION['settings']['sign'].'?'.rand() : $_SESSION['settings']['sign'].'?'.rand();%>" alt="">
+													</figure>
+													<input type="file" name="sign" id="sign" style="opacity:0;"/>
+													<a onclick="document.getElementById('sign').click();" class="btn btn-primary"><i class="fa fa-photo"></i> <span> Upload Signature</span></a>
+												</div>
+										</div>					
+								</form>
+                             </div>
+							 <div class="col-sm-3">						   
+								<form action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="formteaser"> 
+										<div class="profile-doctor generic">
+												<div class="test-content">
+													<figure id="teaser_feed">
+														<img class="img-circle" src="<%= isset($_SESSION)? $_SESSION['settings']['teaser'].'?'.rand() : $_SESSION['settings']['teaser'].'?'.rand();%>" alt="">
+													</figure>
+													<input type="file" name="teaser" id="teaser" style="opacity:0;"/>
+													<a onclick="document.getElementById('teaser').click();" class="btn btn-primary"><i class="fa fa-photo"></i> <span> Upload Teaser</span></a>
+												</div>
+										</div>					
+								</form>
+                             </div>
+							 <div class="col-sm-3">						   
+								<form action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="formcard"> 
+										<div class="profile-doctor generic">
+												<div class="test-content">
+													<figure id="card_feed">
+														<img class="img-circle" src="<%= isset($_SESSION)? $_SESSION['settings']['card'].'?'.rand() : $_SESSION['settings']['card'].'?'.rand();%>" alt="">
+													</figure>
+													<input type="file" name="card" id="card" style="opacity:0;"/>
+													<a onclick="document.getElementById('card').click();" class="btn btn-primary"><i class="fa fa-photo"></i> <span> Upload ID Card</span></a>
+												</div>
+										</div>					
+								</form>
+                             </div>
+                            </div>							 
+						    
+							<form action="/shs/postinst" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										
+										<div class="form-group">
+											<label for="email" class="kobby">Motto</label>
+											<i class="glyphicon glyphicon-envelope"><input type="text" class="form-control" id="name" name="motto" placeholder="Motto" value="<%= isset($std)? $std['motto'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="email" class="kobby">Institution ShortName or Teaser</label>
+											<i class="glyphicon glyphicon-envelope"><input type="text" class="form-control" id="name" name="sms_sender" maxlength="11" required placeholder="Institution ShortName or Teaser" value="<%= isset($std)? $std['sms_sender'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="email" class="kobby">Institution WASSC Code</label>
+											<i class="glyphicon glyphicon-envelope"><input type="text" class="form-control" id="name" name="wassce" maxlength="7" required placeholder="Institution WASSC Code" value="<%= isset($std)? $std['wassce'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Institute Primary Color</label><span id="primedp" style="border-radius:50%;margin-left:15px;width:20px;height:20px;background-color:<%= isset($std)? $std['primecolor'] : 'transparent';%>;display:inline-block;"></span>
+											<input type="color" class="form-control" id="primecolor" name="primecolor" placeholder="Institute Primary Color" value="<%= isset($std)? $std['primecolor'] : '';%>" onchange="document.getElementById('primedp').style.backgroundColor = this.value;">
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Institute Secondary Color</label><span id="subdp" style="border-radius:50%;margin-left:15px;width:20px;height:20px;background-color:<%= isset($std)? $std['subcolor'] : 'transparent';%>;display:inline-block;"></span>
+											<input type="color" class="form-control" id="subcolor" name="subcolor" placeholder="Institute Secondary Color" value="<%= isset($std)? $std['subcolor'] : '';%>" onchange="document.getElementById('subdp').style.backgroundColor = this.value;">
+										</div>
+										<div class="form-group">
+											<label for="phone" class="kobby">Phone number</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" id="phone" name="phone" placeholder="Phone number" value="<%= isset($std)? $std['phone'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Email Address</label>
+											<input type="text" class="form-control" id="email" name="email" placeholder="Email Address" value="<%= isset($std)? $std['email'] : '';%>">
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Website</label>
+											<input type="text" class="form-control" id="website" name="website" placeholder="Website" value="<%= isset($std)? $std['website'] : '';%>">
+										</div>
+										<div class="form-group">
+											<label for="bank" class="kobby">Bank Details</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control bank" id="bank" name="bank" placeholder="Bank Details"><%= isset($std)? $std['bank'] : '';%></textarea></i>
+										</div>
+										<div class="form-group">
+										    <label for="dob" class="kobby">Date founded</label>
+											<input type="date" name="founded" id="datepicker" name="founded" placeholder="Date founded" class="form-control hasDatepicker" value="<%= isset($std)? $std['founded'] : '';%>">
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Management or Committee Members</label>
+											<input type="text" class="form-control" id="managers" name="managers" placeholder="Management or Committee Members" value="<%= isset($std)? $std['managers'] : '';%>">
+										</div>
+										
+										<div class="form-group" style="text-align:center;">
+										    <input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+											<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+											<input type="hidden"  name="logo" value="<%= isset($std)? $std['logo'] : '';%>">
+											<input type="hidden"  name="headsign" value="<%= isset($std)? $std['headsign'] : '';%>">
+											<input type="hidden"  name="teaser" value="<%= isset($std)? $std['teaser'] : '';%>">
+											<input type="hidden"  name="card" value="<%= isset($std)? $std['card'] : '';%>">
+											<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : '';%>">
+										</div>
+										
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="subject" class="kobby">Name of Institution</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control subject" id="subject" name="title" placeholder="Name of Institution" value="<%= isset($std)? $std['title'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="message" class="kobby">Postal Address</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" id="message" name="address" placeholder="Postal Address"><%= isset($std)? $std['address'] : '';%></textarea></i>
+										</div>									
+										<div class="form-group">
+											<label for="name" class="kobby">Location</label>
+											<input type="text" class="form-control" id="name" name="location" placeholder="Location" value="<%= isset($std)? $std['location'] : '';%>">
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Region/Country</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" name="country" placeholder="Region/Country" value="<%= isset($std)? $std['country'] : '';%>"></i>
+										</div>	
+                                        <div class="form-group">
+										    <label for="name" class="kobby">Profile of Institution</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" id="profile" name="profile" placeholder="Profile of Institution"><%= isset($std)? $std['profile'] : '';%></textarea></i>
+										</div>
+										<div class="form-group">
+										    <label for="name" class="kobby">Subject Restrict ( Allow Subjects for this Forms only *)</label>
+											<input type="text" class="form-control" id="restrictSubj" name="restrictSubj" placeholder="Subject Restrict ( Allow Subjects for this Forms only *)" value="<%= isset($std)? $std['restrictSubj'] : '';%>"/>
+										</div>
+									    <div class="form-group">
+											<label for="active" class="kobby">SMS Module</label>
+											<select class="form-control" id="sms_active" name="sms_active">
+												<option value="0" <%= isset($std) && $std['sms_active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['sms_active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>
+                                        <div class="form-group">
+											<label for="active" class="kobby">E-Mail Module</label>
+											<select class="form-control" id="email_active" name="email_active">
+												<option value="0" <%= isset($std) && $std['email_active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['email_active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>
+                                        <div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>	
+										<div class="form-group">
+											<label for="active" class="kobby">Auto - Academic Term activation</label>
+											<select class="form-control" id="autoAcadem" name="autoAcadem">
+												<option value="0" <%= isset($std) && $std['autoAcadem'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['autoAcadem'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>			
+									</div>
+								</div>									
+							</form>
+						</div>
+					 </div>
+					 <% }%>
+					
+					
+					
+					 <!-- Results Certification -->
+					 <% if(isset($rescert)){%>
+					 
+					 <h5 class="sidebar-title">Results Certification</h5>
+					 <section class="newsletter">
+					    <!-- Check Certification or Staging buttons -->
+					    <% if($std != null && $_SESSION['settings']['resultCertified'] == 0){%> 
+						 <a type="submit" class="btn btn-send" href="<%= $app->urlFor('certres');%>" style="text-align:center;" data-loading-text="Sending...">Certify Exams Results</a> | <span class="hint"> This function certifies results submitted by tutors of subjects in various classes</span><hr/>
+						
+						<% }elseif(is_null($std) && $_SESSION['settings']['resultCertified'] == 0){ %>
+						
+						 <a  class="btn btn-send" style="text-align:center;" href="<%= $app->urlFor('stageres');%>" data-loading-text="Sending...">Stage New Results</a> | <span class="hint"> This function prepares database for a new results for a new term</span><hr/>
+						
+						<% }%>
+						
+						
+						<!-- Certification Procedure Results -->
+						
+						<!-- Complete students results / Pushed to permanent Results DB -->
+						<% 
+						      if(isset($_SESSION['settings']['certSuccess']) && $_SESSION['settings']['certSuccess'] == 1){
+								 // var_dump($ic);
+							%>
+							 <blockquote class="success">
+								<h4>Certification Successful!</h4>
+								<p><em>Students results published in portal..!</em></p>
+							</blockquote>
+						<% }%>
+						
+						<!-- Incomplete students results -->
+						<% if(isset($ic) && $_SESSION['settings']['resultCertified'] == 0  && $_SESSION['settings']['certSuccess'] == 0){%>
+							<blockquote class="warning">
+								<h4>Certification Failed!</h4>
+								<p><em>Students listed below have incomplete results...</em></p>
+							</blockquote>
+					</section>
+					
+							 <ul class="media-list">
+                                 <% foreach($ic as $st){
+									 
+									 //var_dump($st);exit;
+									       for($i = 0;$i < count($st);$i++){											   
+											   $ms = $db->getOneRecord("select * from student where SiteID = '{$_SESSION['SiteID']}' and active = 1 and studentCode = ".$st[$i][4]);
+											   if(!is_null($ms)){
+								%>							 
+									<li class="media">
+										<a class="pull-left" href="javascript:;">
+											<img class="media-object img-circle" src="<%= $ms['photo']%>" alt="//">
+										</a>
+										<div class="media-body">
+											<h5 class="media-heading"><a><%= $ms['fName'].' '.$ms['lName']%></a><small> | Programme : <%= $st[$i][0]%>  | Subject Tutor : <%= $st[$i][5]%>  | Tutor's Contact : <%= $st[$i][6]%> | Subject Code : <%= $st[$i][2]%></small></h5>									
+											<ul class="tags">							
+												<li><a href="<%= $app->urlFor('resolve',array('id'=> $st[$i][4],'subj'=> $st[$i][2]));%>">Resolve</a></li>	
+                                                <li><a href="javascipt:;"><%= $st[$i][7];%></a></li>													
+											</ul>											
+										</div><hr/>
+									</li>
+							    <% }}}%>
+									
+							</ul>
+				  <% }}%>				
+					 
+					 
+					 
+					 
+					  <!-- Results Review -->
+					 <% if(isset($review) && ($_SESSION['settings']['academTerm'] == 3)){
+						 
+						 $ac = $db->getOneRecord("select * from academ where academCode = '{$_SESSION['settings']['academ']}' and SiteID = '{$_SESSION['SiteID']}'");
+					%>
+					 
+					 <h5 class="sidebar-title">Results Review | ( <%= $ac['academName']%> )  <a href="<%= $app->urlFor('promoteall');%>" onclick="if(!confirm('Promoting all Repeating Student !\n\nNote that Promoting repeated students is done in consultation with the Review committee or Management since it is the final step before the generation of student terminal report cards!\n\n This action is irreversible and effected once every Third Term!'))return false;" class="btn btn-default btn-color-shadow pull-right" style="margin-left:10px;">Promote All</a>   <a href="<%= $app->urlFor('finreview',array('action'=>2));%>" onclick="if(!confirm('Finalize Review Process!\n\nNote that Finalizing Review is done in consultation with the Review committee or Management since it is the final step before the generation of student terminal report cards!\n\n This action is irreversible and effected once every Third Term!'))return false;" class="btn btn-default btn-color-shadow pull-right">Finalize Review</a></h5>
+					  <section class="newsletter">							
+								<%									 
+									 $xs = $db->getOneRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' and active = 1");
+									 if(!is_null($xs['promoHist'])){
+										 echo '<blockquote class="warning"><h4>Considered Students (Now Promoted)</h4>';
+										 $ms = explode(',',$xs['promoHist']);
+										 foreach($ms as $ss){
+											 $val = explode(':',$ss);
+											 $st = $db->getOneRecord("select * from student st,class cl where st.classCode = cl.id and st.studentCode = '{$val[0]}' and st.SiteID = '{$_SESSION['SiteID']}'");
+											 $sr = $db->getOneRecord("select * from user where userCode = '{$val[1]}' and SiteID = '{$_SESSION['SiteID']}'");
+								%>	
+								        <p><%= $st['fName'].' '.$st['lName']%> <em>- <%= $st['studentCode']%> [ <%= $st['className']%> ] - Vouched By : <%= $sr['fName'].' '.$sr['lName']%></em> | <a title="View Student File" target="_blank" href="ui/report/pdfStud.php?student=<%= $st['studentCode']%>" onclick="if(!confirm('View Student File!'))return false;">View File</a></p>
+								<% }
+								        echo '</blockquote>';
+								}%>								   					
+						
+							 <blockquote class="success">
+								<h4>Re-peating Students </h4>
+								<p><em>Students listed below are understudy for promotion consideration or repetion by the committee</em></p>
+							</blockquote>						
+						<!--
+							<blockquote class="warning">
+								<h6>Cerfication Failed!</h6>
+								<p><em>Students listed below have incomplete results...</em></p>
+							</blockquote> -->
+					</section>
+					
+							 <ul class="media-list">
+                                 <%									 
+									 $xs = $db->getAllRecord("select pf.*,st.*,cl.className,pf.id as pid from performance pf,student st,class cl where st.classCode = cl.id and pf.studentCode = st.studentCode and pf.SiteID = '{$_SESSION['SiteID']}' and st.active = 1 and pf.promoteTo = 2");
+									 if(!is_null($xs)){
+										 foreach($xs as $ms){
+								%>							 
+									<li class="media">
+										<a class="pull-left" href="<%= $app->urlFor('promotestd',array('pf'=> $ms['pid']));%>" onclick="if(!confirm('Promote Student!'))return false;">
+											<img class="media-object img-circle" src="<%= $ms['photo']%>" alt="<%= $ms['fName'].' '.$ms['lName']%>">
+										</a>
+										<div class="media-body">
+											<h5 class="media-heading"><a><%= $ms['fName'].' '.$ms['lName']%></a><small> | <b>Student Code</b> : <%= $ms['studentCode']%> <%= !is_null($ms['termNote'])? ' | <b>Term\'s Report</b> : '.$ms['termNote'] :''%><%= !is_null($ms['promoteNote'])?'  | <b>Promotion Note</b> : '.$ms['promoteNote']:''%></small></h5>									
+											<ul class="tags">
+											    <li><a href="javascript:;"><%= $ms['className']%></a></li>
+												<li><a href="<%= $app->urlFor('promotestd',array('pf'=> $ms['pid']));%>" onclick="if(!confirm('Promote Student!'))return false;"><%= $ms['promoteTo'] == 2 ? 'Promote Student':'';%></a></li>										
+											</ul>											
+										</div><hr/>
+									</li>
+							   
+								 <% }}%>
+							</ul>
+				  			<% }%>
+					 
+					 
+					 
+					 
+				</div>						
+			</div>
+			
+			
+		</div>
+	</section>
+	<!-- End Icon -->
+	
+
+<% include 'footer.php';%>

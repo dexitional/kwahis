@@ -1,0 +1,53 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+             <% if(msg === 'deleted'){ %>
+				  toastr.success('', 'Record Deleted Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'failed'){ %>
+				toastr.danger('', 'Saving failed!');					 
+			<% }%>		
+			
+			<% if(msg === 'noscript'){ %>
+				toastr.success('', 'No Transcript Records for Student');
+				window.close();									 
+			<% }%>	
+			<% if(msg === 'nots'){ %>
+				toastr.success('', 'No Payment Transactions recorded on Student');
+				window.close();									 
+			<% }%>	
+
+			
+		</script>
+
+
+			<div class="row">				
+                <div class="col-sm-12">				
+				<!-- Main Content -->	
+			
+				
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-hover dataTable graduate">
+						<thead>
+							<tr>
+								<th>Photo</th>
+								<th>Name</th>
+								<th>ID</th>
+								<th>Gender</th>
+								<th>Date of Birth</th>
+								<th>Class</th>                                                
+								<th>Programme</th>
+								<th>Action</th>		
+								<th>Phone</th>
+								<th>Address</th>					
+							</tr>
+						</thead>
+					</table>
+				</div>			   
+                <!-- #END# Exportable Table -->
+		  </div>
+		</div>

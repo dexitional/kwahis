@@ -1,0 +1,202 @@
+<% 
+
+if(!isset($_SESSION)){
+	session_start();
+}
+
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!--<link rel="shortcut icon" href="../images/favicon.png" type="image/png">-->
+
+  <title>Password Recovery</title>
+  <link rel="stylesheet" href="ui/lib/fontawesome/css/font-awesome.css">
+  <link rel="stylesheet" href="ui/lib/select2/select2.css">
+  <link rel="stylesheet" href="ui/css/quirk.css">
+  <script src="ui/lib/modernizr/modernizr.js"></script> 
+   <style type="text/css">
+      /* Login Background */
+	   
+	   #bg {
+				  position: fixed;
+				  left: 0;
+				  top: 0;
+				  width: 100%;
+				  height: 100%;
+				  background: url(<%= $_SESSION['settings']['teaser'].'?'.rand()%>) no-repeat center center fixed;
+				  background-size: cover;
+				  -webkit-filter: blur(4px);  
+			}
+	    .signup .panel {
+			  background-color: rgba(38, 43, 54, 0.6);
+			  padding: 20px 20px 40px 20px;
+		   }
+			
+		  .signup h1 {
+			  color: <%=$_SESSION['settings']['primecolor']%>;
+			  text-align: center;
+			  margin: 0;
+			  font-weight: 500;
+		   }
+		   
+		   .btn-success,.btn-success:active:hover, .btn-success.active:hover, .open > .dropdown-toggle.btn-success:hover, .btn-success:active:focus, .btn-success.active:focus, .open > .dropdown-toggle.btn-success:focus, .btn-success:active.focus, .btn-success.active.focus, .open > .dropdown-toggle.btn-success.focus {
+				background-color: <%=$_SESSION['settings']['primecolor']%> !important;
+			}	
+  </style>
+</head>
+
+<body class="signwrapper">
+
+  <div id="bg"></div>
+  
+  <div class="signup">
+    <div class="row">
+      <div class="col-sm-5">
+        <div class="panel">
+          <div class="panel-heading">
+            <h1>eSHS<sup>&reg;</sup></h1>
+            <h4 class="panel-title">Password Recovery</h4>
+          </div>
+          <div class="panel-body">           
+            <div class="or"></div>
+            <form action="/shs/postsrpwd" method="post">
+			  <div class="form-group mb15">
+                <input type="text" class="form-control" name="userCode" placeholder="Enter User or Tutor Code">
+              </div>
+              <div class="form-group mb15">
+                <input type="password" class="form-control" name="pass1" placeholder="Enter New Password">
+              </div>
+              <div class="form-group mb15">
+                <input type="password" class="form-control" name="pass2" placeholder="Repeat New Password">
+              </div>
+              <div class="form-group mb15">
+                <input type="tel" class="form-control" name="phone" placeholder="Enter Primary Phone #">
+              </div>
+
+              <div class="row mb15">
+                <div class="col-xs-5">
+                  <div class="form-group">
+                    <select class="form-control" style="width: 100%" data-placeholder="Birth Month" name="m">
+                      <option value="">Birth Month</option>
+                      <option value="01">January</option>
+                      <option value="02">February</option>
+                      <option value="03">March</option>
+                      <option value="04">April</option>
+                      <option value="05">May</option>
+                      <option value="06">June</option>
+					  <option value="07">July</option>
+                      <option value="08">August</option>
+                      <option value="09">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">November</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <select class="form-control" style="width: 100%" data-placeholder="Birth Day" name="d">
+                      <option value="">Birth Day</option>
+                      <option value="01">01</option>
+                      <option value="02">02</option>
+                      <option value="03">03</option>
+                      <option value="04">04</option>
+                      <option value="05">05</option>
+                      <option value="06">06</option>
+					  <option value="07">07</option>
+                      <option value="08">08</option>
+                      <option value="09">09</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+					  <option value="13">13</option>
+                      <option value="14">14</option>
+                      <option value="15">15</option>
+                      <option value="16">16</option>
+                      <option value="17">17</option>
+                      <option value="18">18</option>
+					  <option value="19">19</option>
+                      <option value="20">20</option>
+                      <option value="21">21</option>
+                      <option value="22">22</option>
+                      <option value="23">23</option>
+                      <option value="24">24</option>
+					  <option value="25">25</option>
+                      <option value="26">26</option>
+                      <option value="27">27</option>
+                      <option value="28">28</option>
+                      <option value="29">29</option>
+                      <option value="30">30</option>
+					  <option value="31">31</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <select class="form-control" style="width: 100%" data-placeholder="Birth Year" name="y">
+                      <option value="">Birth Year</option>
+                     <% 
+					    $i = 1920;
+						for($i = 1920; $i < date('Y');$i++){
+							echo '<option value="'.$i.'">'.$i.'</option>';
+						}					 
+					 %>					 
+                    </select>
+                  </div>
+                </div>
+              </div>
+             
+              <div class="form-group">
+                <button class="btn btn-success btn-quirk btn-block" onclick="if(!confirm('Do you want to submit?'))return false;">Change password</button>
+              </div>
+			  
+			   <div class="form-group">
+				 <a class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">Student Management System</a>
+			   </div>
+            </form>
+			
+          </div><!-- panel-body -->
+        </div><!-- panel -->
+      </div><!-- col-sm-5 -->
+      <div class="col-sm-7">
+        <div class="sign-sidebar">
+          <h3 class="signtitle mb20"  style="color:#eee;"><%= $_SESSION['settings']['institution'];%></h3>
+          <p><%= substr($_SESSION['settings']['instituteProfile'],0,530).(strlen($_SESSION['settings']['instituteProfile']) > 530 ? '...':'');%></p>       
+          <br>
+
+          <h4 class="reason">SCHOOL ADDRESS</h4>
+          <address><%= strtoupper($_SESSION['settings']['instituteAddress']);%><br>Website : <%= $_SESSION['settings']['instituteWeb'];%><br>E-mail : <%= $_SESSION['settings']['instituteEmail'];%><br>Phone : +233 <%= $_SESSION['settings']['institutePhone'];%></address>
+           <hr class="invisible">
+
+
+          <div class="form-group">
+            <a href="/shs/login" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">All Set ? Sign In Now!</a>
+          </div>
+        </div><!-- sign-sidebar -->
+      </div><!-- col-sm-7 -->
+    </div>
+  </div><!-- signup -->
+
+
+
+<script src="../lib/jquery/jquery.js"></script>
+<script src="../lib/bootstrap/js/bootstrap.js"></script>
+<script src="../lib/select2/select2.js"></script>
+
+<script>
+$(function() {
+
+  // Select2 Box
+  $("select.form-control").select2({ minimumResultsForSearch: Infinity });
+
+});
+</script>
+
+</body>
+</html>

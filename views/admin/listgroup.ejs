@@ -1,0 +1,75 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+			
+			// JQuery Logics
+			 $(function(){ });
+
+		</script>
+
+
+
+		<div class="row clearfix">
+
+			  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				  <div class="card">                            
+					  <div class="header">
+						  <h3><i class="fa fa-pay"></i> CLASS  </h3>						
+					  </div>
+					  <div class="body">
+						 <h5><a class="btn btn-primary" href="/group/add" title="Add New Group" onclick="if(!confirm('Add Class?'))return false;"><i class="fa fa-plus"></i> Add New Class</a></h5>
+				    	 <div class="table-responsive">
+							  
+							  <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+								  <thead>
+									  <tr role="row">
+										  <th>ID</th>	
+										  <th>Class</th>
+										  <th>Year of Admission</th>
+										  <th>Year of Graduation</th>
+										  <th>Program of Study</th>
+										  <th>Level</th>
+										  <th>Status</th>
+										  <th width="250px">Action</th>
+									  </tr>
+								  </thead>								  
+								  <tbody> 
+									
+									<% rows.map((row,i) => { %>
+									  <tr class="odd">											
+											<td><b><%= row.id %></b></td>
+											<td><b><%= row.name %></b></td>
+											<td><b><%= row.entry_year %></b></td>	
+											<td><b><%= row.exit_year %></b></td>	
+											<td><b><%= row.program %></b></td>
+											<td><b><%= row.level %></b></td>
+											<td><b><%= row.academic_status %></b></td>											
+											<td>
+												<% if(row.user !== null){%>
+												<div class="btn-group" style="margin-bottom:5px;">
+												    <a target="_blanks" href="/members/<%- row.id %>" title="View Members" style="margin-right:5px;" class="btn btn-success"><i class="fa fa-users"></i></a>
+													<a target="_blanks" href="/group/gcard/<%- row.id %>" title="ID CARDS" style="margin-right:5px;" class="btn btn-warning"><i class="fa fa-credit-card"></i></a>
+													<a  href="/group/regcheck/<%- row.id %>" title="Update Registration" style="margin-right:5px;" class="btn btn-primary"><b><i class="fa fa-refresh"></i> REG</b></a>
+												    <a href="/group/edit/<%- row.id %>" title="Edit Group" style="margin-right:5px;" class="btn btn-success btn-sm"  onclick="return confirm('Edit Group?')"><i class="fa fa-edit"></i></a>
+													<a href="/group/del/<%- row.id %>" title="Delete Group" style="margin-right:5px;" class="btn btn-danger btn-sm"  onclick="return confirm('Delete Group?')"><i class="fa fa-trash"></i></a>
+												</div>
+												<div class="btn-group">
+													<a target="_blanks" href="/group/rank/<%- row.id %>" title="Class Ranking" style="margin-right:5px;" class="btn btn-warning"><b>POS</b></a>
+													<a target="_blanks" href="/group/result/<%- row.id %>" title="View Terminal Report" style="margin-right:5px;" class="btn btn-primary"><b><i class="fa fa-eye"></i> REP</b></a>
+													<a target="_blanks" href="/group/result/<%- row.id %>" title="Send Terminal Report via SMS" style="margin-right:5px;" class="btn btn-primary"><b><i class="fa fa-send"></i> REP</b></a>
+												</div>
+											    <% }%>                                                     
+									   </tr>
+									<% }) %>
+											</td>                                    
+								  </tbody>
+							   </table>
+							  
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>

@@ -1,0 +1,135 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+             <% if(msg === 'deleted'){ %>
+				  toastr.success('', 'Record Deleted Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'failed'){ %>
+				toastr.danger('', 'Saving failed!');					 
+			<% }%>
+			
+			
+			// JQuery Logics
+			 $(function(){
+
+
+				 $('.ajax_reg').load('/reg/step1',function(){                        
+                        /* Step 2 */
+                        $('#indexgo').on('click', function(){
+                            var data = $('#indexno').val();                                  
+                            
+                            $.ajax({
+                                url : '/reg/step2',
+                                method : 'get',
+                                data : 'data='+data,
+                                success : function(msg){
+                                    // Load Modal Content with Data
+                                    $('.ajax_reg').html(msg);
+									$('.step2').hide();
+									$('.step1').show();
+
+                                    $('#nextstep').on('click', function(){
+                                        //preventDefault();                                       
+                                        $('.step2').show(); 
+                                        $('.step1').hide();                                                      
+                                    });
+
+                                    $('#register').on('click', function(){
+                                        //preventDefault();                                        
+										$('#form2').submit(); 
+										//alert($('#form2').serialize());										
+										/*$.ajax({
+											url : '/reg/step2',
+											method : 'post',
+											data : $('#form2').serialize(),
+											success : function(msg){																								
+												$('.ajax_reg').html(msg);	
+												alert(msg);								          
+											}
+										});  
+										*/                                    
+                                    });
+                                }
+                            });                                                          
+                        });                        
+                    });
+                    
+
+		
+		
+
+			 });
+
+		</script>
+
+
+
+		<div class="row clearfix">
+
+				<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <div class="card">
+                            <div class="header">
+                                <h3>
+									<span>REGISTRATION MODULE</span>
+									<a href="/reg/list" class="btn btn-warning btn-sm pull-right"><i class="fa fa-refresh fa-sm"></i></a>
+								</h3><br>                                
+                            </div>                            
+                            <div class="body">
+                                <div id="ajax_reg" class="ajax_reg">
+									 <!-- Ajax Content --> 
+								</div>
+                                <div id="ajax_print" class="ajax_print">
+                                   <!-- Ajax Content -->                                                                                 
+                                </div>
+                            </div>
+                        </div>
+				</div>
+				
+				
+			  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+				  <div class="card">                            
+					  <div class="header">
+						  <h3><i class="fa fa-pay"></i> REGISTERED STUDENTS - 2017-2018, SEMESTER 2</h3>						
+					  </div>
+					  <div class="body">
+						  <div class="table-responsive">
+							  
+							  <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+								  <thead>
+									  <tr role="row">
+										  <th>#</th>
+										  <th>Student</th>
+										  <th>Programme</th>
+										  <th>Date Registered</th>
+										  <th>&nbsp;</th>
+									  </tr>
+								  </thead>								  
+								  <tbody> 
+									
+									<%
+									if(rows != null){
+									rows.map((row,i) => { %>
+									  <tr class="odd">
+											<td><%- (i+1) %></td>
+											<td><%- row.student %></td>
+											<td><%- row.program %></td>
+											<td><b><%- row.regdate %></b></td>											
+											<td>
+												<div class="btn-group">
+													<a target="_blank" href="/reg/slip/<%- row.id %>" class="btn btn-success btn-sm"  onclick="return confirm('Print Registration Slip?')"><i class="fa fa-print fa-2x"></i> </a></li>		
+												</div>
+											</td>                                                                                         
+									   </tr>
+									<% })} %>
+								  </tbody>
+							   </table>
+							  
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>

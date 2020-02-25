@@ -1,0 +1,232 @@
+<% include 'header.php';%>
+
+
+	<!-- Icons -->
+	<section class="generic">
+		
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="section-title">&nbsp;</div>
+				</div>
+			</div>
+			<div class="row">				
+				
+                <div class="col-sm-12">
+				
+				<!-- Main Content -->
+				
+					 <!-- Student Add & Update  -->
+					 <% if(isset($adduser)){%>
+					 
+					 <h5 class="sidebar-title">User Registration</h5>
+					 <div class="row">
+						<div class="col-sm-12">						    
+							<form action="/shs/postuser" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">First Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" placeholder="First Name" name="fName" value="<%= isset($std)? $std['fName'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="subject" class="kobby">Last Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control subject" id="subject" placeholder="Last Name" name="lName" value="<%= isset($std)? $std['lName'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="email" class="kobby">Email</label>
+											<i class="glyphicon glyphicon-envelope"><input type="email" class="form-control" id="email" placeholder="Email" name="email" value="<%= isset($std)? $std['email'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="phone" class="kobby">Phone number #1</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" id="phone" placeholder="Phone number #1" name="phone1" value="<%= isset($std)? $std['phone1'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+										     <label class="kobby">Phone Number #2</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" placeholder="Phone Number #2" name="phone2" value="<%= isset($std)? $std['phone2'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+										    <label for="dob" class="kobby">Date of Birth</label>
+											<input type="date" placeholder="Date of Birth" class="form-control" name="dob" value="<%= isset($std)? $std['dob'] : '';%>">
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Hometown</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" placeholder="Hometown" name="hometown" value="<%= isset($std)? $std['hometown'] : '';%>"></i>
+										</div>										
+										
+										<div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%> <%=($_SESSION['user']['privilege'] == 2 && ((isset($std) && ($std['active'] != 0)))? 'style="display:none;"' : '')%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%> <%=($_SESSION['user']['privilege'] == 2 && ((isset($std) && ($std['active'] != 1)))? 'style="display:none;"' : '')%>>Enabled</option>												
+											</select>
+										</div>	
+									</div>
+									<div class="col-sm-6">
+									    <% if(isset($std)):%>
+										<div class="form-group">										  
+											<label for="subject" class="kobby" style="text-align:center">
+											  <!--<img class="media-object img-circle"  src="<%= $std['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $std['photo'].'?'.rand();%>" data-id="<%= rand();%>" alt="<%= $std['fName']." ".$std['lName'];%>" title="<%= $std['fName']." ".$std['lName'];%>">-->
+									          <img class="media-object img-circle"  src="<%= is_null($std['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$std['pic'];%>" data-id="<%= rand();%>" alt="<%= $std['fName']." ".$std['lName'];%>" title="<%= $std['fName']." ".$std['lName'];%>">
+											</label>
+										</div>
+									  <% endif;%>
+									  
+										
+										<div class="form-group">
+											<label for="message" class="kobby">Residential Address</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" id="message" placeholder="Residential Address" name="address" > <%= isset($std)? $std['address'] : '';%></textarea></i>
+										</div>									
+										<div class="form-group">
+											<label for="active" class="kobby">Privilege</label>
+											<select class="form-control" id="privilege" name="privilege" >
+												<option value="1" <%= isset($std) && $std['privilege'] == 1? 'selected="selected"' : '';%> <%= ($_SESSION['user']['privilege'] == 2)? 'style="display:none;"' : '';%>>Administrator</option>
+												<option value="2" <%= isset($std) && $std['privilege'] == 2? 'selected="selected"' : '';%>>Tutor</option>
+                                                <option value="3" <%= isset($std) && $std['privilege'] == 3? 'selected="selected"' : '';%> <%= ($_SESSION['user']['privilege'] == 2)? 'style="display:none;"' : '';%>>User</option>												
+											</select>
+										</div>
+										 <div class="form-group">
+												<label for="classCode" class="kobby">Department Code</label>
+												<select class="form-control" id="deptCode" name="deptCode">
+												<% 
+												   $cl = $db->getAllRecord("select * from department  where active = 1");
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['deptCode'].'" '.(isset($std) && ($std['deptCode'] == $op['deptCode']) ? 'selected="selected"' : '').($_SESSION['user']['privilege'] == 2 && ((isset($std) && ($std['deptCode'] != $op['deptCode'])))? 'style="display:none;"' : '').'>'.$op['deptName'].'</option>';
+												   }
+												%>											 												
+												</select>
+										</div>
+										<div class="form-group">
+											<label for="message" class="kobby">Qualification</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" id="message" placeholder="Qualification" name="qualification"> <%= isset($std)? $std['qualification'] : '';%></textarea></i>
+										</div>
+                                        <div class="form-group">
+											<label for="name" class="kobby">User Identification</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" placeholder="User Identification" name="userCode" value="<%= isset($std)? $std['userCode'] : '';%>"  <%= ($_SESSION['user']['privilege'] == 2)? 'readonly="readonly"' : '';%>></i>
+										</div>										
+									</div>
+								</div>
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+								    <input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">	
+                                    <input type="hidden"  name="photo" value="<%= isset($std)? $std['photo'] : '/shs/ui/img/blank.jpg';%>">
+							</form>
+						</div>
+					 </div>					 
+					 <% }%>
+					
+					
+					
+					
+					
+					 <!-- User search -->
+					 <% if(isset($users)){%>				 
+					 
+					 <h5 class="sidebar-title">Users Database   |  <a href="<%= $app->urlFor('adduser');%>" onclick="if(!confirm('Add New User?'))return false;">[ <i class="fa fa-print"></i> Add New User ]</a>   |    <a target="_blank" href="ui/report/pdfTutor.php" onclick="if(!confirm('Print List of Tutors!'))return false;">[ <i class="fa fa-print"></i> Print Tutors ]</a>    | <a target="_blank" href="ui/report/user.xls" title="Download User or Tutor enrollment Sample" onclick="if(!confirm('Download User or Tutor enrollment Sample!'))return false;"><i class="fa fa-cloud-download"></i></a>    | <form style="display:inline;clear:both;" action="/shs/ui/excel_setup.php" method="post" enctype="multipart/form-data" id="formuser"><input type="file" name="user" style="display:none;" id="user_upl" onchange="this.form.submit();"/></form><a href="javascript:;" onclick="if(!confirm('Upload Completed User Excel template!')){return false;}else{document.getElementById('user_upl').click();}"><i class="fa fa-cloud-upload"></i></a></h5>
+					 <section class="newsletter">
+						 <form id="newsletters" class="input-group" action="searchuser" method="get" accept-charset="utf-8" role="form">
+							<input type="text" class="form-control" name="searchuser" placeholder="Enter Name of User or Tutor Code...">
+							<button type="submit" class="btn btn-send" data-loading-text="Sending...">Search User</button>
+						</form><hr/>
+					</section>
+					
+					<% 
+					     if(isset($scstdc)){
+					%>
+					<blockquote class="info">
+						<h4>Results</h4>
+						<p><em><span class="badge badge-danger"><%= !is_null($users)? count($users) : 0 ;%></span> Search results for "<%= isset($typed)? $typed : '';%>"</em></p>
+					</blockquote>
+					<% }%>		
+					 <ul class="media-list">				 
+						<% 
+						     if(isset($scstdc) && ($scstdc > 0)){ 						      
+							    foreach($users as $st){	%>
+									
+							<li class="media">
+								<a class="pull-left">
+									<!--<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+									<img class="media-object img-circle" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a><%= $st['fName']." ".$st['lName'];%></a><small> | Created : <%= date('F j, Y',strtotime($st['dateCreated']));%>  | Privilege : <%= ($st['privilege'] == 1) ? 'Administrator' : 'Tutor';%><% 
+									
+											  $cl = $db->getAllRecord("select dt.deptName from department dt where SiteID = '{$_SESSION['SiteID']}' and dt.deptCode  = '{$st['deptCode']}' and dt.active = 1");
+											  if(!is_null($cl)){ 
+											   foreach($cl as $op){
+												   echo '  | Department : '.$op['deptName'];
+											  }}
+									%>	
+									| User Identification : <%= $st['userCode'];%> </small></h5>									
+									<ul class="tags">
+									    <% if($st['active'] == 1){ %>
+												  <li><a href="<%= $app->urlFor('usactive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable User!'))return false;" style="color:#93db3b;background:none;" title="Disable User"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+											   <% }else{%>
+												  <li><a href="<%= $app->urlFor('usactive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable User!'))return false;" style="color:#eb7395;background:none;" title="Enable User"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+											   <% }%> 
+												<li><a href="<%= $app->urlFor('deluser',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;" title="Delete Record"><i class="fa fa-trash fa-lg"></i></a></li>
+												<li><a href="<%= $app->urlFor('edituser',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:35px;" title="Edit Record"><i class="fa fa-edit fa-lg"></i></a></li>
+												<li><a onclick="if(!confirm('Please take snapshot of User or Tutor!')){return false;}else{ window.open('/shs/ad_assets/webcam/photo.php?id=<%= $st['userCode']%>&loc=users','Photo Album','height=350,width=300'); }" title="Take Snapshot"><i class="fa fa-camera"></i></a></li>
+										        <li><a onclick="if(!confirm('Please upload photo of a user or Tutor!')){return false;}else{document.getElementById('p<%= $st['id']%>').click();}" title="Upload photo"><i class="fa fa-photo"></i></a><form style="display:inline;clear:both;" action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="f<%= $st['id']%>"><input type="file" name="std" id="p<%= $st['id']%>" style="display:none;" onchange="this.form.submit();"/><input type="hidden" name="id" value="<%= $st['userCode']%>"/><input type="hidden" name="loc" value="users"/></form></li>
+										        <li><a onclick="if(!confirm('Remove User Photo!')){return false;}" title="Remove Photo" href="<%= $app->urlFor('rmsrphoto',array('id'=> $st['id'])); %>"><i class="fa fa-close"></i></a></li>
+												<li><a href="<%= $app->urlFor('resetuser',array('id'=> $st['userCode'])); %>" onclick="if(!confirm('Reset User Password!'))return false;">Reset PWD</a></li>																				
+									</ul>									
+								</div><hr/>
+							</li>
+							
+                             <%  }}elseif(isset($scstdc) && $scstdc == 0){%>	
+							 
+									<li class="media">								
+										<div class="media-body">
+											<h5 class="media-heading"><a>No results found!!!</a></h5>							
+										</div><hr/>
+									</li>
+
+							<% }elseif(isset($scstdc) && $scstdc == -1){ 
+							          foreach($users as $st){	%>
+									
+							<li class="media">
+								<a class="pull-left">
+									<!--<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+									<img class="media-object img-circle" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a><%= $st['fName']." ".$st['lName'];%></a><small> | Created : <%= date('F j, Y',strtotime($st['dateCreated']));%>  | Privilege : <%= ($st['privilege'] == 1) ? 'Administrator' : 'Tutor';%><% 
+									
+											  $cl = $db->getAllRecord("select dt.deptName from department dt where SiteID = '{$_SESSION['SiteID']}' and dt.deptCode  = '{$st['deptCode']}' and dt.active = 1");
+											  if(!is_null($cl)){ 
+											   foreach($cl as $op){
+												   echo '  | Department : '.$op['deptName'];
+											  }}
+									%>	
+									| User Identification : <%= $st['userCode'];%> </small></h5>									
+									<ul class="tags">
+									    <% if($st['active'] == 1){ %>
+												  <li><a href="<%= $app->urlFor('usactive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable User!'))return false;" style="color:#93db3b;background:none;" title="Disable User"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+											   <% }else{%>
+												  <li><a href="<%= $app->urlFor('usactive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable User!'))return false;" style="color:#eb7395;background:none;" title="Enable User"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+											   <% }%> 
+												<li><a href="<%= $app->urlFor('deluser',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;" title="Delete Record"><i class="fa fa-trash fa-lg"></i></a></li>
+												<li><a href="<%= $app->urlFor('edituser',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:35px;" title="Edit Record"><i class="fa fa-edit fa-lg"></i></a></li>
+												<li><a onclick="if(!confirm('Please take snapshot of User or Tutor!')){return false;}else{ window.open('/shs/ad_assets/webcam/photo.php?id=<%= $st['userCode']%>&loc=users','Photo Album','height=350,width=300'); }" title="Take Snapshot"><i class="fa fa-camera"></i></a></li>
+										        <li><a onclick="if(!confirm('Please upload photo of a user or Tutor!')){return false;}else{document.getElementById('p<%= $st['id']%>').click();}" title="Upload photo"><i class="fa fa-photo"></i></a><form style="display:inline;clear:both;" action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="f<%= $st['id']%>"><input type="file" name="std" id="p<%= $st['id']%>" style="display:none;" onchange="this.form.submit();"/><input type="hidden" name="id" value="<%= $st['userCode']%>"/><input type="hidden" name="loc" value="users"/></form></li>
+										        <li><a onclick="if(!confirm('Remove User Photo!')){return false;}" title="Remove Photo" href="<%= $app->urlFor('rmsrphoto',array('id'=> $st['id'])); %>"><i class="fa fa-close"></i></a></li>
+												<li><a href="<%= $app->urlFor('resetuser',array('id'=> $st['userCode'])); %>" onclick="if(!confirm('Reset User Password!'))return false;">Reset PWD</a></li>																				
+									</ul>									
+								</div><hr/>
+							</li>
+                            <% }}%>							
+					</ul>
+
+					 <% }%>
+					
+                     					 
+				</div>						
+			</div>
+			
+			
+		
+	</section>
+	<!-- End Icon -->
+	
+
+<% include 'footer.php';%>

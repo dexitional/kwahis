@@ -1,0 +1,17 @@
+<section>  
+    <ul class="list-group">
+        <li class="list-group-item active">
+            <center><strong><em>REGISTRATION SLIP PRINTOUT</em></strong><br/><span><%= sl.fname +' '+sl.lname %></span></center>
+        </li>      
+        <li class="list-group-item">                                                        
+            <center>
+                <div class="btn-group">
+                   <a href="/reg/slip/<%- sl.id %>" class="btn btn-success btn-sm" title="Print Registration Slip" onclick="return confirm('Print Registration Slip?')"><i class="fa fa-print fa-2x"></i> </a></li>		
+                </div>
+            </center>           
+        </li>         
+        <li class="list-group-item">                                                        
+            <center><a href="/reg/list"  class="btn btn-success">New Registration <i class="fa fa-chevron-right"></i></a></center>
+        </li>                                                                                                    
+    </ul>
+</section>

@@ -1,0 +1,49 @@
+<form name="" action="/course/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Code</label>							
+								<input type="text" name="code" value="<%- row.code %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Name</label>								
+								<input type="text" name="name" value="<%- row.name %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Remarks</label>							
+							    <input type="text" name="remarks" value="<%- row.remarks %>" class="form-control">
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Credit Hours</label>							
+							    <input type="number" name="hours" value="<%- row.hours %>" class="form-control">
+							</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">	
+							<label class="form-label kobby">Name of Instructor/Tutor</label>							
+							<input type="text" name="instructor" value="<%- row.instructor %>" class="form-control">
+						</div>
+				    </div>
+					
+						
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/course/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

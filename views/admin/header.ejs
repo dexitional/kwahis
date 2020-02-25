@@ -1,0 +1,1000 @@
+
+<!DOCTYPE html>
+<html>
+<meta http-equiv="expires" content="Sun, 01 Jan 2014 00:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache"/>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+<head>
+	<meta charset="utf-8">
+	
+	<!-- Define Charset -->
+    <meta charset="utf-8">
+
+    <!-- Page Title -->
+    <title>Student Management System</title>
+
+    <!-- Responsive Metatag -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=9" />-->
+
+  
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+        <link href="/public/assets/icon.css" rel="stylesheet" type="text/css">
+
+        <!-- Styles -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+        <link href="/public/st_assets/plugins/pace-master/themes/blue/pace-theme-flash.css" rel="stylesheet"/>
+        
+        <link href="/public/st_assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/public/st_assets/plugins/fontawesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+        
+        <link href="/public/st_assets/plugins/offcanvasmenueffects/css/menu_cornerbox.css" rel="stylesheet" type="text/css"/>	
+       
+       
+        <link href="/public/st_assets/plugins/3d-bold-navigation/css/style.css" rel="stylesheet" type="text/css"/>			
+        <link href="/public/st_assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css"/>	
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/public/ad_asset/style.css">
+	    <!-- Tooltip Files @kobby Kay -->
+	    <link rel="stylesheet" type="text/css" href="/public/ad_assets/lib/tooltipster/css/tooltipster.bundle.min.css" />   
+		
+        
+        <!-- Theme Styles -->
+        <link href="/public/st_assets/css/modern.min.css" rel="stylesheet" type="text/css"/>
+        <link href="/public/st_assets/css/themes/white.css" class="theme-color" rel="stylesheet" type="text/css"/>
+       
+		<!-- Theme Material Design 2 -->
+		<link href="/public/assets/dataTables.bootstrap.css" rel="stylesheet">
+
+		<!-- Bootstrap Switch Js -->
+		<link href="/public/assets/bootstrap-switch.min.css" rel="stylesheet">
+		
+		 <style type="text/css">				 
+			 
+			 p{
+				 font-size: 0.9em;
+				 font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+			 }
+			 
+			 h5 {
+				 font-size: 1.18em;
+			 }
+			 
+			 .generic h5:first-child {
+				 text-transform:uppercase;
+			 }
+						   
+			 .alert-success {
+					 background-color: #9ed566;
+					 border-color: transparent;
+					 color: #456b1d;
+			 }
+			 
+			 .alert-info {
+					 background-color: #56c2e8;
+					 border-color: transparent;
+					 color: #0e4e64;
+			 }
+			 
+			 .alert-warning {
+					 background-color: #fdcc51;
+					 border-color: transparent;
+					 color: #815c01;
+			 }
+			 
+			 .alert-danger {
+				 background-color: <%- settings.loginColor; %>;
+				 border-color: transparent;
+				 color: #ffffff;
+			 }	
+
+			 .fade.in {
+				 opacity: 1;
+			 }
+				 
+			 .nomargin {
+				 margin: 0;
+			 }		 
+			 
+			 .mb15 {
+				 margin-bottom: 15px;
+			 } 
+			 
+			 .btn-primary {
+				 color: #ffffff;
+				 /*background-color: !important;*/
+				 border-color: transparent;
+			 }
+			 
+			 .btn-color-border-solid{
+			 /*	background-color: !important;
+				 border-color: !important;*/
+				 color: #fff;
+			 }
+			 
+			 .btn-color-border-solid:hover {
+				 background-color: #ffffff;
+			 /*	border-color: ;
+				 color: */
+			 }
+			 
+			 .newsletter .btn {
+			 /*   background-color: !important; */
+			    line-height:45px;		   
+			 }
+			 
+			 .newsletter input[type=text] {				
+				 line-height:45px;
+				 border:2px solid <%- settings.primaryColor; %>!important;
+				 border-radius:35px 0 0 35px;
+				 text-align:center;
+			 }
+			 
+			 .newsletter .btn:hover {
+			 background-color: #eee!important; 
+			 }
+			 
+			 .btn {
+				 padding: 10px 12px 9px;			
+				 transition: all 0.2s ease-out 0s;
+				 display: inline-block;
+				 margin-bottom: 0;
+				 font-weight: normal;
+				 text-align: center;
+				 vertical-align: middle;
+				 touch-action: manipulation;
+				 cursor: pointer;
+				 background-image: none;
+				 /*background-color: !important;*/
+				 color:#eee;
+				 border: 1px solid transparent;
+				 white-space: nowrap;			
+				 font-size: 12px;
+				 line-height: 1.42857143;
+				 border-radius: 2px;			
+				 user-select: none;
+			 }
+				 
+			 .alert {
+				 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				 font-size: 12px;
+				 line-height: 1.42857143;
+				 padding: 15px;
+				 margin-bottom: 17px;
+				 border: 1px solid transparent;
+				 border-radius: 2px;
+			 }
+			 
+			 
+		 /* Camera Photo Capture Styling */
+		 
+			 .camcontent{
+			   display: block;
+			   position: relative;
+			   overflow: hidden;
+			   height: 480px;
+			   margin: auto;
+			   }
+			 .cambuttons button {
+			   border-radius: 15px;
+			   font-size: 18px;
+			   }
+			 .cambuttons button:hover {
+			   cursor: pointer;
+			   border-radius: 15px;
+			   background: #00dd00 ;    /* green */ 
+			   }
+			   
+			 /* Override */
+			 
+			 input[type="date"].form-control, input[type="time"].form-control, input[type="datetime-local"].form-control, input[type="month"].form-control {
+				 line-height: 1em !important;
+			 }
+
+
+			 .form-control{
+				 background-color:rgb(218, 236, 245);
+				 border:2px solid #b5e8fa;
+				 color:<%- settings.loginColor; %>;
+				 font-weight:bold;
+				 height:40px;
+				 border-radius:5px;
+			 }
+
+			 .kobby{
+				 color:<%- settings.primaryColor; %>;
+				 font-size:0.9em;
+				 font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+				 font-weight:600;
+			  }	             
+			 
+			 
+			 .signpanel {
+				   position: fixed;
+				   left: 0;
+				   top: 0;
+				   width: 100%;
+				   height: 100%;
+				  /* background: url() no-repeat center center fixed;
+				   background-size: cover;
+				   -webkit-filter: blur(4px);  */
+			 }
+			 
+			 
+			 .sub-nav{
+				 background-color:#eee;
+				 border-radius:0  0 40px 40px;
+				 margin-right:50px;
+				 padding:0px 20px;
+				 
+			 }
+			 
+			 .sub-nav .dash-links li a:hover, .sub-nav .dash-links li a.active, .sub-nav .dash-links li a.active:first-child{
+				 color: #eee;
+				 background-color:#eee !important;
+			 }
+			 
+			 .sub-nav .dash-links li a {
+				 height: 50px;
+				 width: 50px;
+				 position: relative;
+				 padding: 10px 10px;		
+			 }
+			 
+			 .copy{
+			   position:relative;
+			   background-color: <%- settings.primaryColor; %>; 			  
+			 }
+			 
+			 .profile-nav{
+				 background-color: #eee; 
+				 border-radius:40px;
+				 margin-left:15%;
+				 padding:8px 20px;
+				 position:absolute;
+				 top:20%;
+				 right: 3%;
+				 clear:both;
+			 }
+			 
+			 .profile-nav p{
+				 display:inline;
+				 line-height: 55px;
+				 text-align: center;
+			 }
+		
+			 .profile-nav img{
+				 float:right;
+				 width:54px;
+				 height:54px;
+				 border-radius:50%;
+			 }
+			 
+			 
+			 /* Theme */
+			 
+			 .icon-simple.default {
+				 background-color: <%- settings.primaryColor; %>; 
+				 text-align:center;
+				 font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				 font-weight:bold;
+				 font-size:25px;
+				 height:150px;
+				 width:190px;
+				 padding-top:50px;
+				 margin:20px 15px;  
+				 border-radius:5px;  
+			 }
+			 
+			 .dash-links li a:hover,.social-links li a:hover {
+				 color: #eee;
+			 }
+			 
+			 a{
+				 color: #eee;
+			 }
+			 
+			 a:hover,a:active,.tags li a:focus{
+				 color: #eee;
+				 text-decoration:none;
+			 }
+			 
+			 .tags li a:hover {
+				 background-color: <%- settings.primaryColor; %>;
+			 }
+			 
+								 
+			 .sidebar-title:before,.alternative-title:before {
+				 background-color: <%- settings.primaryColor; %>;
+			 }
+			 
+			 p.down{
+				 color: #fff !important;
+			 }
+			 
+			 fade,top,bottom,in{
+				 background-color: #eee;
+			 }
+			 
+			 *:focus{
+				 text-decoration:none;
+				 color: #666;
+			 }
+			 
+			 .media-heading {
+				 color: #aeb3b9;
+				 font-size: 15px;
+				 
+			 }
+			 
+			 .media-heading a {
+				 color: <%- settings.primaryColor; %>;
+			 }
+			 
+			 .media-heading a:hover {
+				 color: #eee;
+			 }
+			 
+			 
+			 /* Main Content Styling for all 
+				@ Override
+			 */
+			 
+			 .page-inner {
+				 padding: 0 0 0;
+				 background: #f1f2f3;				
+			 }
+			 
+			 section.generic{
+				 background:#fff;
+				 padding:0 20px 10px 20px;
+				 margin-bottom:50px;
+			 }
+			 
+			 section.generic .sidebar{
+				 background:none;
+			 }
+			 
+			 .page-title{
+				 
+			 }
+			 
+			 .page-title h3 {
+				 font-size: 24px;
+				 font-weight: 300;
+				 color: #74767d;
+				 padding: 0;
+				 margin: 0 0 4px;
+				 text-align:left;
+			 }
+			 
+			 
+			 /*  THEME STYLING */
+			 
+					 .page-content {
+						 background: #eee;
+					 }
+
+					 .navbar .logo-box {
+						 background: #fff;
+					 }
+
+					 .navbar .logo-box a {
+						 color: #5f5f5f;
+					 }
+
+					 .sidebar {
+						 background: #eee;
+					 }
+
+					 .sidebar-header {
+						 background: #eee;
+					 }
+
+					 .sidebar-profile span small {
+						 color: <%- settings.primaryColor; %>;
+					 }
+
+					 .menu {
+						 background: #ded9b3;
+					 }
+
+					 .menu.accordion-menu a,.menu.accordion-menu p {
+						 color: <%- settings.primaryColor; %>;
+					 }
+
+					 .menu.accordion-menu a:hover {
+						 background: <%- settings.primaryColor; %>;
+						 color: ded9b3;
+					 }
+
+					 .menu.accordion-menu > li.active > a,
+					 .menu.accordion-menu > li.active.open > a {
+						 background: <%- settings.primaryColor; %>;
+						 color: #fff;
+					 }
+
+					 .small-sidebar:not(.page-sidebar-fixed) .accordion-menu li.droplink:hover > a,
+					 .horizontal-bar .accordion-menu li.droplink:hover > a,
+					 .menu.accordion-menu ul,
+					 .menu.accordion-menu li.open > a,
+					 .hover-menu .accordion-menu li.droplink:hover > a {
+						 background: <%- settings.primaryColor; %>;
+						 color: #ded9b3;
+					 }
+
+					 .menu.accordion-menu ul li a:hover,
+					 .menu.accordion-menu ul li.active a {
+						 background: #3a6c80;							
+						 color: #ded9b3;
+						 font-weight:bolder;
+					 }
+
+					 .menu.accordion-menu ul li a {
+						 color: #fff;
+					 }
+					 
+					 span.checked input[type=checkbox]{
+						 border:2px solid <%- settings.primaryColor; %>!important;							
+					 }
+					   
+					   
+					 /* Custom CSS */
+					  .btn-danger{
+						  background-color: #ded9b3;
+					  }
+					  
+					  .btn-primary,.btn-success{
+						  background-color: <%- settings.primaryColor; %>;
+					  }
+					 
+
+					 /* Jquery DataTable ============================ */
+							 .dataTables_wrapper {
+								 position: relative;
+								 clear:both;
+							  }
+							 
+							 .dataTables_wrapper select {
+								 border: none;
+								 border-bottom: 1px solid #ddd;
+								 -webkit-border-radius: 0;
+								 -moz-border-radius: 0;
+								 -ms-border-radius: 0;
+								 border-radius: 0;
+								 -webkit-box-shadow: none;
+								 -moz-box-shadow: none;
+								 -ms-box-shadow: none;
+								 box-shadow: none;
+							  }
+
+							  .dataTables_wrapper label {
+								 display:block;
+								 float:left;
+							  }
+
+							 .dataTables_wrapper select:active, .dataTables_wrapper select:focus {
+								 -webkit-box-shadow: none;
+								 -moz-box-shadow: none;
+								 -ms-box-shadow: none;
+								 box-shadow: none;
+							  }
+							 .dataTables_wrapper input[type="search"] {
+								 width: 250px;
+								 height:40px;
+								 padding:20px 25px;
+								 border-radius:3px;									
+								 -webkit-box-shadow: none;
+								 -moz-box-shadow: none;
+								 -ms-box-shadow: none;
+								 box-shadow: none;
+								 border: none;
+								 font-size: 12px;
+								 border: 2px solid #cde0f3;
+								 background-color: #deeaf5;
+							  }
+							 .dataTables_wrapper input[type="search"]:focus, .dataTables_wrapper input[type="search"]:active {
+								 border-bottom: 2px solid #1f91f3;
+							  }
+							 .dataTables_wrapper .dt-buttons {
+								 float: right;
+							  }
+							 .dataTables_wrapper .dt-buttons a.dt-button {
+								 background-color: #607D8B;
+								 color: #fff;
+								 padding: 7px 12px;
+								 margin-right: 5px;
+								 text-decoration: none;
+								 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 10px rgba(0, 0, 0, 0.12);
+								 -webkit-border-radius: 2px;
+								 -moz-border-radius: 2px;
+								 -ms-border-radius: 2px;
+								 border-radius: 2px;
+								 border: none;
+								 font-size: 13px;
+								 outline: none; 
+							 }
+							 .dataTables_wrapper .dt-buttons a.dt-button:active {
+								 opacity: 0.8; 
+							 }
+
+							 .dt-button-info {
+								 position: fixed;
+								 top: 50%;
+								 left: 50%;
+								 min-width: 400px;
+								 text-align: center;
+								 background-color: #fff;
+								 border: 2px solid #999;
+								 -webkit-border-radius: 3px;
+								 -moz-border-radius: 3px;
+								 -ms-border-radius: 3px;
+								 border-radius: 3px;
+								 margin-top: -100px;
+								 margin-left: -200px;
+								 z-index: 21; 
+							 }
+							 .dt-button-info h2 {
+								 color: #777;
+							 }
+							 .dt-button-info div {
+								 color: #777;
+								 margin-bottom: 20px;
+							  }
+
+
+
+							 body {
+								 background-color: #e9e9e9;
+								 -moz-transition: all 0.5s;
+								 -o-transition: all 0.5s;
+								 -webkit-transition: all 0.5s;
+								 transition: all 0.5s;
+								 font-family: 'Roboto', Arial, Tahoma, sans-serif;
+								 font-size: 14px;
+								 line-height: 1.42857143;
+								 color: #333;
+								 background-color: #fff;
+							 }	
+
+
+							 /* Fix for Menu */	
+							 .sub-menu{
+								 display:none;
+							 }	
+
+							 
+											 
+	 												
+	    </style>
+		
+		
+         <!-- Javascripts -->
+		 <script src="/public/st_assets/plugins/jquery/jquery-2.1.3.min.js"></script> 		        
+		 <script src="/public/st_assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+		 <!-- Jquery DataTable Plugin Js -->
+		 <script src="/public/assets/jquery.dataTables.js"></script>
+		 <script src="/public/assets/dataTables.bootstrap.js"></script>
+		 <script src="/public/assets/dataTables.buttons.min.js"></script>
+		 <script src="/public/assets/buttons.flash.min.js"></script>
+		 <script src="/public/assets/export/jszip.min.js"></script>
+		 <script src="/public/assets/pdfmake.min.js"></script>
+		 <script src="/public/assets/vfs_fonts.js"></script>
+		 <script src="/public/assets/buttons.html5.min.js"></script>
+		 <script src="/public/assets/buttons.print.min.js"></script>
+         <!-- Toaster -->
+		 <script src="/public/st_assets/plugins/toastr/toastr.min.js"></script> 		
+	 
+ 
+		 <!-- Bootstrap Switch Js -->
+		 <script src="/public/st_assets/lib/jquery-toggles/toggles.js"></script> 
+		 <script src="/public/assets/bootstrap-switch.min.js"></script>
+		 
+		
+		
+ 
+		 <!-- @Kobby photo upload script 
+		 <script src="/shs/ad_assets/webcam/jquery-1.6.1.min.js"></script>-->
+		 <script src="/public/ad_assets/webcam/jquery.form.js"></script>
+		 
+		 <!-- ======================= JQuery libs =========================== -->
+	 
+		 <script type="text/javascript">
+			
+			 $( document ).ready(function() {
+					 
+					 /* Data Tables */ 					
+					var table = $('.js-exportable').DataTable({
+						dom: 'Bfrtip',
+						responsive: true,
+						buttons: [
+							'copy', 'csv', 'excel', 'pdf', 'print'
+						]
+					});
+
+
+					$(table.table().container()).addClass( 'dataTables_wrapper' );
+
+
+					var server = $('.server').DataTable({ 
+						dom: 'Bfrtip',
+						responsive: true,
+						buttons: ['copy','excel', 'print'],            
+						"serverSide": true,    
+						"columns": [
+							{"data": "photo"},	
+							{"data": "name"},
+							{"data": "index_number"},	
+							{"data": "gender"},
+							{"data": "dobs"},	
+							{"data": "class"},
+							{"data": "program"},
+							{"data": "action"},                  
+							{"data": "phone"},
+							{"data": "address"}						
+						],               
+						"ajax": {
+							url: '/student/gson',	
+							dataType: "JSON",
+							type: 'POST'	
+						}     
+					});
+					
+
+					// Graduates
+					var graduate = $('.graduate').DataTable({ 
+						dom: 'Bfrtip',
+						responsive: true,
+						buttons: ['copy','excel', 'print'],            
+						"serverSide": true,    
+						"columns": [
+							{"data": "photo"},	
+							{"data": "name"},
+							{"data": "index_number"},	
+							{"data": "gender"},
+							{"data": "dobs"},	
+							{"data": "class"},
+							{"data": "program"},
+							{"data": "action"},                  
+							{"data": "phone"},
+							{"data": "address"}						
+						],               
+						"ajax": {
+							url: '/graduate/gson',	
+							dataType: "JSON",
+							type: 'POST'	
+						}     
+					});
+					
+                    // Apply CSS
+					$(server.table().container()).addClass('dataTables_wrapper');
+                    $(graduate.table().container()).addClass('dataTables_wrapper' );
+
+			
+ 
+			 
+					 /* Toaster */
+						var i = 0;
+						toastr.options = {
+							closeButton: true,
+							progressBar: true,
+							showMethod: 'fadeIn',
+							hideMethod: 'fadeOut',
+							timeOut: 2000
+						};
+					
+																	 
+			 });
+ 
+	   
+	   /*  Photo Upload script */
+		     $('#photo').on('change', function(){ 
+				 alert("Photo changed!");
+				//$(parent).submit();		
+			 });
+		
+					 
+	  /* Popup Callback function @Kobby Kay */
+		// Put this into popup : onComplete -> window.opener.setData(data);
+		function setData(data){
+		     window.location = '/shs/savephotouser/'+data;
+	    }
+		 
+		function getAge(dateString){
+			 var today = new Date();
+			 var birthDate = new Date(dateString);
+			 var age = today.getFullYear() - birthDate.getFullYear();
+			 var m = today.getMonth() - birthDate.getMonth();
+			 if(m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
+				  age--;
+			 } return age;
+		}			 
+	 </script>
+
+      
+        <!-- 'page-header-fixed  pace-done small-sidebar' : 'page-header-fixed'-->
+    </head>
+    <body class="page-header-fixed small-sidebar pace-done" style="background:url(<%- settings.bg; %>)">
+        <div class="overlay"></div>
+		<!-- Popup Navigation onclick of Profile Photo -->
+        <div class="menu-wrap hidden-print">
+            <nav class="profile-menu">
+                <div class="profile"><img src="/public/none.png" width="200px" alt="<%- session.fname+' '+session.lname%>"/><br><center><span><%- session.fname+' '+session.lname%></span></center></div>
+            </nav>
+            <button class="close-button" id="close-button">Close Menu</button>
+        </div><!-- # End of Photo -->		
+      
+        <main class="page-content content-wrap container">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="sidebar-pusher">
+                        <a href="javascript:void(0);" class="waves-effect waves-button waves-classic push-sidebar">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="logo-box hidden-print">
+                        <a href="/dash" class="logo-text"><span><%- settings.appName; %>&nbsp;<sup>&reg;</sup></span></a>
+                    </div><!-- Logo Box -->
+                    <div class="search-button hidden-print">
+                        <a href="javascript:void(0);" class="waves-effect waves-button waves-classic show-search"><i class="fa fa-search"></i></a>
+                    </div>
+                    <div class="topmenu-outer">
+                        <div class="top-menu">
+                            <ul class="nav navbar-nav navbar-left">
+                                <li>		
+                                    <a href="javascript:void(0);" class="waves-effect waves-button waves-classic sidebar-toggle"><i class="fa fa-bars"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#cd-nav" class="waves-effect waves-button waves-classic cd-nav-trigger"><i class="fa fa-diamond"></i></a>
+                                </li>
+                                <li>		
+                                    <a href="javascript:void(0);" class="waves-effect waves-button waves-classic toggle-fullscreen"><i class="fa fa-expand"></i></a>
+                                </li>
+								
+								
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic" data-toggle="dropdown">
+                                        <i class="fa fa-cogs"></i>
+                                    </a>
+									<form action="/theme" method="post">
+                                    <ul class="dropdown-menu dropdown-md dropdown-list theme-settings" role="menu">
+                                        <li class="li-group">
+                                            <ul class="list-unstyled">
+                                                <li class="no-link" role="presentation">
+                                                    Fixed Header 
+                                                    <div class="ios-switch pull-right switch-md">
+                                                        <input type="checkbox" name="fixed-header-check" value="page-header-fixed" class="js-switch pull-right fixed-header-check" checked>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="li-group">
+                                            <ul class="list-unstyled">
+                                                <li class="no-link" role="presentation">
+                                                    Fixed Sidebar 
+                                                    <div class="ios-switch pull-right switch-md">
+                                                        <input type="checkbox" name="fixed-sidebar-check" value="page-sidebar-fixed" class="js-switch pull-right fixed-sidebar-check">
+                                                    </div>
+                                                </li>
+                                                <li class="no-link" role="presentation">
+                                                    Horizontal bar 
+                                                    <div class="ios-switch pull-right switch-md">
+                                                        <input type="checkbox" name="horizontal-bar-check" value="page-horizontal-bar" class="js-switch pull-right horizontal-bar-check">
+                                                    </div>
+                                                </li>
+                                                <li class="no-link" role="presentation">
+                                                    Toggle Sidebar 
+                                                    <div class="ios-switch pull-right switch-md">
+                                                        <input type="checkbox" name="toggle-sidebar-check" value="small-sidebar" class="js-switch pull-right toggle-sidebar-check">
+                                                    </div>
+                                                </li>
+                                                <li class="no-link" role="presentation">
+                                                    Compact Menu 
+                                                    <div class="ios-switch pull-right switch-md">
+                                                        <input type="checkbox" name="compact-menu-check" value="compact-menu" class="js-switch pull-right compact-menu-check">
+                                                    </div>
+                                                </li>
+                                                <li class="no-link" role="presentation">
+                                                    Hover Menu 
+                                                    <div class="ios-switch pull-right switch-md">
+                                                        <input type="checkbox" name="hover-menu-check" value="hover-menu" class="js-switch pull-right hover-menu-check">
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="li-group">
+                                            <ul class="list-unstyled">
+                                                <li class="no-link" role="presentation">
+                                                    Boxed Layout 
+                                                    <div class="ios-switch pull-right switch-md">
+                                                        <input type="checkbox" name="boxed-layout-check" value="container" class="js-switch pull-right boxed-layout-check" checked>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <!--<li class="li-group">
+                                            <ul class="list-unstyled">
+                                                <li class="no-link" role="presentation">
+                                                    Choose Theme Color
+                                                    <div class="color-switcher">
+                                                        <a class="colorbox color-blue" href="" title="Blue Theme" data-css="blue"></a>
+                                                        <a class="colorbox color-green" href="" title="Green Theme" data-css="green"></a>
+                                                        <a class="colorbox color-red" href="" title="Red Theme" data-css="red"></a>
+                                                        <a class="colorbox color-white" href="" title="White Theme" data-css="white"></a>
+                                                        <a class="colorbox color-purple" href="" title="purple Theme" data-css="purple"></a>
+                                                        <a class="colorbox color-dark" href="" title="Dark Theme" data-css="dark"></a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="no-link"><button class="btn btn-default reset-options">Reset Options</button></li>-->
+										<li class="no-link"><button class="btn btn-default theme_but" type="submit">Save Options</button></li>
+                                    </form>
+									</ul>
+                                </li>
+                               
+								
+                            </ul>
+							
+							
+                            <ul class="nav navbar-nav navbar-right">
+                              
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle waves-effect waves-button waves-classic" data-toggle="dropdown">
+                                        <span class="user-name"><%- session.fname+' '+session.lname %><i class="fa fa-angle-down"></i></span>
+                                        <img class="img-circle avatar" src="/public/none.png" width="50" height="50" alt="">
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-list" role="menu">
+                                      <li role="presentation"><a href="/user/edit/<%- session.id%>" onclick="if(!confirm('Update User Profile!'))return false;"><i class="fa fa-user m-r-xs"></i> Profile</a></li>
+                                      <li role="presentation"><a target="_blank" onclick="if(!confirm('Do you want to Change Password!')){return false;}else{var ins = prompt('Enter New Password'); if(ins != null){ var xns = prompt('Confirm New Password');}else{return false;} if(xns == ins){ alert('Password changed successfully!');window.location='/user/setpwd/<%- session.id%>/'+ins;}else{ alert('Passwords don\'t match!\n\nRe-try again');return false;}}"><i class="fa fa-lock m-r-xs"></i> Change Password </a></li>
+                                      <li role="presentation"><a href="/logout" onclick="if(!confirm('You are logging out!'))return false;"><i class="fa fa-sign-out m-r-xs"></i>Log out</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="/logout" class="log-out waves-effect waves-button waves-classic" onclick="if(!confirm('You are logging out!'))return false;">
+                                        <span><i class="fa fa-sign-out m-r-xs"></i>Log out</span>
+                                    </a>
+                                </li>
+                            </ul><!-- Nav -->
+                        </div><!-- Top Menu -->
+                    </div>
+                </div>
+            </div><!-- Navbar -->
+            <div class="page-sidebar sidebar hidden-print">
+                <div class="page-sidebar-inner slimscroll">
+                    <div class="sidebar-header">
+                        <div class="sidebar-profile">
+                            <a href="javascript:void(0);" id="profile-menu-link">
+                                <div class="sidebar-profile-image">
+                                    <img src="<%- settings.logo; %>" alt="<%- session.fname+''+session.lname %>" class="img-circle img-responsive">
+                                </div>
+                                <div class="sidebar-profile-details">
+                                    <span><%- session.fname+' '+session.lname%><br><small><%- session.privilege == '1' ? 'ADMINISTRATOR':(session.privilege == '2'? 'TUTOR':(session.privilege == '3'? 'ACCOUNTANT':'OFFICER')) %></small></span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="menu accordion-menu">                        
+						
+					<% if(session.privilege == '1'){ %>
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-home"></span><p style="color:<%- settings.accentColor; %>;font-weight:bolder;">HOME</p><span class="arrow"></span></a>
+							<ul class="sub-menu">
+								<li class=""><a href="/dash">Dashboard</a></li>
+							</ul>								
+						</li>	
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-book"></span><p style="color:<%- settings.accentColor; %>;font-weight:bolder;">ACADEMICS</p><span class="arrow"></span></a>
+							<ul class="sub-menu">								
+								<li class=""><a href="/student/list">Student</a></li>
+								<li class=""><a href="/graduate/list">Graduate</a></li>
+								<li class=""><a href="/group/list">Class</a></li>
+								<li class=""><a href="/program/list">Program</a></li>
+								<li class=""><a href="/course/list">Subject</a></li>
+								<li class=""><a href="/bill/list">Bill</a></li>								
+							</ul>
+						</li>		  
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-dollar"></span><p style="color:<%- settings.accentColor; %>;font-weight:bolder;">ACCOUNTS</p><span class="arrow"></span></a>
+							<ul class="sub-menu">								
+								<li class=""><a href="/pay/list">Payment</a></li>
+								<li class=""><a href="/debt/list">Debt</a></li>
+								<!--<li class=""><a href="/mattress/list">Mattress</a></li>-->
+								
+							</ul>
+						</li>	
+                      <!--
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-bed"></span><p style="color:#F90;font-weight:bolder;">ACCOMODATION</p><span class="arrow"></span></a>
+							<ul class="sub-menu">		
+								<li class=""><a href="/hall/list">Halls/Hostel</a></li>
+								<li class=""><a href="/room/list">Rooms</a></li>
+								<li class=""><a href="/bed/list">Beds</a></li>
+								<li class=""><a href="/feeding/list">Feeding</a></li>
+								<!--<li class=""><a href="/mattress/list">Mattress</a></li>					
+							</ul>
+						</li>
+						-->
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-gear"></span><p style="color:<%- settings.accentColor; %>;font-weight:bolder;">SETTINGS</p><span class="arrow"></span></a>
+							<ul class="sub-menu">								
+								<li class=""><a href="/calendar/list">Calendar</a></li>
+								<!--<li class=""><a href="/reg/list">Registration</a></li>-->
+								<li class=""><a href="/assess/list">Score Sheet</a></li>
+								<li class=""><a href="/scheme/list">Score Scheme</a></li>								
+								<li class=""><a href="/user/list">Users</a></li>								
+							</ul>
+						</li>
+
+					<% } %>
+	   
+
+					<% if(session.privilege == '2'){ %>
+						<!-- Tutor only -->
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-bars"></span><p style="color:<%- settings.accentColor; %>;font-weight:bolder;">TUTOR</p><span class="arrow"></span></a>
+							<ul class="sub-menu">								
+									<li class=""><a href="/dash">Dashboard</a></li>
+									<li class=""><a href="/assess/list/<%- session.id%>">Assesment</a></li>																
+									<li class=""><a href="/user/list/<%- session.id%>">Users</a></li>		
+							</ul>
+						</li>
+					<% } %>
+
+					<% if(session.privilege == '3'){ %>
+                        <!-- Accountant only -->
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-bars"></span><p style="color:<%- settings.accentColor; %>;font-weight:bolder;">ACCOUNTANT</p><span class="arrow"></span></a>
+							<ul class="sub-menu">								
+								<li class=""><a href="/dash">Dashboard</a></li>
+								<li class=""><a href="/reg/list">Registration</a></li>
+								<li class=""><a href="/pay/list">Payment</a></li>
+								<li class=""><a href="/debt/list">Debtors</a></li>								
+								<li class=""><a href="/user/list/<%- session.id%>">Users</a></li>								
+							</ul>
+						</li>
+					<% } %>
+
+
+					<% if(session.privilege == '4'){ %>
+						<!-- Registration only -->
+						<li class="droplink"><a href="#" class="waves-effect waves-button"><span class="menu-icon fa fa-bars"></span><p style="color:<%- settings.accentColor; %>;font-weight:bolder;">REGISTRATION </p><span class="arrow"></span></a>
+							<ul class="sub-menu">								
+								<li class=""><a href="/dash">Dashboard</a></li>
+								<li class=""><a href="/reg/list">Registration</a></li>																
+								<li class=""><a href="/user/list/<%- session.id%>">Users</a></li>								
+							</ul>
+						</li>
+					<% } %>
+
+					</ul>
+					
+                </div><!-- Page Sidebar Inner -->
+            </div><!-- Page Sidebar -->
+			
+			
+			
+			<!-- Main Content Wrappers -->
+			<div class="page-inner" style="min-height:nullpx !important">
+               <div class="page-title hidden-print" style="background-color:#f1f2f3; background-image: url(<%- settings.logo; %>);background-repeat:no-repeat;background-position:90% 50%;">
+				        <h3>						
+						     <b style="color: <%- settings.primaryColor; %>;font-size:25px;">
+							      <%= title.toUpperCase();%>
+                            </b>						  
+						</h3>
+						<div class="page-breadcrumb hidden-print">		     
+							<ol class="breadcrumb">
+								<li><a href="/dash" class="btn btn-sm btn-primary" style="color:#ded9b3;cursor:pointer"><i class="fa fa-home"></i></i> <b> HOME</b></a></li>
+								<% if(session.privilege == '1'){ %>
+								<li><a href="/student/list" class="btn btn-sm btn-primary" style="color:#ded9b3;cursor:pointer"><i class="fa fa-users"></i></i> <b> STUDENTS</b></a></li>
+								<li><a href="/graduate/list" class="btn btn-sm btn-primary" style="color:#ded9b3;cursor:pointer"><i class="fa fa-users"></i></i> <b> GRADUATES</b></a></li>
+								<li><a href="/group/list" class="btn btn-sm btn-primary" style="color:#ded9b3;cursor:pointer"><i class="fa fa-users"></i></i> <b> CLASSES</b></a></li>
+								<li><a href="/assess/list" class="btn btn-sm btn-primary" style="color:#ded9b3;cursor:pointer"><i class="fa fa-book"></i></i> <b> SCORES</b></a></li>
+								<li><a href="/user/list" class="btn btn-sm btn-primary" style="color:#ded9b3;cursor:pointer"><i class="fa fa-lock"></i></i> <b> USERS</b></a></li>								
+							    <% }%>
+							</ol>
+						</div>
+				</div>
+				
+			<!-- Main Content Page
+				<main id="main-wrapper">
+                    <div class="row"> --> 

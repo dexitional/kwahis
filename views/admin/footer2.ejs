@@ -1,0 +1,143 @@
+
+
+	
+	<!-- Footer -->
+	<footer>		
+		<div class="copy">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6"><p class="down" style="color:#fff !important;">eSHS | K-Soft GH. Copyright &copy; <%= date('Y');%>. All Rights Reserved.<p></div>
+					<div class="col-sm-6">
+						<ul class="social-links">
+						 <% if($_SESSION['user']['privilege'] < 2):%>
+							<li>
+								<a href="<%= $app->urlFor('listd');%>" title="Students" class="tooltips <% if(isset($active) && ($active == 'listd' || $active == 'albumstd' || $active == 'scstd')){ echo 'active';}%>">
+									<i class="glyphicon glyphicon-user"></i>
+								</a>
+							</li>							
+							<li>
+								<a href="<%= $app->urlFor('stbills');%>" title="Fees" class="tooltips <% if(isset($active) && ($active == 'stbills' || $active == 'feesrp' || $active == 'receipt' || $active == 'debtors')){ echo 'active';}%>">
+									<i class="glyphicon fa fa-money"></i>
+								</a>
+							</li>							
+							<li>
+								<a href="<%= $app->urlFor('cl');%>" title="Class" class="tooltips <% if(isset($active) && ($active == 'class')){ echo 'active';}%>">
+									<i class="fa fa-tasks"></i>
+								</a>
+							</li>							
+							<li>
+								<a href="<%= $app->urlFor('users');%>" title="Users" class="tooltips <% if(isset($active) && ($active == 'users')){ echo 'active';}%>">
+									<i class="fa fa-users"></i>
+								</a>
+							</li>
+							<% endif;%>
+                           <li>
+								<a href="<%= $app->urlFor('logout');%>" onclick="if(!confirm('You are logging out!'))return false;" title="Logout" class="tooltips">
+									<i class="fa fa-power-off fa-lg"></i>
+								</a>
+							</li>		
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- End Footer -->
+
+	<!-- ======================= JQuery libs =========================== -->
+	<!-- jQuery -->
+	<script src="/shs/ui/js/vendors/jquery/jquery-1.11.3.min.js" ></script>
+	
+	<!-- tooltipster -->
+    <script type="text/javascript" src="/shs/ui/lib/tooltipster/js/tooltipster.bundle.min.js"></script>
+
+	<!-- Bootstrap-->
+	<script src="/shs/ui/js/vendors/bootstrap.min.js" ></script>
+
+	<!-- Owl Carousel -->
+	<script src="/shs/ui/js/vendors/owl.carousel.min.js" ></script>
+	
+	<!-- Appear -->
+	<script src="/shs/ui/js/vendors/jquery/jquery.appear.js" ></script>
+
+	
+	<!-- Slider Revolution -->
+	<script src="/shs/ui/js/vendors/revolution/js/jquery.themepunch.tools.min.js"></script>
+	<script src="/shs/ui/js/vendors/revolution/js/jquery.themepunch.revolution.min.js"></script>
+	
+	<!-- Custom JS -->
+	<script src="/shs/ui/js/script.js"></script>
+	
+	<!-- @Kobby photo upload script -->
+	<script src="/shs/ui/kobby_upload/jquery-1.6.1.min.js"></script>
+	<script src="/shs/ui/kobby_upload/jquery.form.js"></script>
+	
+	<script type="text/javascript">
+	  /* Tooltip instantiators */
+	  
+	  
+	  
+	  /*  Photo Upload script */
+	      $('#browse_img').live('change', function(){ 
+			   $("#kb_preview").html('');			   
+			   $("#form6").ajaxForm({
+				       target: '#kb_preview'
+			  }).submit();		
+			});
+			
+			// Logo 
+			$('#logo').live('change', function(){ 
+			   $("#logo_feed").html('');			   
+			   $("#formlogo").ajaxForm({
+						target: '#logo_feed'
+			  }).submit();		
+			});
+			
+			// Signature 
+			$('#sign').live('change', function(){ 
+			   $("#sign_feed").html('');			   
+			   $("#formsign").ajaxForm({
+						target: '#sign_feed'
+			  }).submit();		
+			});
+			
+			// Teaser 
+			$('#teaser').live('change', function(){ 
+			   $("#teaser_feed").html('');			   
+			   $("#formteaser").ajaxForm({
+						target: '#teaser_feed'
+			  }).submit();		
+			});
+			
+			// Card 
+			$('#card').live('change', function(){ 
+			   $("#card_feed").html('');			   
+			   $("#formcard").ajaxForm({
+						target: '#card_feed'
+			  }).submit();		
+			});
+			
+			
+					
+	 /* Popup Callback function @Kobby Kay */
+	    // Put this into popup : onComplete -> window.opener.setData(data);
+		function setData(data){
+			  window.location = '/shs/savephotouser/'+data;			
+		}
+		
+		function getAge(dateString){
+			var today = new Date();
+			var birthDate = new Date(dateString);
+			var age = today.getFullYear() - birthDate.getFullYear();
+			var m = today.getMonth() - birthDate.getMonth();
+			if(m < 0 || (m === 0 && today.getDate() < birthDate.getDate())){
+				 age--;
+			}
+			return age;
+		}
+		
+		
+	</script>
+
+</body>
+</html>

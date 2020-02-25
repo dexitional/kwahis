@@ -1,0 +1,243 @@
+
+<!DOCTYPE>
+<html lang="en">
+<head>
+<style type="text/css">    
+	  body{
+		  background:#eee;
+	  }
+	  .cover{
+		  width:85.60mm;
+		  height:53.98mm;		  
+		  float:left;
+		  margin:0;
+		  position:relative;
+		  border:thin solid <%- settings.loginColor; %>;
+		  border-top:none;
+		  border-bottom:5px solid <%- settings.loginColor; %>;
+		  resize: both;
+	  }
+
+	  
+	  .template{
+		  width:310px;
+		  height:175px;		  
+		  float:left;
+		  margin:5px 15px;
+		  position:relative;
+		  border:thin solid #ccc;
+          background-image:url(<%- settings.logo; %>);
+          background-size:cover;		  
+	  }
+	  
+	  .title{
+		  margin:0;
+		  padding-top:10px;
+		  position:absolute;
+		  top:0;left:0;
+		  width:100%;
+		  height:30px;
+		  background:<%- settings.loginColor; %>; 
+		  color:<%- settings.accentColor; %>;
+		  text-align:center;
+		  font:bold 12px helvetica,calibri;		  
+		 
+	  }
+	  
+	  .subtitle{
+		  margin:0;
+		  padding-top:3px;
+          position:absolute;
+		  top:40;left:0;		  
+		  width:100%;
+		  height:17px;
+		  background:<%- settings.primaryColor; %>;		  
+		  color:#fff;
+		  text-align:center;
+		  font:bold 11px helvetica,calibri;
+		  letter-spacing:0.3em;
+		  word-spacing:0.5em;
+		  box-shadow:0 0 2px #999 inset;
+		  z-index:22;
+		 
+		 
+	  }
+	  
+	  .right{
+		  float:right;
+		  width:65%;
+		  text-shadow:0 0 4px #666;
+	  }
+	  
+	  .left{
+		  float:left;
+		  width:35%;
+		  text-shadow:0 0 3px #666;
+	  }
+	  
+	  #st{
+		  font:arial;
+		  font-weight:bolder;
+		  letter-spacing:0.15em;
+		  font-size:11px;
+	  }
+	  
+	  #cd{
+		  font:arial;		  
+		  font-size:10px;
+		  letter-spacing:0.1em;
+          vertical-align:center;		  
+	  }
+	  
+	  .pic{
+		  background-color:#fff;
+		  position:absolute;
+		  top:65px;
+		  left:5px;
+		  width:90px;
+		  height:80px;
+		  border:2px solid <%- settings.loginColor; %>;
+		  border-radius:5px;
+		  z-index: 21;
+	  }
+	   .logo{
+		  position:absolute;
+		  top:50px;
+		  left:75px;
+		  width:150px;
+		  height:150px;
+          z-index: 20;
+          opacity:0.2;		  
+	  }
+	  
+	   .content{
+		  position:relative;
+		  top:50px;
+		  left:100px;
+		  width:190px;
+		  height:80px;		  
+		  text-align:right;
+	  }
+	  
+	  address{
+		  position:absolute;
+		  top:65px;
+		  right:20px;
+		  font:bolder 10px arial,tahoma;
+		  text-transform:uppercase;
+		  text-align:right;
+		  line-height:13px;
+		  z-index:22;
+	  }
+	  
+	  .val{
+		  font-size:10px;
+		  font-weight:bolder;
+		  color:#666;
+		  width:10px;
+	  }
+	  
+	  .name{		  
+		  font-size:9px;
+		  color:<%- settings.loginColor; %>;
+		  margin-bottom:5px;
+	  }
+	  
+	  .back{			 
+		  border-top:1px solid #ccc;
+          font:bold 10px tahoma,helvetica;
+          text-transform:uppercase;		  
+	  }	
+	  
+	  @media print{
+		  .pageclear{
+			  page-break-after:always;
+			  margin-top: 5px;
+			  clear:both;
+		  }	
+		  
+		  .liner{
+			  display:block;
+		  }
+
+         .cover{
+			 margin:5px 30px;									 			 
+		  }
+
+		 .back{
+			 display:block;
+		 }
+          	  
+	  }
+</style>
+</head>
+<body>
+
+<% var i = 0;
+   rows.map((row) => {
+%>
+
+  <!-- Card 1 -->
+  <div class="cover">   
+	<div class="title">
+		<div class="left">
+			<span id="st">P.O. BOX 7</span>
+			<span id="cd">CAPE COAST</span>
+		</div>
+		<div class="right">
+			<%- settings.instituteLong; %>
+		</div>
+	 </div>
+	 <div class="subtitle">STUDENT IDENTIFICATION CARD</div>	   
+	<!--<div class="pic" style="background-image:url(<?=$std['photo'].'?'.rand();?>);background-size:cover;background-repeat:no-repeat;"></div>-->
+	 <div class="pic" style="background-image:url('<%= row.photo != null ? row.photo : '/public/none.png'; %>');background-size:cover;background-repeat:no-repeat;"></div>
+	 <div class="logo" style="background-image:url('/public/logo.jpg');background-size:cover;background-repeat:no-repeat;"></div>
+	 <p class="content">
+		 <span></span>
+		 <address>
+			 <span class="val"><%- (row.fname+' '+row.lname).toUpperCase();%></span><br>
+			 <span class="name">Student Name</span><br>
+			 <span class="val"><%- row.index_number;%></span><br>
+			 <span class="name">Student Code</span><br>
+			 <span class="val"><%- row.prog;%></span><br>
+			 <span class="name">Programme</span><br>
+			 <span class="val">NOVEMBER <%- row.exit_year;%></span><br>
+			 <span class="name">Valid until</span><br>		   
+		 </address>
+		 
+	  </p>
+</div>	 
+  <%- i > 0 && ( i%9 == 0 ) ? '<div class="pageclear"></div>':''%>
+  <%   i++;
+      });
+  %>
+
+<div class="pageclear"></div
+ 
+<% var i = 0;
+  rows.map((row) => {
+%>
+
+  <!-- Card Back -->
+  
+  <div class="cover back"> 
+		<br>
+		<center>
+		<p style="margin-top:0px;"><img src="/public/none.png" height="50"/><br><em>Head Teacher's Signature</em></p>
+		<p style="font-size:9px;"><em>This is a property of <%- settings.instituteLong; %></em></p>
+		<p><strong>If found kindly return to <br> The Head Teacher<br><%- settings.instituteShort; %><br>Tel: <%- settings.phone; %><br>or the Nearest Police Station</strong></p>
+		</center>
+  </div>
+  <!-- # End of Back Cover -->	
+
+  <%- i > 0 && ( i%9 == 0 ) ? '<div class="pageclear"></div>':''%>
+  <%   i++;
+      });
+  %>
+		 
+  </div>
+</body>
+
+
+</html>
+

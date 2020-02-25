@@ -1,0 +1,138 @@
+<script>
+    $(function(){
+        //$("[type='checkbox']").bootstrapSwitch(); 
+        $('.list-group-item').on('click',function(){
+            //$(" [type='checkbox']").toggle();            
+        });      
+    });
+</script>
+<%
+    if(status){
+        if(reg){       
+%> 
+
+<section>  
+    <ul class="list-group">
+        <li class="list-group-item active">
+            <center><strong><em>Student Already Registered!</em></strong><br/><span><%= sl.fname +' '+sl.lname %></span></center>
+        </li>
+        <% let url = sl.index_number.split('/').join('_'); %>       
+        <li class="list-group-item">                                                        
+            <center>
+                <div class="btn-group">
+                    <a href="/reg/slip/<%- sl.id %>" target="_blank" style="margin-right:15px" class="btn btn-success btn-sm" title="Print Registration Slip" onclick="return confirm('Print Registration Slip?')"><i class="fa fa-print fa-2x"></i> </a>		
+                    <a href="/reg/list" class="btn btn-warning btn-sm" style="margin-right:15px" title="New Registration"><i class="fa fa-refresh fa-2x"></i> </a>
+                    <a href="javascript:;" class="btn btn-info" style="margin-right:15px" onclick="if(!confirm('Please take snapshot of student!')){return false;}else{ window.open('/student/cam/<%= sl.id %>','Photo Album','height=350,width=350'); }"><i class="fa fa-camera fa-2x"></i></a> 
+					<a href="/reg/restage/<%- url %>/<%- academ.academ %>" class="btn btn-danger btn-sm" title="Re-Stage Registration for <%- sl.index_number %>" onclick="return confirm('Re-Stage Registration for <%- sl.index_number %>?')"><i class="fa fa-trash fa-2x"></i> </a>
+                    
+                </div>
+            </center>           
+        </li>                                                                                                            
+    </ul>
+</section>
+
+     <% }else{ 
+         
+             if(tbal > min && sl.allow_register == '0'){
+     %>
+<section>  
+    <ul class="list-group">
+        <li class="list-group-item active">
+            <center><strong><em>Student has not met the minimum payment amount yet.!</em></strong></center>
+        </li>      
+        <li class="list-group-item">                                                        
+                <center><a href="/reg/list"  class="btn bg-primary" id="try_again">Please pay your debt before registering!</a></center>
+        </li>                                                                                                    
+    </ul>
+</section>
+
+           <% }else{ %>
+
+<section>  
+<ul class="list-group">
+    <li class="list-group-item">
+        <strong>Student : </strong><span><%= sl.fname +' '+sl.lname %></span><br>
+        <strong>Program : </strong><span><%= sl.program %></span><br>
+        <strong>Acad Year : </strong><span><%= academ.year %></span><br>
+        <strong>Semester : </strong><span><%= academ.semester %></span><br>
+    </li>                                            
+    <li class="list-group-item">
+        <div class="list-group">           
+               
+                     <form name="form2" id="form2"  action="/reg/postreg"method="post">
+                            <div class="step1">
+                                <a href="javascript:void(0);" class="list-group-item active"><b>Courses for the Semester</b></a>
+                                <%   
+                                     courses.map((cs,i) => { 
+                                 %>
+                                    <a href="javascript:void(0);" class="list-group-item" style="clear:both">
+                                        <small><%= (i+1)+'. '+cs.name %></small>                                                           
+                                        <label style="float:left;margin-right:3px;"><input type="checkbox" class="checkbox" name="<%= cs.code %>" checked><span class="lever switch-col-indigo"></span></label>
+                                    </a>
+                                <%      console.log(cs);
+                                    });                                      
+                                %> 
+                                       
+                                
+                                <a href="javascript:void(0);" class="list-group-item switch">
+                                    <input type="hidden" name="index_number" value="<%= sl.index_number %>"/>
+                                    <input type="hidden" name="year_group" value="<%= sl.year_group %>"/>
+                                    <input type="hidden" name="academ" value="<%= academ.academ %>"/>
+                                    <input type="hidden" name="semester" value="<%= academ.semester %>"/>
+                                    <input type="hidden" name="progkey" value="<%= progkey %>"/>                                    
+                                    <center><input type="button" id="nextstep" value="Next" class="btn btn-primary"/></center>
+                                </a>
+                            </div>
+                            
+                            <div class="step2">                                                             
+                                <a href="javascript:void(0);" class="list-group-item active">Accomodation</a>
+                                <a href="javascript:void(0);" class="list-group-item">
+                                    <input class="form-control" type="text" name="mattress" value="" placeholder="Enter Mattress No."/>
+                                </a>
+                                    
+                                <a href="javascript:void(0);" class="list-group-item">
+                                    <select class="form-control" name="residential_status">
+                                            <option value="" <%= sl.residential_status == '' ? 'selected="selected"':''%>>Choose Accomodation Status</option>
+                                            <option value="NON-RESIDENTIAL" <%= sl.residential_status == 'NON-RESIDENTIAL' ? 'selected="selected"':''%>>Non-Residential</option>
+                                            <option value="RESIDENTIAL" <%= sl.residential_status == 'RESIDENTIAL' ? 'selected="selected"':''%>>Residential</option>                                                                                    
+                                    </select><br/>                                                                                
+                                </a>
+                                
+                                <a href="javascript:void(0);" class="list-group-item">
+                                    <select class="form-control" name="hall_id" >
+                                            <option value="0" <?- sl.hall_id == '0'? 'selected="selected"':'';%>>Choose Hostel</option>
+                                            <% hall.map((h,i) => { %>
+                                            <%-'<option value="'+h.id+'" '+(h.id == sl.hall_id ? 'selected="selected"':'')+'>'+h.name+'</option>' %>
+                                            <% }) %>                                                                                       
+                                    </select> <br/>                                                                                    
+                                </a>                             
+                               
+                                <a href="javascript:void(0);" class="list-group-item">                                   
+                                    <center><input type="button" id="register" value="Register" class="btn btn-primary"/></center>
+                                </a>
+                            </div>
+                    </form>                                                        
+        </div>                                           
+    </li>                                                                                                    
+</ul>
+</section>
+
+<%       }  // End of Minimum Pay
+    }  // End of Un-Registered Student
+  }else{
+%>
+
+<section>  
+    <ul class="list-group">
+        <li class="list-group-item active">
+            <center><strong><em>Student not found..!</em></strong></center>
+        </li>      
+        <li class="list-group-item">                                                        
+                <center><a href="/reg/list"  class="btn btn-primary" id="try_again">Try Again</a></center>
+        </li>                                                                                                    
+    </ul>
+</section>
+
+<% } %>
+
+ 

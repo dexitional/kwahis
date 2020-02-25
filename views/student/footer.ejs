@@ -1,0 +1,165 @@
+                <div class="page-footer hidden-print">
+                    <p class="no-s"><small class="pull-left" style="font-size:13px;font-weight:bolder;font-style:italic;"> &copy; <%- new Date().getFullYear() %> All rights reserved, <%- settings.instituteLong.toLowerCase() %>.</small><b class="pull-right">POWERED BY <img class="" src="/public/ksoft.png" style="height:50px;" alt="K-Soft GH - 0248577384" onclick="alert('Contact K-SOft GH for your Customized Software!\n\nWe Build : Android Apps, Web applications, Desktop applications, Websites, E-commerce Sites!\n\nServices: Data Migration - All Databases, Data Collection apps, Data Management & Analysis, IT Training services for the Home!\n\nPhone: 0248577384, 0245776265, 0204186079\nE-mail: info@ksoftgh.com, ksoftghltd@gmail.com\nWebsite: www.ksoftgh.com\n\nCreating with Style!')"/><b></p>
+               </div>
+            </div><!-- Page Inner -->
+        </main><!-- Page Content -->
+        <nav class="cd-nav-container" id="cd-nav">
+            <header>
+                <h3>Navigation</h3>
+                <a href="#0" class="cd-close-nav">Close</a>
+            </header>
+            <ul class="cd-nav list-unstyled">
+                <li class="cd-selected" data-menu="index">
+                    <a href="javsacript:void(0);">
+                        <span>
+                            <i class="glyphicon glyphicon-home"></i>
+                        </span>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li data-menu="Results">
+                    <a href="javsacript:void(0);">
+                        <span>
+                            <i class="glyphicon glyphicon-user"></i>
+                        </span>
+                        <p>Results</p>
+                    </a>
+                </li>
+                <li data-menu="Fees">
+                    <a href="javsacript:void(0);">
+                        <span>
+                            <i class="glyphicon glyphicon-envelope"></i>
+                        </span>
+                        <p>Fees</p>
+                    </a>
+                </li>
+                <li data-menu="/st_bill">
+                    <a href="javsacript:void(0);">
+                        <span>
+                            <i class="glyphicon glyphicon-tasks"></i>
+                        </span>
+                        <p>Bills</p>
+                    </a>
+                </li>
+                <li data-menu="#">
+                    <a href="javsacript:void(0);">
+                        <span>
+                            <i class="glyphicon glyphicon-cog"></i>
+                        </span>
+                        <p>Settings</p>
+                    </a>
+                </li>
+                <li data-menu="calendar">
+                    <a href="javsacript:void(0);">
+                        <span>
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </span>
+                        <p>Calendar</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="cd-overlay"></div>
+	
+
+        
+         <!-- Javascripts -->
+        <script src="/public/st_assets/plugins/jquery/jquery-2.1.3.min.js"></script>
+        <script src="/public/st_assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <script src="/public/st_assets/plugins/pace-master/pace.min.js"></script>
+        <script src="/public/st_assets/plugins/jquery-blockui/jquery.blockui.js"></script>
+        <script src="/public/st_assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/public/st_assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="/public/st_assets/plugins/switchery/switchery.min.js"></script>
+        <script src="/public/st_assets/plugins/uniform/jquery.uniform.min.js"></script>
+        <script src="/public/st_assets/plugins/offcanvasmenueffects/js/classie.js"></script>
+        <script src="/public/st_assets/plugins/offcanvasmenueffects/js/main.js"></script>
+        <script src="/public/st_assets/plugins/waves/waves.min.js"></script>
+        <script src="/public/st_assets/plugins/3d-bold-navigation/js/main.js"></script>
+        
+		
+		<% if((active) && (active == 'st_dash')){ %>
+		 <!-- Dashboard --> 		
+        <script src="st_assets/plugins/waypoints/jquery.waypoints.min.js"></script>
+        <script src="st_assets/plugins/jquery-counterup/jquery.counterup.min.js"></script>
+        <script src="st_assets/plugins/toastr/toastr.min.js"></script>
+        <script src="st_assets/plugins/flot/jquery.flot.min.js"></script>
+        <script src="st_assets/plugins/flot/jquery.flot.time.min.js"></script>
+        <script src="st_assets/plugins/flot/jquery.flot.symbol.min.js"></script>
+        <script src="st_assets/plugins/flot/jquery.flot.resize.min.js"></script>
+        <script src="st_assets/plugins/flot/jquery.flot.tooltip.min.js"></script><!---->
+        <script src="st_assets/plugins/curvedlines/curvedLines.js"></script>
+        <script src="st_assets/plugins/metrojs/MetroJs.min.js"></script>        
+        <script src="st_assets/js/pages/dashboard.js"></script>
+		 
+		<% }%>
+		
+		<% if((active) && (active == 'st_fee' || active == 'st_result' || active == 'st_resource' || active == 'st_bill')){ %>
+		<!-- Data tables -->
+		<script src="st_assets/plugins/datatables/js/jquery.datatables.min.js"></script>       
+        <script src="st_assets/js/pages/table-data.js"></script>
+		<% }%>
+		
+		<% if((active) && (active == 'st_inbox' || active == 'st_compose')){ %>
+		<!-- Inbox -->		     
+        <script src="st_assets/js/pages/inbox.js"></script>
+		<script src="st_assets/js/pages/compose.js"></script>
+		<script src="st_assets/plugins/summernote-master/summernote.min.js"></script>
+		<% }%>		
+		<script src="st_assets/js/modern.min.js"></script>
+		<script src="st_assets/js/main.js"></script>
+		
+		<script type="text/javascript">
+			   // JQUERY
+			   $( document ).ready(function() {
+    	   
+				       var i = 0;
+						toastr.options = {
+							closeButton: true,
+							progressBar: true,
+							showMethod: 'fadeIn',
+							hideMethod: 'fadeOut',
+							timeOut: 5000
+						};
+						toastr.success('Goto Academics > Results History to print Report', 'Welcome <%- session.fname %>,');
+					
+			   });
+
+
+			   // Send SMS to Parents or Guardians
+			     function sendpta(){
+					//var ins = prompt("Please Enter Message to send to parents or Guardians!");
+					alert("ok");
+				}
+			   
+
+			   function PrintElem(elem)
+				{
+					Popup($(elem).html());
+				}
+
+				function Popup(data) 
+				{
+					var mywindow = window.open('', 'my div', 'height=400,width=600');
+					mywindow.document.write('<html><head><title>my div</title>');
+					/*optional stylesheet*/ mywindow.document.write('<link href="../st_assets/css/print.css" rel="stylesheet"/>');
+					//mywindow.document.write('<style>.col-md-4{display:inline-block;width:30%;margin:0 5px 0;}.img-circle {border-radius: 50%;.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {display: block;max-width: 100%;height: auto;}img {vertical-align: middle;}img {border: 0;}.panel .panel-heading .panel-title {float: left;margin: 0;padding: 0;}.panel-title {margin-top: 0;margin-bottom: 0;font-size: 10px!important;color: inherit;}.table {width: 100%;max-width: 100%;margin-bottom: 20px;}table {background-color: transparent;border-spacing: 0;border-collapse: collapse;display: table;border-collapse: separate;border-spacing: 2px; border-color: grey;border:1px solid #666;padding:5px;} th{text-align:left;}</style>');
+					mywindow.document.write('</head><body >');
+					mywindow.document.write(data);
+					mywindow.document.write('</body></html>');
+
+					mywindow.document.close(); // necessary for IE >= 10
+					mywindow.focus(); // necessary for IE >= 10
+
+					mywindow.print();
+					mywindow.close();
+					return true;
+				}	
+				
+				
+				
+				
+		 </script>
+        
+    </body>
+</html>

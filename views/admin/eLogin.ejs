@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!--<link rel="shortcut icon" href="../images/favicon.png" type="image/png">-->
+
+  <title>Student Management System</title>
+  <link rel="stylesheet" href="/public/ad_assets/lib/fontawesome/css/font-awesome.css">
+  <link rel="stylesheet" href="/public/ad_assets/css/quirk.css">  
+  <script src="/public/ad_assets/lib/modernizr/modernizr.js"></script> 
+  
+  <style type="text/css">
+      /* Login Background */
+	   
+	      #bg {
+			  position: fixed;
+			  left: 0;
+			  top: 0;
+			  width: 100%;
+			  height: 100%;
+        /*
+			  background: url() no-repeat center center fixed;
+			  background-size: cover;
+			  -webkit-filter: blur(4px);  
+			  z-index:999!important;*/
+        background-color:#4c1729;
+		   }
+	   
+	      .signup{
+			  z-index:1000!important;
+		   }
+		   
+		  .signup .panel {
+			  background-color: rgba(70, 8, 28, 0.6);
+			  padding: 20px 20px 40px 20px;
+		   }
+			
+		  .signup h1 {
+			  color: rgba(0,0,0,0.5);
+			  text-align: center;
+			  margin: 0;
+			  font-weight: 600;
+		   }
+		   
+		   .btn-success,.btn-success:active:hover, .btn-success.active:hover, .open > .dropdown-toggle.btn-success:hover, .btn-success:active:focus, .btn-success.active:focus, .open > .dropdown-toggle.btn-success:focus, .btn-success:active.focus, .btn-success.active.focus, .open > .dropdown-toggle.btn-success.focus {
+				background-color:rgba(0,0,0,0.5) !important;
+			}			
+	  
+  </style>
+  
+  
+</head>
+
+<body class="signwrapper">
+       
+	<div id="bg"></div>
+	 
+	 <div class="signup">
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="panel">    
+	
+	<!-- Login Error Message -->
+	
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			<strong>Error Message</strong>
+	   </div>
+	
+   <!-- # End of Login error message -->
+   
+    <div class="panel-heading">
+      <h1>PRAISE BAPTIST<sup>&reg;</sup></h1>
+      <h4 class="panel-title">Welcome! </h4>
+    </div>
+    <div class="panel-body">
+     
+      <div class="or">ADMINISTRATOR & TUTOR LOGIN</div>
+      <form action="login" method="post">
+        <div class="form-group mb10">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input type="text" name="username" class="form-control" placeholder="Enter Usercode">
+          </div>
+        </div>
+        <div class="form-group mb10">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <input type="password" name="password" class="form-control" placeholder="Enter Password">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="btn btn-success btn-quirk btn-block">Sign In</button>
+        </div>
+      </form>
+      <hr class="invisible">
+      <div class="form-group">
+        <a class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-block btn-sign">School Management System</a>
+      </div>
+    </div>
+  </div><!-- panel -->
+  </div><!-- col-sm-5 -->
+  
+  <!-- INSTRUCTIONS -->
+    
+    <div class="col-sm-7">
+        <div class="sign-sidebar">
+          <h2 class="signtitle mb20" style="color:#eee;text-shadow:0 0 6px #666;">Community Health  Nursing <br>Training School - Esiama</h2>
+          <img src="/public/logo.jpg" style="width:150px;height:150px;border-radius:15px;display:block;margin-bottom:15px;"/>
+         
+          <h4 class="reason">SCHOOL ADDRESS</h4>
+          <address style="color:#eee;text-shadow:0 0 6px #666;font-size:16px;font-style:italic">Address : P.O Box DD1<br>Website : www.google.com <br>E-mail : dexitional@gmail.com<br>Phone : +233 277675089</address>
+           <hr class="invisible">
+
+          <div class="form-group">
+            <a href="/forgetsr" class="btn btn-default btn-quirk btn-stroke btn-stroke-thin btn-sign">Forgot Password?</a>
+          </div>
+        </div><!-- sign-sidebar -->
+    </div><!-- col-sm-7 -->
+	 
+    </div>
+	
+	</div><!-- signup -->
+
+</body>
+</html>

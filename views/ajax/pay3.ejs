@@ -1,0 +1,66 @@
+<% if(status){ %>
+<section>  
+<ul class="list-group">
+    <li class="list-group-item">
+        <strong>Student : </strong><span><%= sl.fname +' '+sl.lname %></span><br>
+        <strong>Program : </strong><span><%= sl.program %></span><br>
+        <strong>Class : </strong><span><%= sl.classname %></span><br>
+        <strong>Acad Year : </strong><span><%= academ.name %></span><br>
+        <strong>Term : </strong><span><%= academ.term %></span><br>
+        <strong>Total Debt/Charge : <em><%- ( tbal > 0 ? 'GHC '+(tbal) : '<b>None</b>') %></em></strong><br>
+    </li>                                            
+    <li class="list-group-item">
+        <div class="list-group">               
+                     <form name="form2" id="form2"  action="/pay/postpay"method="post">
+                          <div class="step1">                             
+                                <a href="javascript:void(0);" class="list-group-item active"><b>PAYMENT</b></a>                               
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter Amount Paid." step="any" min="<%- ( tbal > 0 ? (tbal <= 600 ? tbal : (tbal-min)) : 0) %>" max="50000">
+                                        </div><br>
+                                        <div class="form-line">
+                                            <input type="text" name="receipt_no" class="form-control" placeholder="Enter Receipt No.">
+                                        </div>                                       
+                                    </div>                                               
+                                </li> 
+                                        
+                             
+                                <a href="javascript:void(0);" class="list-group-item" style="overflow:hidden;">  
+                                    <input type="hidden" name="index_number" value="<%= sl.index_number %>"/>
+                                    <input type="hidden" name="academ" value="<%= academ.academ %>"/>
+                                    <input type="hidden" name="semester" value="<%= academ.term %>"/>
+                                    <input type="hidden" name="bill" value="<%= bill.bill %>"/> 
+                                   
+                                    <% if(tbal > 0){ %>                                                                                                     
+                                       <center><input type="button" onclick="form.submit()" id="register" value="PAY" class="btn btn-primary"/></center>
+                                    <% }else{%>
+                                       <center>
+                                           <b><em>No Bill Charged against Student! </em></b><br/><small>Please Post Bill to activate payment.</small> <br>                                      
+                                           <a href="/pay/list"  class="btn btn-primary btn-lg" id="try_again">Try Again</a></center>
+                                       
+                                    <% }%>
+                                </a>
+                            </div>
+
+                    </form>                                                        
+        </div>                                           
+    </li>                                                                                                    
+</ul>
+</section>
+
+<% }else{ %>
+
+
+    <section>  
+        <ul class="list-group">
+            <li class="list-group-item active">
+                <center><strong><em>Student not found..!</em></strong></center>
+            </li>      
+            <li class="list-group-item">                                                        
+                    <center><a href="/pay/list"  class="btn btn-primary btn-lg" id="try_again">Try Again</a></center>
+            </li>                                                                                                    
+        </ul>
+    </section>
+
+<% } %>

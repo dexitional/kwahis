@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PHOTO SNAPSHOT</title>
+    <!-- JPEG_CAMERA -->
+    <script src="/public/ad_assets/jpeg_camera/query.min.js" type="text/javascript"></script>
+    <script src="/public/ad_assets/jpeg_camera/jpeg_camera_with_dependencies.min.js" type="text/javascript"></script>
+   
+    <script type="text/javascript">
+       /*$(function(){
+       
+                var camera = new JpegCamera("#camera");
+                var snapshot = camera.capture();
+                var snapshot = camera.capture();
+
+                if (JpegCamera.canvas_supported()) {
+                    snapshot.get_canvas(add_snapshot);
+                }
+                else {
+                    // <canvas> is not supported in this browser. We'll use anonymous
+                    // graphic instead.
+                    var image = document.createElement("img");
+                    image.src = "/public/none.png";
+                   
+                }
+                snapshot.show(); // Display the snapshot
+                
+                snapshot.upload({api_url: "/public/students/kk.jpg'"}).done(function(response) {
+                response_container.innerHTML = response;
+                this.discard(); // discard snapshot and show video stream again
+                }).fail(function(status_code, error_message, response) {
+                    alert("Upload failed with status " + status_code);
+                });        
+       });
+
+*/
+       // --------------------------------------------------------------------------
+$(function() {
+  if (window.JpegCamera) {
+    var camera; // Initialized at the end
+
+    var take_snapshots = function(count) {
+      var snapshot = camera.capture();
+
+      if (JpegCamera.canvas_supported()) {
+        snapshot.get_canvas(add_snapshot);
+      }
+      else {
+        // <canvas> is not supported in this browser. We'll use anonymous
+        // graphic instead.
+        var image = document.createElement("img");
+        image.src = "no_canvas_photo.jpg";
+        setTimeout(function() {add_snapshot.call(snapshot, image)}, 1);
+      }
+
+      if (count > 1) {
+        setTimeout(function() {take_snapshots(count - 1);}, 500);
+      }
+    };
+
+    var add_snapshot = function(element) {
+      $(element).data("snapshot", this).addClass("item");
+
+      var $container = $("#snapshots").append(element);
+      var $camera = $("#camera");
+      var camera_ratio = $camera.innerWidth() / $camera.innerHeight();
+
+      var height = $container.height()
+      element.style.height = "" + height + "px";
+      element.style.width = "" + Math.round(camera_ratio * height) + "px";
+
+      var scroll = $container[0].scrollWidth - $container.innerWidth();
+
+      $container.animate({
+        scrollLeft: scroll
+      }, 200);
+    };
+
+    var select_snapshot = function () {
+      $(".item").removeClass("selected");
+      var snapshot = $(this).addClass("selected").data("snapshot");
+      $("#discard_snapshot, #upload_snapshot").show();
+      snapshot.show();
+      $("#show_stream").show();
+    };
+
+    var clear_upload_data = function() {
+      $("#upload_status, #upload_result").html("");
+    };
+
+    var upload_snapshot = function() {
+        var api_url =  location.protocol+'//'+location.hostname+''+(location.port ? ':'+location.port: '')+"/student/camsave";   
+        alert(api_url);
+        clear_upload_data();
+        $("#loader").show();
+        $("#upload_snapshot").hide();
+        var snapshot = $(".item.selected").data("snapshot");
+        snapshot.upload({api_url: api_url}).done(upload_done).fail(upload_fail);
+    };
+
+    var upload_done = function(response) {
+      $("#upload_snapshot").prop("disabled", false);
+      $("#loader").hide();
+      $("#upload_status").html("Upload successful");
+      $("#upload_result").html(response);
+    };
+
+    var upload_fail = function(code, error, response) {
+      $("#upload_snapshot").prop("disabled", false);
+      $("#loader").hide();
+      $("#upload_status").html(
+        "Upload failed with status " + code + " (" + error + ")");
+      $("#upload_result").html(response);
+    };
+
+    var discard_snapshot = function() {
+      var element = $(".item.selected").removeClass("item selected");
+
+      var next = element.nextAll(".item").first();
+
+      if (!next.size()) {
+        next = element.prevAll(".item").first();
+      }
+
+      if (next.size()) {
+        next.addClass("selected");
+        next.data("snapshot").show();
+      }
+      else {
+        hide_snapshot_controls();
+      }
+
+      element.data("snapshot").discard();
+
+      element.hide("slow", function() {$(this).remove()});
+    };
+
+    var show_stream = function() {
+      $(this).hide();
+      $(".item").removeClass("selected");
+      hide_snapshot_controls();
+      clear_upload_data();
+      camera.show_stream();
+    };
+
+    var hide_snapshot_controls = function() {
+      $("#discard_snapshot, #upload_snapshot, #api_url").hide();
+      $("#upload_result, #upload_status").html("");
+      $("#show_stream").hide();
+    };
+
+    $("#take_snapshots").click(function() {take_snapshots(1);});
+    $("#snapshots").on("click", ".item", select_snapshot);
+    $("#upload_snapshot").click(upload_snapshot);
+    $("#discard_snapshot").click(discard_snapshot);
+    $("#show_stream").click(show_stream);
+
+    var options = {
+      shutter_ogg_url: "../dist/shutter.ogg",
+      shutter_mp3_url: "../dist/shutter.mp3",
+      swf_url: "../dist/jpeg_camera.swf"
+    }
+
+    camera = new JpegCamera("#camera", options).ready(function(info) {
+      $("#take_snapshots").show();
+
+      $("#camera_info").html(
+        "Camera resolution: " + info.video_width + "x" + info.video_height);
+    });
+  }
+});
+
+  
+       
+    </script>
+
+<style type="text/css">
+    body {
+ background-color: #ddd;
+ padding: 0.5em;
+ text-align: center;
+ font-family: "Helvetica Neueu", "Helvetica", "Arial", sans;
+ }
+
+ button, input, #loader {
+ display: none;
+ }
+
+ input {
+ width: 300px;
+ }
+
+ #camera {
+ display: inline-block;
+ background-color: #eee;
+ width: 250px;
+ height: 300px;
+ margin: 0.5em;
+ }
+
+ #camera .placeholder {
+ padding: 0.5em;
+ }
+
+ #snapshots {
+ height: 150px;
+ margin: 0.5em 0;
+ padding: 3px;
+
+ border: 1px solid #aaa;
+
+ white-space: nowrap;
+ overflow-x: auto;
+ overflow-y: hidden;
+ }
+
+ #snapshots canvas, #snapshots img {
+ box-sizing: border-box;
+ -webkit-box-sizing: border-box;
+ -moz-box-sizing: border-box;
+ -ms-box-sizing: border-box;
+ -o-box-sizing: border-box;
+
+ height: 100%;
+ margin-left: 3px;
+ border: 3px solid transparent;
+ }
+
+ #snapshots .selected {
+ border: 3px solid #000;
+ }
+
+ button, #upload_status, #upload_result, #loader {
+ margin: 0.5em;
+ }
+
+</style>
+  </head>
+  <body>   
+    <div id="camera_info"></div>
+    <div id="stream_stats"></div>
+
+    <div id="camera"></div><br>
+
+    <button id="take_snapshots">Take more snapshots</button>
+    <button id="show_stream">Show stream</button><br>
+
+    <div id="snapshots"></div>
+
+    <button id="discard_snapshot">Discard snapshot</button>
+    <button id="upload_snapshot">Upload to URL</button><br>
+
+    <input type="text" id="api_url" placeholder="https://example.com/upload"><br>
+
+    <img src="public/jpeg_camera/loader.gif" id="loader">
+    <div id="upload_status"></div>
+    <div id="upload_result"></div>
+  </body>
+</html>

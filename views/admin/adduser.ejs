@@ -1,0 +1,103 @@
+<form name="" action="/user/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+				    <div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Surname</label>							
+							    <input type="text" name="lname" value="<%- row.lname %>" class="form-control">
+							</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Other name(s)</label>							
+								<input type="text" name="fname" value="<%- row.fname %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Date of Birth</label>								
+								<input type="date" name="dob" value="<%- row.dobx %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">   
+						<div class="form-group"> 
+								<label class="form-label kobby">Gender</label>          
+								<select class="form-control" name="gender">
+									<option value="M" <%= row.gender == 'M'? 'selected="selected"':'';%>>Male</option>
+									<option value="F" <%= row.gender == 'F'? 'selected="selected"':'';%>>Female</option>                            
+								</select>	
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="form-label kobby">Phone</label>								
+							<input type="text" name="phone" value="<%- row.phone %>" class="form-control">																
+						</div>
+				    </div> 	
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Address</label>								
+								<input type="text" name="address" value="<%- row.address %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="form-label kobby">Email Address</label>								
+							<input type="text" name="email" value="<%- row.email %>" class="form-control">																
+						</div>
+					</div> 
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="form-label kobby">Hometown</label>								
+							<input type="text" name="hometown" value="<%- row.hometown %>" class="form-control">																
+						</div>
+					</div> 
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="form-label kobby">Qualification</label>								
+							<input type="text" name="qualification" value="<%- row.qualification %>" class="form-control">																
+						</div>
+					</div> 
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="form-label kobby">Username</label>								
+							<input type="text" name="username" value="<%- row.username %>" class="form-control">																
+						</div>
+					</div> 
+					<% if(session.privilege == '1'){ %>
+					<div class="col-sm-12">   
+							<div class="form-group"> 
+									<label class="form-label kobby">Privilege</label>          
+									<select class="form-control" name="privilege">
+										<option value="1" <%= row.privilege == '1'? 'selected="selected"':'';%>>Administrator</option>
+										<option value="3" <%= row.privilege == '3'? 'selected="selected"':'';%>>Accountant</option>                            
+									    <option value="2" <%= row.privilege == '2'? 'selected="selected"':'';%>>Tutor</option>                            
+									    <option value="4" <%= row.privilege == '4'? 'selected="selected"':'';%>>Officer</option>                            
+									
+									</select>	
+							</div>
+					</div>
+					<% } %>	
+					<div class="col-sm-12">   
+							<div class="form-group"> 
+									<label class="form-label kobby">Status</label>          
+									<select class="form-control" name="active">
+										<option value="0" <%= row.active == '0'? 'selected="selected"':'';%>>Disabled</option>
+										<option value="1" <%= row.active == '1'? 'selected="selected"':'';%>>Enabled</option>                            
+									</select>	
+							</div>
+					</div>					
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/user/list<%- session.privilege == '1'? '' : '/'+session.id %>" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

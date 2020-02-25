@@ -1,0 +1,254 @@
+
+
+           <!-- Breadcrump -->
+            <div class="page-inner">
+			<%- include('../student/breadcrump.ejs'); %>
+				
+			<!-- Main Content Page --> 
+				<div id="main-wrapper">
+                    <div class="row">
+					 
+					    <!-- Class Size -->
+                        <div class="col-lg-3 col-md-3">
+                            <div class="panel info-box panel-white">
+                                <div class="panel-body">
+                                     <img src="<%- session.photo != null ? session.photo : '/public/none.png' %>" style="width:100%;margin:0 auto;border-radius:5px;"/>
+                                </div>
+                            </div>
+                        </div>
+						
+						 <!-- Class Rating -->
+						 <div class="col-md-6">
+								<div class="row">
+										<div class="panel panel-custom "style="border-radius: 20px; padding:8px 20px;">
+											<h3 class="panel-title" ><%- (session.fname+' '+session.lname).toUpperCase()%></h3>
+										</div>
+								</div>
+							   <div class="row">
+								  <div class="col-md-6">
+										<div class="panel info-box panel-white">
+												<div class="panel-body">
+													<div class="info-box-stats">
+														<p class="counter"><%- session.index_number%></p>
+														<span class="info-box-title"><strong>STUDENT ID</strong></span>
+													</div>
+													<div class="info-box-icon">
+														<i class="fa fa-user"></i>
+													</div>
+													<div class="info-box-progress">
+														<div class="progress progress-xs progress-squared bs-n">
+															<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+															</div>
+														</div>
+													</div>
+												</div>
+										</div>									
+								  </div>
+								  <div class="col-md-6">
+										<div class="panel info-box panel-white">
+											<div class="panel-body">
+												<div class="info-box-stats">
+													<p><span>GH<em>₵</em></span> <span class="counter"><%- (tbal > 0 ? tbal : 0) %></span></p>
+													<span class="info-box-title">ACCRUED DEBT</span>
+												</div>
+												<div class="info-box-icon">
+														<i class="fa fa-money"></i>
+												</div>
+												<div class="info-box-progress">
+													<div class="progress progress-xs progress-squared bs-n">
+														<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+								  </div>
+								</div>
+								
+                        </div>
+						
+						<!-- Student Debt -->
+                        <div class="col-lg-3 col-md-3">
+							<div class="panel twitter-box">
+									<div class="panel-body">
+										<div class="live-tile flip ha" data-mode="flip" data-speed="750" data-delay="3000">
+											<span class="tile-title pull-right">Current Calendar</span>
+											<i class="fa fa-university"></i>
+											<div class="flip-front ha" style="transform: rotateX(0deg); transition: all 0s ease 0s;">
+												<h2 class="no-m">CALENDAR</h2><h3 class="tile-date"><%- academ[0].name+' Academic Year - Term '+academ[0].term %> </h3>
+												<a href="#" class="btn btn-mini btn-danger hidden">Print Registration Slip</a>
+											</div>
+											<div class="flip-back ha" style="transform: rotateX(540deg); transition: all 750ms ease 0s;"><h2 class="no-m">Next Term : </h2><h3></h3><span class="tile-date"><a target="_blank" href="ui/pdfCal.php?academ=">View Curent Calendar</a></span></div>
+										</div>
+									</div>
+							</div>
+                        </div>
+                       
+					    <!-- Message unread Number -->
+                        <div class="col-md-3">
+                           
+                        </div>
+                    </div><!-- Row -->
+                    <div class="row">
+					
+					    <!-- Payment & Transactions -->
+                        <div class="col-lg-6 col-md-6">
+                            <div class="panel panel-white">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">FEES PAYMENT OVERVIEW</h4>
+                                    <div class="panel-control">
+                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" class="panel-reload" data-original-title="Reload"><i class="icon-reload"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                       <div class="table-responsive project-stats">  
+                                       <table class="table">
+                                           <thead>
+                                               <tr>                                                  
+                                                   <th>TITLE</th>
+                                                   <th>DATE</th>
+                                                   <th>AMOUNT</th>
+                                                   <th>&nbsp;</th>
+                                               </tr>
+                                           </thead>
+                                           <tbody>
+											<%
+												if(fees.length > 0){ 
+													fees.map(row =>{
+											%>
+													<tr role="row" class="odd">
+													<td class="sorting_1"><%- row.bill %></td>
+													<td><%- row.pdate %></td>
+													<td><b>GHC <%- row.amount %></b></td>
+													<td><a target="_blank" href="/receipt/<%- row.tid %>" class="btn btn-success" onclick="if(!confirm('Do you want to Print Fees Receipt ?')) return false;" title="Print Receipt"><i class="fa fa-print"></i></a></td>																		
+													</tr>
+											<%
+												}); 
+											   }else{
+										    %>																										
+										        	<tr><td colspan="4" style="text-align:center;" class="sorting_1"><em>Sorry, No payments recorded!</em></td></tr>                                               
+											<% } %>						
+											</tbody>
+                                        </table>
+                                    </div>
+                                </div>
+								<div class="panel-footer">
+									  <a class="btn btn-info btn-addon m-b-sm pull-left" href="/st_fee"><i class="fa fa-plus"></i> View Payment</a>
+							          <a class="btn btn-danger btn-addon m-b-sm pull-right" target="_blank" href="/transact/<%- session.index_number; %>"><i class="fa fa-plus"></i> View Transactions</a><br><br>
+							    </div>
+                            </div>							
+                        </div>
+						
+						<!-- Message Inbox List # Limit 5 -->
+                        <div class="col-lg-4 col-md-6">
+                           <!-- <div class="panel panel-white">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Inbox</h4>
+                                    <div class="panel-control">
+                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="" class="panel-reload" data-original-title="Reload"><i class="icon-reload"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;"><div class="inbox-widget slimscroll" style="overflow: hidden; width: auto; height: 100%;">
+                                        <a href="#">
+                                            <div class="inbox-item">
+                                                <div class="inbox-item-img"><img src="../../assets/images/avatar2.png" class="img-circle" alt=""></div>
+                                                <p class="inbox-item-author">Sandra Smith</p>
+                                                <p class="inbox-item-text">Hey! I'm working on your...</p>
+                                                <p class="inbox-item-date">13:40 PM</p>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="inbox-item">
+                                                <div class="inbox-item-img"><img src="../../assets/images/avatar3.png" class="img-circle" alt=""></div>
+                                                <p class="inbox-item-author">Christopher</p>
+                                                <p class="inbox-item-text">I've finished it! See you so...</p>
+                                                <p class="inbox-item-date">13:34 PM</p>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="inbox-item">
+                                                <div class="inbox-item-img"><img src="../../assets/images/avatar4.png" class="img-circle" alt=""></div>
+                                                <p class="inbox-item-author">Amily Lee</p>
+                                                <p class="inbox-item-text">This theme is awesome!</p>
+                                                <p class="inbox-item-date">13:17 PM</p>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="inbox-item">
+                                                <div class="inbox-item-img"><img src="../../assets/images/avatar5.png" class="img-circle" alt=""></div>
+                                                <p class="inbox-item-author">Nick Doe</p>
+                                                <p class="inbox-item-text">Nice to meet you</p>
+                                                <p class="inbox-item-date">12:20 PM</p>
+                                            </div>
+                                        </a>
+                                        <a href="#">
+                                            <div class="inbox-item">
+                                                <div class="inbox-item-img"><img src="../../assets/images/avatar2.png" class="img-circle" alt=""></div>
+                                                <p class="inbox-item-author">Sandra Smith</p>
+                                                <p class="inbox-item-text">Hey! I'm working on your...</p>
+                                                <p class="inbox-item-date">10:15 AM</p>
+                                            </div>
+                                        </a>
+                                        
+                                    </div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 42px; opacity: 0.3; display: none; border-radius: 0px; z-index: 99; right: 0px; height: 298.923px; background: rgb(204, 204, 204);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; opacity: 0.2; z-index: 90; right: 0px; background: rgb(51, 51, 51);"></div></div>
+                                </div>
+								<div class="panel-footer">
+								         <button type="button" class="btn btn-info btn-addon m-b-sm"><i class="fa fa-plus"></i> Read Messages</button>
+								</div>
+                            </div>-->
+							
+							
+							
+                        </div>
+						
+						<!-- Academic Status -->
+                        <div class="col-lg-6 col-md-6">
+								<div class="panel panel-custom ui-sortable-handle">
+										<div class="panel-heading">
+                                                <h4 class="panel-title">STATEMENT OF RESULTS</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                 <div class="table-responsive project-stats">  
+													   <table class="table">
+														   <thead>
+															   <tr>
+																  
+																   <th colspan="2">RESULTS</th>
+																   <th>CLASS</th>
+																   <th>TERM</th>
+															   </tr>
+														   </thead>
+														   <tbody>
+															   <% if(results != undefined && results.length > 0){ 						
+																	results.map(row =>{ 
+															   %>
+															   <tr>																    
+																    <td colspan="2"><%- row[0].name %>, Term <%- row[0].term %></td>																	
+																	<th scope="row" align="center"><%- row[0].classx %></th>
+																	<th scope="row" align="center">Term <%- row[0].term %></th>
+																	<td><a target="_blank" href="/result/print/<%- row[0].index_number.split('/').join('_') %>/<%- row[0].academ %>" class="btn btn-warning" onclick="if(!confirm('Do you want to Print Results ?')) return false;" title="Print Results"><i class="fa fa-print"></i></a></td>																		
+																		  
+															   </tr>
+															   <%
+																	});
+																 }else{
+																%>
+																<tr><th colspan="4"><em>No Result History..!</em></th></tr>  
+																<% }%>															   
+															</tbody>
+														</table>
+												</div>
+                                        </div>
+
+										<div class="panel-footer">
+												<a class="btn btn-info btn-addon m-b-sm" href="/st_result"><i class="fa fa-plus"></i> View Results</a>
+									    </div>
+								</div>							
+                        </div>
+						
+						
+					
+                    </div>
+                </div><!-- Main Wrapper -->
+			

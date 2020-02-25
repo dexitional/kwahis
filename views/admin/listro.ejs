@@ -1,0 +1,96 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+            <% if(msg === 'deleted'){ %>
+				  toastr.success('', 'Record Deleted Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'failed'){ %>
+				toastr.danger('', 'Saving failed!');					 
+			<% }%>
+
+			<% if(msg === 'nobed'){ %>
+				toastr.warning('', 'No Beds Available in Chosen Room!');					 
+			<% }%>
+
+			<% if(msg === 'assigned'){ %>
+				  toastr.success('', 'Bed Assigned to Student Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'nouser'){ %>
+				toastr.warning('', 'User Does not Exist !');					 
+			<% }%>
+
+			<% if(msg === 'badsex'){ %>
+				toastr.warning('', 'Room is assigned to Opposite Sex !');					 
+			<% }%>
+
+			<% if(msg === 'badgroup'){ %>
+				toastr.warning('', 'Room is assigned to different Group !');					 
+			<% }%>			
+			
+			
+			// JQuery Logics
+			 $(function(){
+
+			 });
+
+		</script>
+
+
+
+		<div class="row clearfix">
+
+			  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				  <div class="card">                            
+					  <div class="header">
+						  <h3><i class="fa fa-pay"></i> ROOMS</h3>						
+					  </div>
+					  <div class="body">
+						 <h5><a class="btn btn-primary" href="/room/add" title="Add New Room" onclick="if(!confirm('Add New Room?'))return false;"><i class="fa fa-plus"></i> Add Room</a>   <a class="btn btn-primary" href="/room/generate" title="Generate Rooms for Semester" onclick="if(!confirm('Generate Rooms for Semester?'))return false;"><i class="fa fa-plus"></i> Generate Rooms</a></h5>
+				    	 <div class="table-responsive">
+							  
+							  <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+								  <thead>
+									  <tr role="row">
+										  <th>#</th>
+										  <th>Room</th>
+										  <th>Capacity/Beds</th>
+										  <th>Groups</th>
+										  <th>Hall</th>
+										  <th>Occupied</th>
+										  <th>Remarks</th>
+										  <th>&nbsp;</th>
+									  </tr>
+								  </thead>								  
+								  <tbody> 
+									
+									<% rows.map((row,i) => { %>
+									  <tr class="odd">
+											<td><%- (i+1) %></td>
+											<td><b><%= row.room %></b></td>
+											<td><%- row.capacity+' / ( <b>'+(row.capacity*2)+'</b> )' %></td>
+											<td><b><%- row.groups %></b></td>	
+											<td><b><%- row.hall %></b></td>	
+											<td><b><%- row.occupied == '1'? 'Occupied':'<em><small>Available Slots/ Beds</small></em>' %></b></td>
+											<td><b><%- row.remark %></b></td>											
+											<td>
+												<div class="btn-group">
+													<a href="/room/edit/<%- row.id %>" title="Edit Room" style="margin-right:5px;" class="btn btn-success btn-sm"  onclick="return confirm('Edit Room?')"><i class="fa fa-edit"></i> </a>
+													<a href="javascript:;" title="Assign Bed in Room to Student" style="margin-right:5px;" class="btn btn-warning btn-sm"  onclick="var st = prompt('Please Enter Index Number to Assign Bed!'); if(st !== null){ var clst = st.split('/').join('_'); window.location='/room/assign/<%- row.id %>/'+clst;}else{ alert('Please Enter Correct Index Number');}"><i class="fa fa-send"></i> </a>
+												    <a href="/room/del/<%- row.id %>/" title="Delete Room & related Beds" class="btn btn-danger btn-sm"  onclick="return confirm('Delete Room & Beds?')"><i class="fa fa-trash"></i> </a>
+												</div>
+											</td>                                                                                         
+									   </tr>
+									<% }) %>
+								  </tbody>
+							   </table>
+							  
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>

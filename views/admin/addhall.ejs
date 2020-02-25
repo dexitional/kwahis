@@ -1,0 +1,41 @@
+<form name="" action="/hall/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+				    <div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Name</label>							
+							    <input type="text" name="name" value="<%- row.name %>" class="form-control">
+							</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Location</label>							
+								<input type="text" name="location" value="<%- row.location %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Patron</label>								
+								<input type="text" name="patron" value="<%- row.patron %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Remarks</label>								
+								<input type="text" name="remark" value="<%- row.remark %>" class="form-control">																
+							</div>
+					</div>								
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/hall/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

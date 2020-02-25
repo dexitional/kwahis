@@ -1,0 +1,89 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			  <% }%>
+
+        <% if(msg === 'sent'){ %>
+				  toastr.success('', 'Bill Posted Successfully!');					 
+				<% }%>
+				
+				<% if(msg === 'revoked'){ %>
+				  toastr.warning('', 'Bill Revoked Successfully!');					 
+			  <% }%>
+
+        <% if(msg === 'deleted'){ %>
+				  toastr.success('', 'Record Deleted Successfully!');					 
+				<% }%>
+
+				<% if(msg === 'failed'){ %>
+					toastr.danger('', 'Saving failed!');					 
+				<% }%>			 	
+		</script>
+
+
+			<div class="row">				
+                <div class="col-sm-12">				
+				<!-- Main Content -->	
+				<h5><a class="btn btn-primary" href="/bill/add" title="Add New Bill" onclick="if(!confirm('Add New Bill?'))return false;"><i class="fa fa-user-plus"></i> Add Bill</a></h5>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-hover dataTable js-exportable">
+							<thead>
+								<tr role="row">
+									<th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Title : activate to sort column descending" style="width: 53px;">Title </th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending" style="width: 35px;">Date</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Academic Year: activate to sort column ascending" style="width: 76px;">Academic Year</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Boarder Charge (GHC): activate to sort column ascending" style="width: 56px;">Boarder Charge (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="NRS Charge (GHC): activate to sort column ascending" style="width: 56px;">Day Charge (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Assigned Groups: activate to sort column ascending" style="width: 73px;">Assigned Groups</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 55px;">Action</th></tr>
+							</thead>				
+						<tbody> 								
+						                                           
+							<% rows.map((row,i) => { %>
+								<tr role="row" class="<%- (i%2) == 0 ? 'odd' : 'even'%>">
+									<td><small><b><%= row.bill %></b></small></td>
+									<td><small><b><%= row.sdate %></b></small></td>
+									<td><small><b><%= row.academs %></b></small></td>
+									<td><b><%= row.bamount %></b></td>
+									<td><b><%= row.damount %></b></td>
+								  <td><b><%= row.groups %></b></td>
+									<td width="300px">
+										  <!-- For Only Accountants -->
+										  <div class="btn-group" style="width:300px;margin:5px 0;">
+												<a href="/bill/view/<%= row.id %>" title="View Bill!" style="margin:0 1px" class="btn btn-warning btn-sm" target="_blank" onclick="return confirm('View Bill?')"><i class="fa fa-eye"></i></button>
+												
+											 <% if(row.status == '0'){ %>		
+											   <a href="/bill/send/<%= row.id %>" title="Post Bill to Students Accounts!" style="margin:0 1px" class="btn btn-success btn-sm"  onclick="return confirm('Do you want to Send Bill?')"><i class="fa fa-send"></i></button>
+											   <a href="/bill/edit/<%= row.id %>" title="Update Bill Data!" class="btn btn-success" style="margin:0 1px" onclick="return confirm('Do you want to edit Record?')"><i class="fa fa-edit"></i></a> 											  
+											   <a href="/bill/del/<%= row.id %>" title="Delete Bill Data!" class="btn btn-danger" style="margin:0 1px" onclick="return confirm('Delete Record?')"><i class="fa fa-trash"></i></a>  
+											 <% }else{%> 
+											 	<a href="/bill/print/<%= row.id %>" title="Print Posted Bill of Students" style="margin:0 1px" class="btn btn-info btn-sm"  onclick="return confirm('Do you want to Print Bill?')"><i class="fa fa-print"></i></button>
+											    <a href="/bill/revoke/<%= row.id %>" title="Revoke Sent Bill!" style="margin:0 1px" class="btn btn-warning btn-sm"  onclick="return confirm('Do you want to Revoke Sent Bill?')"><i class="fa fa-minus"></i> Revoke</button>
+											 <% }%>  
+											  	<a href="javascript:;" title="Post Bill to Group!" style="margin:0 1px" class="btn btn-info" onclick="if(!confirm('Do you want post bill to a batch of Students?')){return false;}else{var m = prompt('Enter Student ID\'s ex : D1/001,C17021,...');var b = m.split('/');var k = b.join('_');var q = k.split(',');var w = q.join('__');alert('Bill is being Posted!');window.location = '/bill/xsend/<%= row.id %>/'+w;}">X-Post</a>											   
+										  </div>
+										<!--
+										  <div class="btn-group" style="width:200px;">
+											  <a href="/student/edit/<%= row.id %>" class="btn btn-success" style="margin:0 1px" onclick="return confirm('Do you want to edit Record?')"><i class="fa fa-edit"></i></a> 											  
+											  <a href="/student/view/<%= row.id %>" class="btn btn-warning" style="margin:0 1px" onclick="return confirm('View Student\'s File?')"><i class="fa fa-eye"></i></a> 
+											  <a href="" class="btn btn-info" style="margin:0 1px" onclick="if(!confirm('Please take snapshot of student!')){return false;}else{ window.open('/public/assets/webcam/photo.php?id=<%= row.id %>&amp;loc=students','Photo Album','height=350,width=300'); }"><i class="fa fa-camera"></i></a> 
+											  <a href="" class="btn btn-info" style="margin:0 1px"><i class="fa fa-photo"></i></a>
+											  <form style="display:inline;margin:0" data-form="<%= row.id %>"action="assets/photo.php" method="post" enctype="multipart/form-data" id="photoform"> 
+													<input type="file"  name="photo" id="photo" style="display:none;"/><input type="hidden" name="id" value="<%= row.id %>"/>
+											  </form> 
+											  <a href="/student/del/<%= row.id %>" class="btn btn-danger" style="margin:0 1px" onclick="return confirm('Delete Record?')"><i class="fa fa-trash"></i></a>  
+										  </div>
+										-->	
+								    </td>                                                                                      
+								</tr>
+							 <% }) %>
+						</tbody>
+
+
+
+
+
+
+					</table>
+				</div>
+			   
+<!-- #END# Exportable Table -->
+
+
+		  </div>
+		</div>

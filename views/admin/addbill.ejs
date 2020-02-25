@@ -1,0 +1,96 @@
+<script>
+	$(function(){
+		$('#content').on('blur',function(){
+			var content = $(this).val();
+			var ct = content.split(';');
+			var sum = 0;
+			for(var v of ct){
+				var ln = v.split(':');
+				    sum += parseInt(ln[1].trim());
+			}			
+			$('#bamount').val(sum);
+			$('#damount').val(sum);
+		});
+
+		$('#save').on('click',function(){
+			var content = $('#content').val();
+			var ct = content.split(';');
+			var sum = 0;
+			for(var v of ct){
+				var ln = v.split(':');
+				    sum += parseInt(ln[1].trim());
+			}			
+			$('#bamount').val(sum);
+			$('#damount').val(sum);
+		})
+		
+	})
+</script>
+<form name="" action="/bill/post" method="post" enctype="application/x-www-form-urlencoded">	
+	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Title</label>							
+								<input type="text" name="bill" value="<%- row.bill %>" class="form-control">
+					    </div>
+					</div>
+					<div class="col-sm-12">   
+						<div class="form-group">
+							<label class="form-label kobby">Academic Year</label>         
+							<select class="form-control" name="academ">
+								<option value="" <%= row.academ == '' ? 'selected="selected"':'' %>>Choose Academ</option>
+								<% academs.map((academ,i) => {	%>											
+								<%- '<option value="'+academ.academ+'"'%>
+								<%- academ.academ == row.academ ? 'selected="selected"':'' %>
+								<%- '>'+academ.name+', Term '+academ.term+'</option>' %>
+								<%  });	%>									   
+							</select>
+						</div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Boarding Student Charge (GHC)</label>								
+								<input type="number" id="bamount" name="bamount" value="<%= row.bamount %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Day Student Charge (GHC)</label>							
+							    <input type="number"id="damount" name="damount" value="<%= row.damount %>" class="form-control">
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby"><a style="border-radius:50%" onclick="alert('Example:\n\nSchool Fees : 1500;\nComputer Facility User Fee  : 300;\nUtility Fees : 240')" class="btn btn-success"><i class="fa fa-info"></i></a>  Bill Content  <em>( Separate items with semi-colon ';' and also item from cost with colon ':' )</em></label>							
+							    <textarea name="content"  id="content" class="form-control" rows="5"> <%= row.content %></textarea>
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Class or groups to Assign Bill (Ex: 'D1,C16,..')</label>							
+							    <input type="text" name="groups" value="<%= row.groups %>" class="form-control">
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Individuals to Assign Bill (Ex: 'DR/0124,GHS/232,..')</label>							
+							    <input type="text" name="individ" value="<%= row.individ %>" class="form-control">
+							</div>
+					</div>					
+
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" id="save" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/bill/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

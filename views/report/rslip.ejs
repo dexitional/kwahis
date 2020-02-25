@@ -1,0 +1,352 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+    <title>RESULT STATEMENT </title>
+    <link href="http://www.allfont.de/allfont.css?fonts=arial-narrow" rel="stylesheet" type="text/css" />
+    <style type="text/css" >
+          body{
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight:normal;
+            font-size:13px; 
+            background-color:#eee;  
+            letter-spacing:0.093em;            
+          }
+
+         h2,h3,h4,h5,h6,b{color: <%- settings.loginColor; %>}
+
+        header{
+            background:<%- settings.loginColor; %>;
+            padding:10px 15px;
+            display:flex;
+            border-radius:15px 15px 0 0;
+        }
+
+        .logo{
+          height:80px;
+          width:80px;
+          border-radius:10px;
+          padding:5px;
+          background-color:white;
+        }
+
+        .photo{
+          height:70px;
+         
+        }
+
+        .cover{
+            width: 920px;             
+            margin: 10px auto;  
+            box-shadow:2px 2px 4px #999;             
+            background:#fff;  
+            page-break-after:always;  
+            border-radius:15px; 
+            padding-bottom:20px;     
+        }
+
+        .title{
+            text-align: left;  
+            color:<%- settings.accentColor %>;
+            font-size:28px;
+            letter-spacing:0.15em;
+            width:80%;
+            padding:20px;
+            margin:0px auto;                                                               
+        }
+
+        h1.title span{
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+            font-weight:100;
+            color:#fff;
+        }
+
+        .subcover{
+        clear:both;  
+        text-align:center;   
+        }
+
+        .s-item{
+            float:left;
+            margin-right:6.2%;
+            margin-left:7.2%;
+            color:<%- settings.accentColor %>;
+            font-size:16px;
+        }
+
+        .s-item b{
+            color:#ccc;
+        }
+
+
+        content{
+            font-family:'Arial Narrow', Arial, sans-serif;
+            font-size: 17px;
+            display:block;              
+            clear:both;
+            overflow:hidden;
+            padding:10px 50px;
+        }        
+
+
+        .owner{
+            font-weight:tahoma,helvetica;
+            clear:both;
+            overflow:hidden;
+            line-height:5px;            
+        }
+
+        .owner small{
+            font-size:12px;
+            font-weight:bold;
+        }
+
+        .owner p{
+            font-size:12px;  
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif          
+        }
+
+        .ch1{
+            float:left;
+        }
+        .ch2{
+            padding:5px 0;
+            float:right;
+            direction:ltl;
+        }
+
+        .content{
+            clear:both;
+            overflow:hidden;              
+        }
+
+        .sub-footer{
+            clear:both;
+        }
+
+        .ftleft{
+            float:left;
+        }
+
+        .ftright{
+            float:left;
+        }
+
+
+
+
+        footer{
+            margin:80px 0 10px;
+            font-size:10px;
+            font-family:cursive;
+            font-style:italic;
+        }
+
+        .heading{
+            text-align:center;
+            text-decoration : underline;
+        }
+
+        .table{
+            width:800px;             
+            border-collapse: collapse;              
+            padding: 20px;
+            vertical-align:middle;
+            text-align:center;  
+            border:1px solid <%- settings.loginColor %>;                       
+        }
+
+        .table1{
+            width:800px;             
+            border-collapse: collapse;              
+            padding: 20px;
+            vertical-align:middle;
+            text-align:center;   
+            font-weight:bolder;                      
+        }
+
+        .tablex{
+            width:800px;   
+            margin-top:70px;          
+            border-collapse: collapse;            
+            vertical-align:middle;  
+            font-size:13px; 
+            line-height:18px;                     
+        }
+
+
+        table,tr,td{
+            border-collapse: collapse;
+        }
+
+        .table tr td{
+            border-bottom: 1px solid #ccc;  
+            line-height:10px;           
+        }
+
+        .table tr:first-child td{
+            font-weight:bolder;
+            border-bottom: 4px solid <%- settings.loginColor %>;  
+            border-top: 6px solid <%- settings.accentColor %>;              
+            border-left:none;
+            border-right:none;                  
+        }
+
+        .table tr:last-child td{
+            font-weight:bolder;
+            border-bottom: 6px solid <%- settings.accentColor %>;
+            border-top: 4px solid #000;   
+            border-left:none;
+            border-right:none;                  
+        }
+
+        .table td{
+            padding: 20px 10px;            
+        }
+
+            
+        .sbody{
+            font-weight:600;
+            font-size:11px;
+            text-transform:uppercase;
+            display:inline-block;
+        }
+
+
+        @media print {
+          body{
+              background:#fff;
+              border:none;
+          }
+
+          .cover{
+              background:#fff;
+              border:thin solid #999;
+              box-shadow:none;
+              border-radius:0;
+             
+          }
+
+          header{border-radius:0}
+        }
+
+    </style>
+</head>
+<body>
+    <div class="cover">
+            <header>
+                    <img src="<%- settings.logo; %>" class="logo">
+                    <h3 class="title">TERMINAL <span>REPORT</span></h3>
+                 </header>   
+                 <content>
+                        <div class="owner">
+                                <div class="ch1">
+                                    <h3><%- settings.instituteLong; %></h3><br>
+                                    <p><b>A: </b><%- settings.instituteAddress; %></p>
+                                    <p><b>P: </b><%- settings.institutePhones; %></p>
+                                    <p><b>E: </b><%- settings.instituteEmail; %>, <%- settings.instituteWeb; %></p>
+                                    <p><h3 style="color:<%- settings.primaryColor; %>;fontWeight:bolder;"><small> CLASS: <%- rows[0].classx %></small></h3></p>
+                                </div>
+                                <div class="ch2">
+                                    <b><small><%- (rows[0].fname+' '+rows[0].lname).toUpperCase() %></small></b>
+                                    <h1><%- rows[0].index_number %></h1>
+                                    <% if(rows[0].photo == null){ %>
+                                        <img src="/public/none.png" class="stdphoto" style="width:50px;box-shadow:0px 0px 2px #666;padding:5px;float:left;margin:0 5px 5px 0;"/>
+                                        <% }else{%>
+                                        <img src="<%- rows[0].photo;%>" class="stdphoto" style="width:50px;height:66px;box-shadow:0px 0px 2px #666;padding:5px;float:left;margin:0 5px 5px 0;"/>
+                                        <% }%>
+                                        <b src="/public/none.png" class="stdphoto" style="width:50px;height:65px;border:thin dashed brown;padding:5px;float:left;margin:0 5px 5px 0;line-height: 65px;text-align: center;font-size:20px"><%- rows[0].classx %></b>
+                                       
+                                </div>
+                          </div>
+                     
+              
+              <div class="content"> <h3 class="heading"><%= rows[0].acad+' ACADEMIC YEAR, TERM '+rows[0].term %></h3>             
+                  <table class="table">                     
+                      <tr>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:left;font-weight:bolder;">SUBJECT</h5></td>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">CLASS</h5></td>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">EXAMS</h5></td> 
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">TOTAL</h5></td>                           
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">GRADE</h5></td>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">REMARK</h5></td>
+                      
+                      </tr>
+                      <%  var r = 0, sum = 0;                     
+                          rows.map((row,i)=>{
+                      %>
+                      <tr>
+                            <td align="left"><span class="sbody"><%- row.course %> </span></td>
+                            <td align="center"><span class="sbody"><%- row.class %> </span></td>
+                            <td align="center"><span class="sbody"><%- row.exams %> </span></td>
+                            <td align="center"><span class="sbody"><%- row.total %> </span></td>
+                            <td align="center"><span class="sbody" style="font-size:15px;font-weight:bolder;text-align:center"><%
+                                sum += row.total;
+                                let score = row.score.split(',');
+                                let grade = row.grade.split(',');
+                                let remark = row.detail.split(',');
+                                let j = 0;
+                                for(var i = 0; i < score.length; i++){
+                                    let ms = score[i].split(':');
+                                    console.log(ms[0]);      
+                                                    
+                                    let gt = Number(ms[0]);
+                                    let lt = Number(ms[1]);                        
+                                    let sd = {};
+                                  
+                                    if((gt >= row.total) && (row.total >= lt)){                            
+                                        sd.grade = grade[i];
+                                        sd.remark= remark[i];
+                                        if(j==0){
+                        %>
+                                     <%- row.total < 0 ? 'IC' : sd.grade %>
+                        <%		        }  j++;																	                   			  
+                                    }                    
+                                }	
+                            
+                         %></b></td>
+
+                         <td align="center"><span class="sbody" style="font-size:15px;font-weight:bolder;text-align:center"><%
+                            j = 0;
+                            for(var i = 0; i < score.length; i++){
+                                let ms = score[i].split(':');
+                                console.log(ms[0]);      
+                                                
+                                let gt = Number(ms[0]);
+                                let lt = Number(ms[1]);                        
+                                let sd = {};
+                              
+                                if((gt >= row.total) && (row.total >= lt)){                            
+                                    sd.grade = grade[i];
+                                    sd.remark= remark[i];
+                                    if(j==0){
+                            %>
+                                        <%- row.total < 0 ? 'IC' : sd.remark %>
+                            <%		        }  j++;																	                   			  
+                                        }                    
+                                    }	
+                                
+                            %></b></td>
+                      </tr>
+                      <% r++; });%>
+                      <tr>
+                        <td colspan="4" align="right"><span class="sbody" style="font-weight:bolder;font-size:11px;"><b>REMARKS : </b>HARD WORKING</span></td>
+                        <td align="right"><span class="sbody" style="font-weight:bolder;font-size:11px;"><b>AVERAGE </b></span></td>
+                        <td align="center"><span class="sbody" style="font-weight:bolder;font-size:11px;"><%- (sum/r) %> </span></td>
+                      </tr>
+                    </table>
+                   
+                    <!--
+                      <table class="table">                    
+                         <tr>
+                             <td align="center"><br><br><br><span class="sbody">----------------------------------------------------------</span><br><small>Signature of Academic Officer</small></td>
+                             <td align="center"><br><br><br><span class="sbody">----------------------------------------------------------</span><br><small>Signature of Principal</small></td>
+                             <td align="center"><br><br><br><span class="sbody">----------------------------------------------------------</span><br><small>Signature of Student</small></td>                        
+                        </tr>
+                      </table>
+                    -->
+              </div>              
+          </content>
+          <footer></footer>        
+    </div>
+</body>
+</html>

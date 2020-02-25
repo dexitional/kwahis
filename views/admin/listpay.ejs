@@ -1,0 +1,123 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+             <% if(msg === 'deleted'){ %>
+				  toastr.success('', 'Record Deleted Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'failed'){ %>
+				toastr.danger('', 'Saving failed!');					 
+			<% }%>
+			
+			
+			// JQuery Logics
+			 $(function(){
+
+                  // PAYMENT MODULE
+				  $('.ajax_pay').load('/pay/step1',function(){ 					            
+					 $('#indexgo').focus();
+					
+					/* Step 2 */					
+					 $('#indexgo').on('click', function(){
+						var data = $('#indexno').val();                                  
+						
+						$.ajax({
+							url : '/pay/step2',
+							method : 'get',
+							data : 'data='+data,
+							success : function(msg){
+								$('.ajax_pay').html(msg);
+								//$('.step2').hide();   
+								$('.stpay').on('click', function(){
+									var data = $(this).data('id');  
+									$.ajax({
+										url : '/pay/step3',
+										method : 'get',
+										data : 'data='+data,
+										success : function(msg){
+											// Load Modal Content with Data
+											$('.ajax_pay').html(msg);
+											//$('.step2').hide();                               
+										}
+									});  
+								});                            
+							}
+						});  
+				   });
+
+					
+				});
+		
+			});
+
+		</script>
+
+
+
+		<div class="row clearfix">
+				<!-- Reegistration Module -->   
+
+			  <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+				  <div class="card">
+					  <div class="header">
+						  <h3>PAYMENT MODULE
+							<a href="/pay/list" class="btn btn-warning btn-sm pull-right"><i class="fa fa-refresh fa-sm"></i></a><br>
+						  </h3>                                
+					  </div>                            
+					  <div class="body">
+						  <div id="ajax_pay" class="ajax_pay"> 
+								
+						  </div>
+						  <div id="ajax_print" class="ajax_print">
+							 <!-- Ajax Content --> 																	   
+						  </div>
+					  </div>
+				  </div>
+			  </div> 
+
+
+
+			  <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+				  <div class="card">                            
+					  <div class="header">
+						  <h1><i class="fa fa-pay"></i> PAYMENTS</h1>
+						  <a href="javasscript:;" style="margin:0 1px" class="btn btn-success btn-sm" id="adddebt"  onclick="var v = prompt('AMOUNT FOR ARREARS ( GHC )');if(v == null){return false;}else{ var m = prompt('STUDENT INDEX NUMBER');if(m == null){return false;}else{alert('GHC '+v+' Arrears posted against '+m+' Account successfully..!'); window.location = '/pay/addebt/'+v+'/'+m.split('/').join('_');}}"><i class="fa fa-plus"></i> ADD DEBT</a>						
+						  <a href="javascript:;" style="margin:0 1px" class="btn btn-success btn-sm" id="addbal"  onclick="var v = prompt('AMOUNT FOR BALANCE ( GHC )');if(v == null){return false;}else{ var m = prompt('STUDENT INDEX NUMBER');if(m == null){return false;}else{alert('GHC '+v+' Balance posted against '+m+' Account successfully..!'); window.location = '/pay/addbal/'+v+'/'+m.split('/').join('_');}}"><i class="fa fa-plus"></i> ADD BALANCE</a>
+					</div>
+					  <div class="body">
+						  <div class="table-responsive">
+							  
+							  <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+								  <thead>
+									  <tr role="row"><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Receipt No: activate to sort column ascending" style="width: 49px;">Receipt No.</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Bill: activate to sort column ascending" style="width: 49px;">Bill</th><th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Reference : activate to sort column descending" style="width: 59px;">Reference</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Amount Paid (GHC): activate to sort column ascending" style="width: 61px;">Amount (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Student: activate to sort column ascending" style="width: 102px;">Student</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payment Date: activate to sort column ascending" style="width: 67px;">Date Paid</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Receiver: activate to sort column ascending" style="width: 67px;">Receiver</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 55px;">Action</th></tr>
+								  </thead>								  
+								  <tbody> 
+									
+									<% rows.map((row,i) => { %>
+									  <tr class="odd">
+										    <td><%- row.draft_no %></td>																						
+											<td><%- row.bill %></td>
+											<td><%- row.receipt_no %></td>
+											<td><b><%- row.amount %></b></td> 											
+											<td><%- row.student %></td>
+											<td><%- row.pdate %></td>                                                   
+											<td><%- row.username %></td>
+											<td width="120px">
+												<div class="btn-group">
+													<a href="/receipt/<%- row.tid %>" target="_blank" title="Payment Receipt" class="btn btn-primary btn-sm"><i class="fa fa-print fa-2x"></i> </a></li>		
+												    <a href="/pay/del/<%- row.tid %>" class="btn btn-danger btn-sm"  style="margin-left:10px" onclick="return confirm('Remove Payment from Student Account?')"><i class="fa fa-times-circle fa-2x"></i> </a></li>		
+												</div>
+											</td>                                                                                         
+										  </tr>
+									<% }) %>
+								  </tbody>
+							   </table>
+							  
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>

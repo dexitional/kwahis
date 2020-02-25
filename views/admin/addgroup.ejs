@@ -1,0 +1,53 @@
+<form name="" action="/group/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Name</label>							
+								<input type="text" name="name" value="<%= row.name %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Year of Admission</label>								
+								<input type="number" name="entry_year" value="<%= row.entry_year %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Year of Graduation</label>							
+							    <input type="number" name="exit_year" value="<%= row.exit_year %>" class="form-control">
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Level</label>							
+							    <input type="number" name="level" value="<%= row.level %>" class="form-control">
+							</div>
+					</div>
+					
+					<div class="col-sm-12">   
+							<div class="form-group">
+								<label class="form-label kobby">Program</label>         
+								<select class="form-control" name="program_id">
+										<option value="" <%- row.program_id == ''? 'selected="selected"':'' %> >Choose Program</option>
+										<% programs.map((program,i) => {	%>
+										<%- '<option value="'+program.id+'" '+(program.id == row.program_id ? 'selected="selected"':'')+'>'+program.name+'</option>';%>
+										<%  });	%>									   
+								</select>
+							</div>
+					</div> 			
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/group/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

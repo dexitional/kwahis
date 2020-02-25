@@ -1,0 +1,148 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'deleted'){ %>
+				  toastr.danger('', 'Deleted Successfully!');					 
+			<% }%>
+
+            <% if(msg === 'reset'){ %>
+				  toastr.success('', 'Password Reset Successfully!');					 
+			<% }%>
+
+			 <% if(msg === 'pwdchanged'){ %>
+				  toastr.success('', 'Password Changed Successfully!');					 
+			<% }%>
+			
+			
+			
+			// JQuery Logics
+			 $(function(){               
+		
+		
+
+			 });
+
+		</script>
+
+
+
+		<div class="row clearfix">
+			
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				  <div class="card">                            
+					  <div class="header">
+						  <h3>
+							  <i class="fa fa-pay"></i> TRANSCRIPT | <%- (rows[0][0].fname+' '+rows[0][0].lname).toUpperCase() %> ( <%- rows[0][0].index_number %> )  
+						      <a class="btn btn-primary pull-right" target="_blank" href="/transcript/print/<%- rows[0][0].index_number;%>"><i class="fa fa-print"></i> Print Transcript</a>
+						</h3>						
+					  </div>
+					  <div class="body">
+						<% if(rows.length > 0){ %> 
+                          <!--<h4><a class="btn btn-primary" href="/result/add/<%- rows[0][0].index_number.split('/').join('_') %>/<%- rows[0][0].academ %>" title="Add New Transcript" onclick="if(!confirm('Add Transcript?'))return false;"><i class="fa fa-plus"></i> ADD TRANSCRIPT</a></h4>-->
+						<% }%>
+						 <HR>
+                        
+						<% if(rows.length > 0){ 						
+						   rows.map(row =>{ %>
+						 <div class="table-responsive">	
+							    <h3 class="sidebar-title"><%- row[0].name %> ACADEMIC YEAR, TERM <%- row[0].term %>  -  CLASS <%- row[0].classx %><!--| <a target="_blank" class="btn btn-sm btn-primary" href="../ui/report/pdfResult.php?academ=201703&amp;std=20150001" onclick="if(!confirm('Print Assessment Reports!'))return false;"> <i class="fa fa-print"></i> PRINT RESULTS </a>     | <a class="btn btn-sm btn-danger" href="/editranscript/20150001/14/201703/151250" onclick="if(!confirm('Edit Assessment Report?'))return false;"> <i class="fa fa-edit"></i> UPDATE RESULTS </a>--></h3>                            						
+								<div class="col-sm-12 panel">
+									   
+									    <a title="Print Result" href="/result/print/<%- row[0].index_number.split('/').join('_') %>/<%- row[0].academ %>" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-print"></i></a>									
+										<a title="Edit Result" href="/result/edit/<%- row[0].index_number.split('/').join('_') %>/<%- row[0].academ %>" class="btn btn-danger pull-right" style="margin-right:3px"><i class="fa fa-edit"></i></a>									
+										
+										<table class="table" style="background: rgba(61, 165, 226, 0.1);width:90%;margin:5px auto">
+											<tr style="background:pink;border-bottom:2px solid brown">
+												<th class="col-sm-1">CODE</th>
+												<th class="col-sm-4">COURSE</th>
+												<th class="col-sm-1">CLASS</th>
+												<th class="col-sm-1">EXAM</th>
+												<th class="col-sm-1">GRADE</th>
+												<th class="col-sm-1">REMARK</th>
+																							
+											</tr>
+											<% 
+											    var r = 0, sum = 0;
+											    row.map(rex => { 											  
+											%>							  										
+											<tr>
+												<td class="col-sm-1"><b><%- rex.course_code %></b></td>												
+												<td class="col-sm-4"><small><b><%- rex.course.toUpperCase() %></b></small></td>
+												<td class="col-sm-1"><b style="font-size:15px"><%- rex.class == '-1' ? 'IC': rex.class %></b></td>
+												<td class="col-sm-1"><b style="font-size:15px"><%- rex.exams == '-1' ? 'IC': rex.exams %></b></td>
+												<td class="col-sm-1"><b style="font-size:15px"><%
+														sum += rex.total;
+													    let score = rex.score.split(',');
+														let grade = rex.grade.split(',');
+														let remark = rex.detail.split(',');
+                                                        let j = 0;
+														for(var i = 0; i < score.length; i++){
+															let ms = score[i].split(':');
+															console.log(ms[0]);      
+																			
+															let gt = Number(ms[0]);
+															let lt = Number(ms[1]);                        
+															let sd = {};
+														  
+															if((gt >= rex.total) && (rex.total >= lt)){                            
+																sd.grade = grade[i];
+																sd.remark= remark[i];
+																if(j==0){
+												%>
+												             <%- rex.total < 0 ? 'IC' : sd.grade %>
+												<%		        }  j++;																	                   			  
+															}                    
+														}	
+													
+												 %></b></td>
+												 <td class="col-sm-1"><b style="font-size:15px"><%													
+													 j = 0;
+													for(var i = 0; i < score.length; i++){
+														let ms = score[i].split(':');
+														console.log(ms[0]);      
+																		
+														let gt = Number(ms[0]);
+														let lt = Number(ms[1]);                        
+														let sd = {};
+													  
+														if((gt >= rex.total) && (rex.total >= lt)){                            
+															sd.grade = grade[i];
+															sd.remark= remark[i];
+															if(j==0){
+											%>
+														 <%- rex.total < 0 ? 'IC' : sd.remark %>
+											<%		        }  j++;																	                   			  
+														}                    
+													}	
+												
+											 %></b></td>
+																						
+											</tr>
+											<%  r++; }) %>
+											<tr>
+												<td align="center"><span class="sbody">&nbsp;</span></td>
+												<td align="right" colspan="4"><span class="sbody" style="font-weight:bolder;font-size:15px;"><b>AVERAGE </b></span></td>
+												<td align="center"><span class="sbody" style="font-weight:bolder;font-size:15px;"><b><%- (sum/r) %> </b></span></td>
+											  </tr>																																		
+										</table><div class="clearfix"></div>									
+								</div>
+							  
+						  </div>
+						  <% }) }else{ %>
+							<div class="table-responsive">	
+									<h3 class="sidebar-title"><em>No Records!</em></h3>                            						
+						    </div>
+										   
+						  <% } %>
+
+
+						  
+
+
+					  </div>
+				  </div>
+			  </div>
+		  </div>

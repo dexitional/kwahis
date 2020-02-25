@@ -1,0 +1,9 @@
+/* Write your custom CSS here */
+
+.col-md-4{display:inline-block;width:30%;margin:0 5px 0;}
+.img-circle {border-radius: 50%;}
+ img {vertical-align: middle;border: 0;}
+.panel .panel-heading .panel-title {float: left;margin: 0;padding: 0;}
+.panel-title {margin-top: 0;margin-bottom: 0;font-size: 10px!important;color: inherit;}
+table {background-color: transparent;border-spacing: 0;border-collapse:table;border-spacing: 2px; border-color: grey;border:1px solid #666;padding:5px;}
+th{text-align:left;}

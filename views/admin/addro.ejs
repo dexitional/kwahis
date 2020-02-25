@@ -1,0 +1,84 @@
+<form name="" action="/room/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Room</label>							
+								<input type="text" name="room" value="<%- row.room %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Groups <small><em>( ID's of Groups separated by commas )</em></small></label>								
+								<input type="text" name="groups" value="<%= row.groups %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Capacity</label>							
+							    <input type="number" name="capacity" value="<%= row.capacity %>" class="form-control">
+							</div>
+					</div> 					
+					<div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Remarks</label>							
+							    <input type="text" name="remarks" value="<%= row.remarks %>" class="form-control">
+							</div>
+					</div>
+					<div class="col-sm-12">   
+						<div class="form-group"> 
+								<label class="form-label kobby">Gender</label>          
+								<select class="form-control" name="gender">
+									<option value="" <%= row.gender == ''? 'selected="selected"':'';%>>Choose Gender</option>
+									<option value="M" <%= row.gender == 'M'? 'selected="selected"':'';%>>Male</option>
+									<option value="F" <%= row.gender == 'F'? 'selected="selected"':'';%>>Female</option>                            
+								</select>	
+						</div>
+					</div>
+					<div class="col-sm-12">   
+							<div class="form-group">
+								<label class="form-label kobby">Hall of Room</label>         
+								<select class="form-control" name="hall_id">
+										<option value="0" <%- row.hall_id == '0'? 'selected="selected"':'' %> >Choose Hall / Hostel</option>
+										<% halls.map((hall,i) => {	%>
+										<%- '<option value="'+hall.id+'" '+(hall.id == row.hall_id ? 'selected="selected"':'')+'>'+hall.name+'</option>';%>
+										<%  });	%>									   
+								</select>
+							</div>
+					</div> 
+					<div class="col-sm-12">   
+						<div class="form-group"> 
+								<label class="form-label kobby">Occupied</label>          
+								<select class="form-control" name="occupied">
+									<option value="0" <%= row.occupied == '0'? 'selected="selected"':'';%>>Unoccupied</option>
+									<option value="1" <%= row.occupied == '1'? 'selected="selected"':'';%>>Occupied</option>                            
+								</select>	
+						</div>
+					</div>	
+					<div class="col-sm-12">   
+							<div class="form-group"> 
+									<label class="form-label kobby">Status</label>          
+									<select class="form-control" name="active">
+										<option value="0" <%= row.active == '0'? 'selected="selected"':'';%>>Inactive</option>
+										<option value="1" <%= row.active == '1'? 'selected="selected"':'';%>>Active</option>                            
+									</select>	
+							</div>
+						</div>	
+				
+
+					
+					
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/room/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

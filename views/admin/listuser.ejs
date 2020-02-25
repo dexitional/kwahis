@@ -1,0 +1,102 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'deleted'){ %>
+				  toastr.danger('', 'Deleted Successfully!');					 
+			<% }%>
+
+            <% if(msg === 'reser'){ %>
+				  toastr.success('', 'Password Reset Successfully!');					 
+			<% }%>
+
+			 <% if(msg === 'pwdchanged'){ %>
+				  toastr.success('', 'Password Changed Successfully!');					 
+			<% }%>
+			
+			
+			
+			// JQuery Logics
+			 $(function(){               
+		
+		
+
+			 });
+
+		</script>
+
+
+
+		<div class="row clearfix">
+
+			  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				  <div class="card">                            
+					  <div class="header">
+						  <h3><i class="fa fa-pay"></i> USERS  </h3>						
+					  </div>
+					  <div class="body">
+						  <% if(session.privilege == '1'){ %>
+						 <h5><a class="btn btn-primary" href="/user/add" title="Add New User" onclick="if(!confirm('Add User?'))return false;"><i class="fa fa-plus"></i> Add New User</a></h5>
+						 <% } %>
+						 <div class="table-responsive">
+							  
+							  <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+								  <thead>
+									  <tr role="row">
+										  <th>Name</th>
+										  <th width="200px">Privilege</th>
+										  <th>Username</th>
+										  <th>Phone</th>
+										  <th>Gender</th>
+										  <th>Address</th>
+										  <th>Status</th>										  									  
+										  <th width="190px">Action</th>
+									  </tr>
+								  </thead>								  
+								  <tbody> 
+									
+									<% rows.map((row,i) => { %>
+									  <tr class="odd">											
+											<td><b><%- row.fname+' '+row.lname %></b></td>
+											<td><b>
+												<%  let pout = '';
+												    if(row.privilege == '1'){
+														pout = 'ADMINISTRATOR';
+													}else if(row.privilege == '2'){
+														pout = 'TUTOR';
+													}else if(row.privilege == '3'){
+														pout = 'ACCOUNTANT';
+													}else if(row.privilege == '4'){
+														pout = 'OFFICER';
+													}
+												%>
+												
+												<%- pout %><b></td>
+											<td><b><em><%- row.username %></em></b></td>	
+											<td><b><%- row.phone %></b></td>	
+											<td><b><%- row.gender == 'M' ? 'Male': 'Female' %></b></td>
+											<td><b><%- row.address %></b></td>	
+											<td><b><%- row.active == '0' ? 'Disabled': 'Enabled' %></b></td>
+											<td>
+												<% if(row.user !== null){%>
+												<div class="btn-group">
+													<a href="/user/edit/<%- row.id %>" title="Edit User" style="margin-right:5px;" class="btn btn-success btn-sm"  onclick="return confirm('Edit User?')"><i class="fa fa-edit"></i></a>
+													<a href="/user/reset/<%- row.id %>" title="Reset Password" style="margin-right:5px;" class="btn btn-warning btn-sm"  onclick="return confirm('Reset Password for user <%- row.fname+' '+row.lname%>?')"><i class="fa fa-refresh"></i> Reset PWD</a>
+													<% if(session.privilege == '1'){ %>
+													<a href="/user/del/<%- row.id %>" title="Delete User" style="margin-right:5px;" class="btn btn-danger btn-sm"  onclick="return confirm('Delete User?')"><i class="fa fa-trash"></i></a>
+													<% } %>
+												</div>
+											    <% }%>
+											</td>                                                                                         
+									   </tr>
+									<% }) %>
+								  </tbody>
+							   </table>
+							  
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>

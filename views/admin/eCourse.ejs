@@ -1,0 +1,318 @@
+<% include 'header.php';%>
+	
+
+	<!-- Icons -->
+	<section class="generic">
+		
+			
+			<div class="row">				
+				
+                <div class="col-sm-12">
+				
+				<!-- Main Content -->
+				
+					 <!-- Subjects view -->
+					 <% if(isset($subj)){%>
+					 
+					 <h5 class="sidebar-title">Subjects <span class="badge badge-danger"><%= !is_null($std)? count($std) : 0 ;%></span> -  <a href="<%= $app->urlFor('addsubj');%>" class="">[ <i class="fa fa-book"></i> Add New Subject ]</a><% if(!is_null($std)):%>   | <a target="_blank" href="ui/report/pdfSubj" class="">[ <i class="fa fa-print"></i> Subjects & Codes ]</a> <% endif;%></h5>
+					 <ul class="media-list">
+					      <%
+                           if(!is_null($std)){							  
+						      foreach($std as $st){						      
+						   %>	
+							<li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a><%= $st['subjName'];%></a> <small> | Created: <%= date('F j, Y',strtotime($st['dateCreated']));%> | Description : <%= $st['subjDesc'];%> | Subject type : <%= $st['subjType'] == 0 ? 'Core ': 'Elective';%></small></h5>									
+									<ul class="tags">
+									   <% if($st['active'] == 1){ %>
+										  <li><a href="<%= $app->urlFor('cractive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable Subject!'))return false;" style="color:#93db3b;background:none;" title="Disable Subject"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }else{%>
+										  <li><a href="<%= $app->urlFor('cractive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable Subject!'))return false;" style="color:#eb7395;background:none;" title="Enable Subject"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }%> 
+									    <li><a href="<%= $app->urlFor('delsubj',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;"  style="background:pink;color:#fff;border-radius:18px;" title="Delete Record"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editsubj',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:18px;" title="Edit Record"><i class="fa fa-edit fa-lg"></i></a></li>
+										<li><a style="display:inline-block;margin-right:0;">ShortCode: <%= $st['subjCode'];%></a><a style="display:inline-block;margin-left:0;">ShortName: <%= $st['subjShort'];%></a></li>													
+									</ul>
+									
+								</div><hr/>
+							</li>
+						 <% }}%>							
+					</ul>
+					 <% }%>
+					
+					
+					
+					
+					<!-- Subject Add & Update  -->
+					 
+					 <% if(isset($addsubj)){%>
+					 
+					 <h5 class="sidebar-title">Subject - Registration</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/postsubj" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Subject Title</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="subjName" id="name" value="<%= isset($std)? $std['subjName'] : '';%>" placeholder="Subject Title"></i>
+										</div>										
+										<div class="form-group">
+											<label for="phone" class="kobby">Subject Code</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" name="subjCode" value="<%= isset($std)? $std['subjCode'] : '';%>" id="phone" placeholder="Subject Code"></i>
+										</div>
+                                        <div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>										
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Subject Short Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="subjShort" id="name" value="<%= isset($std)? $std['subjShort'] : '';%>" placeholder="Subject Short Name"></i>
+										</div>	
+										<div class="form-group">
+											<label for="phone" class="kobby">Subject Description</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" name="subjDesc" value="<%= isset($std)? $std['subjDesc'] : '';%>" id="phone" placeholder="Subject Description"></i>
+										</div>
+										 <div class="form-group">
+											<label for="active" class="kobby">Subject Type</label>
+											<select class="form-control" id="active" name="subjType">
+												<option value="0" <%= isset($std) && $std['subjType'] == 0? 'selected="selected"' : '';%>>Core</option>
+												<option value="1" <%= isset($std) && $std['subjType'] == 1? 'selected="selected"' : '';%>>Elective</option>												
+											</select>
+										</div>	
+
+																				
+																			
+									</div>
+								</div>
+								    <input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">	
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+								    <input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+							
+							</form>
+						</div>
+					 </div>
+					 <% }%>
+					
+					
+					
+					
+					 <!-- Course Add & Update  -->
+					 
+					 <% if(isset($addcr)){%>
+					 
+					 <h5 class="sidebar-title">Course - Registration</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/postcr" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Course Title</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="courseName" id="name" value="<%= isset($std)? $std['courseName'] : '';%>" placeholder="Course Title"></i>
+										</div>										
+										<div class="form-group">
+											<label for="phone" class="kobby">Course Code</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" name="courseCode" id="name" value="<%= isset($std)? $std['courseCode'] : '';%>" placeholder="Course Code"></i>
+										</div>
+										<div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>	
+										
+									</div>
+									<div class="col-sm-6">																	
+										<div class="form-group">
+											<label for="name" class="kobby">Subjects shortcodes</label>
+											<input type="text" class="form-control" name="subjArray" id="name" value="<%= isset($std)? $std['subjArray'] : '';%>" placeholder="Subjects shortcodes [ ex: ENG125,CS439 ]">
+										</div>
+
+										<div class="form-group">
+											<label for="name" class="kobby">Course Description</label>
+											<input type="text" class="form-control" name="courseDesc" id="name" value="<%= isset($std)? $std['courseDesc'] : '';%>" placeholder="Course Description">
+										</div>										
+									</div>
+								</div>
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+								    <input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+							        <input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">	
+							</form>
+						</div>
+					 </div>
+					 <% }%>
+					 
+					 
+					
+					
+					 <!-- Course view -->
+					 <% if(isset($course)){%>
+					 
+					 <h5 class="sidebar-title">Course <span class="badge badge-danger"><%= !is_null($std)? count($std) : 0 ;%></span> - <a href="<%= $app->urlFor('addcr');%>" class="">[ <i class="fa fa-book"></i> Add New Course ]</a></h5>
+					 <ul class="media-list">
+                         <%
+                           if(!is_null($std)){							 
+						      foreach($std as $st){						      
+						 %>						 
+							<li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a><%= $st['courseName'];%></a> <small> | Created: <%= date('F j, Y',strtotime($st['dateCreated']));%> | Description : <%= $st['courseDesc'];%> | <% 
+									     $sub = explode(',',$st['subjArray']);
+										 echo 'Subject Component ( '.count($sub).' ) : <em>';
+										 $m = 1;
+										 foreach($sub as $sj){
+										   $sl = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode LIKE trim('{$sj}')");
+										   echo ' '.$sl['subjName'].' ('.$sl['subjCode'].') '.($m != count($sub)?',':'</em>');
+										   $m++;
+									     }
+									%>
+									</small></h5>									
+									<ul class="tags">
+									   <% if($st['active'] == 1){ %>
+										  <li><a href="<%= $app->urlFor('csactive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable Course!'))return false;" style="color:#93db3b;background:none;" title="Disable Course"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }else{%>
+										  <li><a href="<%= $app->urlFor('csactive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable Course!'))return false;" style="color:#eb7395;background:none;" title="Enable Course"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }%> 
+									    <li><a href="<%= $app->urlFor('delcr',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;"  style="background:pink;color:#fff;border-radius:18px;" title="Delete Record"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editcr',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:18px;" title="Edit Record"><i class="fa fa-edit fa-lg"></i></a></li>
+										<li><a>Shortcode: <%= $st['courseCode'];%></a></li>														
+									</ul>									
+								</div><hr/>
+							</li>
+						<% }}%>
+					</ul>
+					 <% }%>
+					 
+					 
+					 
+					
+					<!-- Departments view -->
+					
+					<% if(isset($dept)){%>
+					
+					 <h5 class="sidebar-title">Departments <span class="badge badge-danger"><%= !is_null($std)? count($std) : 0 ;%></span> - <a href="<%= $app->urlFor('addept');%>" class="">[ <i class="fa fa-book"></i> Add New Department ]</a></h5>
+					 <ul class="media-list">
+                          <%
+                           if(!is_null($std)){						  
+						      foreach($std as $st){						      
+						   %>
+     					 
+							<li class="media">
+								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html"><%= $st['deptName'];%></a> <small> | Created: <%= date('F j, Y',strtotime($st['dateCreated']));%> | Head of Department : <em> <%= $st['hod'];%></em> | Address : <%= $st['deptLocation'];%> | Phone : <%= $st['deptContact'];%></small> </h5>									
+									<ul class="tags">
+									   <% if($st['active'] == 1){ %>
+										  <li><a href="<%= $app->urlFor('dtactive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable Department!'))return false;" style="color:#93db3b;background:none;" title="Disable Department"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }else{%>
+										  <li><a href="<%= $app->urlFor('dtactive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable Department!'))return false;" style="color:#eb7395;background:none;" title="Enable Department"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }%> 
+									    <li><a href="<%= $app->urlFor('deldept',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;"  style="background:pink;color:#fff;border-radius:18px;" title="Delete Record"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editdept',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:18px;" title="Edit Record"><i class="fa fa-edit fa-lg"></i></a></li>
+										<li><a>Shortcode: <%= $st['deptCode'];%></a></li>
+										<li><a><% 
+									     $sub = explode(',',$st['subjArray']);
+										 echo 'Manned Subjects ( '.count($sub).' ) : <em>';
+										 $m = 1;
+										 foreach($sub as $sj){
+										   $sl = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode LIKE trim('{$sj}')");
+										   echo ' '.$sl['subjName'].' ('.$sl['subjCode'].') '.($m != count($sub)?',':'</em>');
+										   $m++;
+									     }
+									%></a></li>										
+						   		
+																			
+									</ul>
+									
+								</div><hr/>
+							</li>
+						<% }}%>	
+						
+					</ul>
+					<% }%>
+					
+					
+					
+					
+					 <!-- Course Add & Update  -->
+					 
+					 <% if(isset($addept)){%>
+					 
+					 <h5 class="sidebar-title">Department - Add/Edit</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/postdept" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Department Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="deptName" id="name" value="<%= isset($std)? $std['deptName'] : '';%>" placeholder="Department Name"></i>
+										</div>
+                                        <div class="form-group">
+											<label for="name" class="kobby">Department ShortCode</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="deptCode" id="name" value="<%= isset($std)? $std['deptCode'] : '';%>" placeholder="Department ShortCode"></i>
+										</div>	
+                                        <div class="form-group">
+											<label for="name" class="kobby">Subjects shortcodes</label>
+											<input type="text" class="form-control" name="subjArray" id="name" value="<%= isset($std)? $std['subjArray'] : '';%>" placeholder="Subjects shortcodes [ ex: ENG125,CS439 ]">
+										</div>										
+										<div class="form-group">
+											<label for="phone" class="kobby">Head of Department Code</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" name="hod" id="name" value="<%= isset($std)? $std['hod'] : '';%>" placeholder="Head of Department Code"></i>
+										</div>
+										<div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>	
+										
+									</div>
+									<div class="col-sm-6">
+										
+																			
+										<div class="form-group">
+											<label for="message" class="kobby">Department Description</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" name="deptDesc" id="name" value="<%= isset($std)? $std['deptDesc'] : '';%>" placeholder="Department Description"></textarea></i>
+										</div>	
+                                        
+										<div class="form-group">
+											<label for="name" class="kobby">Department Contact Number</label>
+											<input type="text" class="form-control" name="deptContact" id="name" value="<%= isset($std)? $std['deptContact'] : '';%>" placeholder="Department Contact Number">
+										</div>
+                                        <div class="form-group">
+											<label for="name" class="kobby">Address</label>
+											<input type="text" class="form-control" name="deptLocation" id="name" value="<%= isset($std)? $std['deptLocation'] : '';%>" placeholder="Address">
+										</div>											
+									</div>
+								</div>
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+								    <input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">	
+							</form>
+						</div>
+					 </div>
+					
+					 <% }%>
+					
+						 
+				</div>						
+			</div>
+			
+			
+		
+	</section>
+	<!-- End Icon -->
+		
+<% include 'footer.php';%>

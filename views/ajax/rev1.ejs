@@ -1,0 +1,45 @@
+<section>  
+    <ul class="list-group">
+        <li class="list-group-item">
+            <center><strong>REVENUE PAYMENT</strong></center>
+        </li>                                            
+        <li class="list-group-item">
+            <div class="list-group">               
+                            <form name="form2" id="form2"  action="/revenue/postpay"method="post">
+                                <div class="step1">                             
+                                   <a href="javascript:void(0);" class="list-group-item">
+                                        <select class="form-control" name="category_id" class="revcat" >
+                                                <option value="0">SELECT PAYMENT</option>
+                                                <% category.map((h,i) => { %>
+                                                <%-'<option value="'+h.id+'" selected="selected">'+h.category.toUpperCase()+'</option>' %>
+                                                <% }) %>                                                                                       
+                                        </select>                                                                                    
+                                    </a>                                
+                                    <li class="list-group-item">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" id="amount" name="amount" class="form-control" placeholder="Payment Amount" step="any">
+                                            </div><br>
+                                            <div class="form-line">
+                                                <input type="text" name="payee" class="form-control" placeholder="Payee Name">
+                                            </div><br>
+                                            <div class="form-line">
+                                                <input type="text" name="reference" class="form-control" placeholder="Payment Reference">
+                                            </div><br>
+                                            <div class="form-line sindex">
+                                                    <input type="text" name="index_number" class="form-control" placeholder="Student Ref.">
+                                            </div>
+                                        </div>                                               
+                                    </li> 
+                                      
+                                    
+                                    <a href="javascript:void(0);" class="list-group-item">  
+                                       <center><input type="button" id="register" value="PAY" class="btn btn-primary"/></center>
+                                       
+                                    </a>
+                                </div>    
+                        </form>                                                        
+            </div>                                           
+        </li>                                                                                                    
+    </ul>
+</section>

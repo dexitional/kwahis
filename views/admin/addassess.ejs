@@ -1,0 +1,86 @@
+<form name="" action="/assess/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+				<div class="col-sm-12">   
+					<div class="form-group">
+						<h3><label class="form-label kobby">TUTOR</label></h3>  							
+						<select class="form-control" name="tutor_id">
+							<option value="" <%- rowx.tutor_id == ''? 'selected="selected"':'' %>>Select Tutor</option>
+							<% tutors.map((tutor,i) => {	%>
+							<%- '<option value="'+tutor.id+'" '+(tutor.id == rowx.tutor_id ? 'selected="selected"':'')+'>'+tutor.fname+' '+tutor.lname+'</option>';%>
+							<%  });	%>									   
+					    </select>						                                                                          
+					</div>
+				</div>
+				<hr/>
+				
+				<div class="col-sm-12"> <h3> <label class="form-label kobby">CLASSES FOR REMARKS</label></h3></div>			
+				<%   let m = 1;
+					 gm.map((g) => {										
+				%>
+						<div class="col-sm-2">   
+							<div class="form-group" style="padding:10px;background-color:pink;border-radius:10px">											
+								 <fieldset> 
+										<label class="kobby" for="<%- 'rm'+m %>">		
+								          <input type="checkbox" style="width:20px;height:20px;line-height:50px;" id="<%- 'rm'+m %>" name="<%- 'rm'+m %>" value="<%- g.id %>" <%- rowx.promoArray != null && rowx.promoArray.includes(g.id) ? 'checked="checked"':'' %>>
+								          <span><small style="font-size:12px"><%- g.name.toUpperCase() %></small></span>
+										</label>
+								</fieldset>	
+							</div>
+						</div>
+				<%								
+					 m++;})
+				%>              
+
+		</div>
+
+		<div class="row">
+			 
+               
+			    <div class="col-sm-12"> <h3> <label class="form-label kobby">CLASSES & COURSES FOR ASSESSMENT</label></h3></div>   	
+				<% data.map(row => { %>
+				<div class="col-sm-3">   
+					<div class="form-group" style="padding:10px;background-color:pink;border-radius:10px">
+						<fieldset> 							
+							<h5><%- row.gname %></h5><hr>							
+							<%	
+								let m = 1;
+								if(row.link != null){
+									row.link.split(',').forEach((cts) =>{								
+							%>
+							<label class="kobby" for="<%- row.gname+m %>">
+								 <input type="checkbox" style="width:20px;height:20px;line-height:50px;" id="<%- row.gname+m %>" name="<%- row.gname+m %>" value="<%- row.gid %>:<%- cts %>" <%- rowx.classArray != null && rowx.classArray.includes(row.gid+':'+cts) ? 'checked="checked"':'' %>>
+								 <%
+								     crs.map((cm) => {
+										 if(cm.code == cts){
+								 %>
+                                 <span><small><%- cm.name.toUpperCase() +' <b>('+cts+')</b>'%></small></span>
+								 <%			 
+										 }
+									 })
+								 %>
+								 										 
+							</label><hr/>
+							<% m++;}) 
+						        }
+							%>								    							
+						</fieldset>					                                                                          
+					</div>
+				</div>
+				<% }) %>
+				 				 
+				
+				<div class="col-sm-12">   
+					<div class="form-group">  
+						<input type="hidden" name="id" value="<%= rowx.id ? rowx.id : '0' %>"/>
+						<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+						<a href="/assess/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+					</div>
+				</div>
+
+		</div>
+	</div> 
+ </div>
+</form>

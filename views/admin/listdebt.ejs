@@ -1,0 +1,77 @@
+		<script>
+			// Messages on Records 
+		    <% if(msg === 'saved'){ %>
+				  toastr.success('', 'Record Saved Successfully!');					 
+			<% }%>
+
+             <% if(msg === 'deleted'){ %>
+				  toastr.success('', 'Record Deleted Successfully!');					 
+			<% }%>
+
+			<% if(msg === 'failed'){ %>
+				toastr.danger('', 'Saving failed!');					 
+			<% }%>	
+			
+			
+			$(function(){
+                 $('.st_debt').on("click",function(){
+					 	$('.js-exportable').dataTable().fnFilter( 'debt' );
+				 });
+
+				 $('.st_bal').on("click",function(){						 
+						$('.js-exportable').dataTable().fnFilter( 'bal' );
+				 });
+
+				  $('.st_zero').on("click",function(){						 
+						$('.js-exportable').dataTable().fnFilter( 'no-debt' );
+						 
+				 });
+			});
+		</script>
+
+
+			<div class="row">				
+                <div class="col-sm-12">				
+				<!-- Main Content -->	
+				<h5><a class="btn btn-primary st_zero"  title="Student with Zero(0) Balance"><i class="fa fa-search"></i> Zero(0) Balance Students</a>   <a class="btn btn-primary st_debt"  title="Students with Debts" ><i class="fa fa-search"></i> Students with Debts</a>&nbsp;&nbsp;&nbsp;<a class="btn btn-primary st_bal"  title="Students with Balance" ><i class="fa fa-search"></i> Students with Balance</a></h5>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-hover dataTable js-exportable">
+						<thead>							
+							<tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="STUDENT: activate to sort column descending" style="width: 102px;">STUDENT</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="ARREARS (GHC): activate to sort column ascending" style="width: 80px;">ARREARS (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="ADVANCE (GHC): activate to sort column ascending" style="width: 78px;">ADVANCE (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CURRENT BILL (GHC): activate to sort column ascending" style="width: 79px;">CURRENT BILL (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="TOTAL CHARGE (GHC): activate to sort column ascending" style="width: 70px;">TOTAL CHARGE (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="TOTAL PAYMENT (GHC): activate to sort column ascending" style="width: 76px;">LAST PAYMENT (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="TOTAL PAYMENT (GHC): activate to sort column ascending" style="width: 76px;">TOTAL PAYMENT (GHC)</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CURRENT BALANCE  (GHC): activate to sort column ascending" style="width: 79px;">CURRENT BALANCE  (GHC)</th></tr>
+						</thead>						
+						<tbody>				                                           
+							<% 
+							if(rows != null){
+							  rows.map((row,i) => { %>
+								<tr role="row" class="odd">
+									<td class="sorting_1"><%- row.student %></td>
+									<td><b>₵ <%= row.mdebt %></b></td>
+									<td>₵ <%= row.mbal %></td>
+									<td><b>₵ <%= row.cur_bill %></b></td> 
+									<td><b>( ₵ <%= row.charge %> )</b></td> 
+									<td align="center">₵ <%- row.lpay %><br><b> - <small style="font-size:9px;font-style:italic;"><%- row.ldate %></small></b></td>								
+									<td>₵ <%= row.paid %></td>
+									<td> 
+										<center>									
+											<%- (row.tbal > 0 ? '<b>( ₵ '+row.tbal+' )</b><br><small style="font-size:9px;font-style:italic;">DEBT</small>':(row.tbal == 0 ? '( ₵ '+row.tbal+' )<br><small style="font-size:9px;font-style:italic;">NO-DEBT</small>':'( ₵ '+Math.abs(row.tbal)+' )<br><small style="font-size:9px;font-style:italic;">BAL</small>'))%>
+											<%- '<br><br><a style="font-size:10px;font-style:italic;border-radius:5px;" class="btn btn-success" target="_blank" href="/transact/'+row.index_number+'">STATEMENT</a>';%>
+											
+										</center>
+									</td>                                                                                                                               
+								</tr> 
+							<% })} %>
+						</tbody>
+
+
+
+
+
+
+					</table>
+				</div>
+			   
+<!-- #END# Exportable Table -->
+
+
+		  </div>
+		</div>

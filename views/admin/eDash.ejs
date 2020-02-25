@@ -1,0 +1,220 @@
+
+<%- include('header.ejs'); %>
+		
+	<!-- Administrator only -->
+	<% if(session.privilege == '1') { %>
+	<section class="generic">
+		
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="section-title">&nbsp;</div>
+				</div>
+			</div>
+			<div class="row">				
+				<div class="col-sm-3">
+					<a href="/student/list" class="icon-box">
+					   <span class="icon-simple default fa"><i class="fa fa-user"></i><br><center>Student</center></span>					  
+					</a>				
+				</div>
+				<div class="col-sm-3">
+					<a href="/program/list" class="icon-box">
+					<span class="icon-simple default fa"><i class="fa fa-language"></i><br><center>Program</center></span>
+					</a>				
+				</div>
+				<div class="col-sm-3">
+					<a href="/group/list" class="icon-box">
+					<span class="icon-simple default  fa"><i class="fa fa-users"></i><br><center>Class</center></span>
+					</a>
+			    </div>	
+				<div class="col-sm-3">
+					<a href="/course/list" class="icon-box">
+					<span class="icon-simple default  fa "><i class="fa fa-tasks"></i><br><center>Subject</center></span>
+					</a>
+				</div>				
+				<!--
+				<div class="col-sm-3">
+					<a href="/room/list" class="icon-box">
+					<span class="icon-simple default  fa"><i class="fa fa-building"></i><br><center>Rooms</center></span>
+					</a>
+				</div>
+				<div class="col-sm-3">
+					<a href="/bed/list" class="icon-box">
+					<span class="icon-simple default fa"><i class="fa fa-bed"></i><br><center>Beds</center></span>
+					</a>
+				</div>
+			    --> 
+                <div class="col-sm-3">
+					<a href="/calendar/list" class="icon-box">
+					<span class="icon-simple default fa"><i class="fa fa-calendar"></i><br><center>Calendar</center></span>
+					</a>
+				</div>					
+				<!--
+				<div class="col-sm-3">
+					<a href="/reg/list" class="icon-box">
+					<span class="icon-simple default  fa"><i class="fa fa-tasks"></i><br><center>Registration</center></span>
+					</a>
+				</div>
+			    -->
+				<div class="col-sm-3">
+					<a href="/bill/list" class="icon-box">
+					<span class="icon-simple default  fa"><i class="fa fa-money"></i><br><center> Bill</center></span>
+					</a>
+			    </div>
+				<div class="col-sm-3">
+						<a href="/debt/list" class="icon-box">
+						<span class="icon-simple default  fa"><i class="fa fa-tasks"></i><br><center>Finance</center></span>
+						</a>
+				</div>
+				
+				<div class="col-sm-3">
+						<a href="/pay/list" class="icon-box">
+						<span class="icon-simple default  fa"><i class="fa fa-credit-card"></i><br><center>Payment</center></span>
+						</a>
+				</div>
+				<!--
+				<div class="col-sm-3">
+						<a href="/hall/list" class="icon-box">
+						<span class="icon-simple default  fa fa-tasks"><i class="fa fa-university"></i><br><center>Hostels</center></span>
+						</a>
+				</div>				
+				<div class="col-sm-3">
+						<a href="/feeding/list" class="icon-box">
+						<span class="icon-simple default  fa"><i class="fa fa-coffee"></i><br><center>Feeding</center></span>
+						</a>
+				</div>
+				-->
+				<div class="col-sm-3">
+					<a href="/assess/list" class="icon-box">
+					<span class="icon-simple default fa"><i class="fa fa-book"></i><br><center>Assessments</center></span>
+					</a>
+				</div>
+				<div class="col-sm-3">
+						<a href="/scheme/list" class="icon-box">
+						<span class="icon-simple default  fa "><i class="fa fa-tasks"></i><br><center>Grading</center></span>
+						</a>
+				</div>
+				<div class="col-sm-3">
+						<a href="/user/list" class="icon-box">
+						<span class="icon-simple default  fa"><i class="fa fa-users"></i><br><center>Users</center></span>
+						</a>
+				</div>	
+				<div class="col-sm-3">
+						<a href="/user/list" class="icon-box">
+						<span class="icon-simple default  fa"><i class="fa fa-gear"></i><br><center>Reports</center></span>
+						</a>
+				</div>		
+				<div class="col-sm-3">
+						<a href="/user/list" class="icon-box">
+						<span class="icon-simple default  fa"><i class="fa fa-mobile fa-lg"></i><br><center>SMS</center></span>
+						</a>
+				</div>	
+				<div class="col-sm-3">
+					<a href="/user/list" class="icon-box">
+					<span class="icon-simple default  fa"><i class="fa fa-users fa-lg"></i><br><center>Guardian</center></span>
+					</a>
+				</div>		
+				
+				
+			</div>
+		
+	</section>
+	<!-- End Icon -->
+	<% } %>
+
+		<!-- Tutors only -->
+		<% if(session.privilege == '2') { %>
+			<section class="generic">
+				
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="section-title">&nbsp;</div>
+						</div>
+					</div>
+					<div class="row">				
+						
+						<div class="col-sm-3">
+							<a href="/assess/list/<%- session.id%>" class="icon-box">
+							<span class="icon-simple default fa"><i class="fa fa-tasks"></i><br><center>Assessors</center></span>
+							</a>
+						</div>		
+						
+						<div class="col-sm-3">
+								<a href="/user/list/<%- session.id%>" class="icon-box">
+								<span class="icon-simple default  fa"><i class="fa fa-users"></i><br><center>Users</center></span>
+								</a>
+						</div>		
+						
+						
+					</div>
+				
+			</section>
+			<!-- End Icon -->
+			<% } %>
+
+
+	<!-- Accountant only -->
+	<% if(session.privilege == '3') { %>
+		<section class="generic">
+			
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="section-title">&nbsp;</div>
+					</div>
+				</div>
+				<div class="row">			
+					<div class="col-sm-3">
+							<a href="/debt/list" class="icon-box">
+							<span class="icon-simple default  fa fa-tasks"><i class="fa fa-tasks"></i><br><center>Debts</center></span>
+							</a>
+					</div>
+					
+					<div class="col-sm-3">
+							<a href="/pay/list" class="icon-box">
+							<span class="icon-simple default  fa"><i class="fa fa-credit-card"></i><br><center>Payment</center></span>
+							</a>
+					</div>
+					<div class="col-sm-3">
+							<a href="/user/list/<%- session.id%>" class="icon-box">
+							<span class="icon-simple default  fa"><i class="fa fa-users"></i><br><center>Users</center></span>
+							</a>
+					</div>		
+					
+					
+				</div>
+			
+		</section>
+		<!-- End Icon -->
+		<% } %>
+	
+
+
+		<!-- Registration Officer only -->
+	<% if(session.privilege == '4') { %>
+		<section class="generic">
+			
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="section-title">&nbsp;</div>
+					</div>
+				</div>
+				<div class="row">				
+					<div class="col-sm-3">
+						<a href="/reg/list" class="icon-box">
+						   <span class="icon-simple default fa fa-user"><i class="fa fa-tasks"></i><br><center>Registration</center></span>					  
+						</a>				
+					</div>				
+					<div class="col-sm-3">
+							<a href="/user/list/<%- session.id%>" class="icon-box">
+							<span class="icon-simple default  fa"><i class="fa fa-users"></i><br><center>Users</center></span>
+							</a>
+					</div>			
+					
+					
+				</div>
+			
+		</section>
+		<!-- End Icon -->
+		<% } %>
+	
+
+	<%- include('footer.ejs') %>

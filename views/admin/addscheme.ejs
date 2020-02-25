@@ -1,0 +1,57 @@
+<form name="" action="/scheme/post" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">	
+		<div class="col-sm-12">
+			<h2><em><%= title %></em></h2><hr>		
+			<div class="row">
+				    <div class="col-sm-12">
+							<div class="form-group">	
+								<label class="form-label kobby">Title of Scheme</label>							
+							    <input type="text" name="title" value="<%- row.title %>" class="form-control">
+							</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group">
+								<label class="form-label kobby">Scores</label>							
+								<input type="text" name="score" value="<%- row.score %>" class="form-control">
+					    </div>
+					</div>                                                                
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Grades</label>								
+								<input type="text" name="grade" value="<%- row.grade %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+							<div class="form-group">
+								<label class="form-label kobby">Cuttoff Mark</label>								
+								<input type="text" name="cutoff" value="<%- row.cutoff %>" class="form-control">																
+							</div>
+					</div> 
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="form-label kobby">Remarks</label>								
+							<input type="text" name="remark" value="<%- row.remark %>" class="form-control">																
+						</div>
+					</div> 
+					<div class="col-sm-12">   
+							<div class="form-group"> 
+									<label class="form-label kobby">Status</label>          
+									<select class="form-control" name="active">
+										<option value="0" <%= row.active == '0'? 'selected="selected"':'';%>>Disabled</option>
+										<option value="1" <%= row.active == '1'? 'selected="selected"':'';%>>Enabled</option>                            
+									</select>	
+							</div>
+					</div>	
+									
+					<div class="col-sm-12">   
+						<div class="form-group">  
+					        <input type="hidden" name="id" value="<%= row.id ? row.id : '0' %>"/>
+							<button type="submit" class="btn btn-success btn-large">SAVE CHANGES</button>
+							<a href="/scheme/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+	</div>
+</form>

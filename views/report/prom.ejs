@@ -1,0 +1,271 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+    <title>PROMOTION & REPETITON STATISTICS </title>
+    <link href="http://www.allfont.de/allfont.css?fonts=arial-narrow" rel="stylesheet" type="text/css" />
+    <style type="text/css" >
+         body{
+            background-color:#eee;              
+          }
+
+          .cover{
+              width: 920px;             
+              margin: 10px auto;  
+              box-shadow:2px 2px 4px #999;
+              padding:20px 35px; 
+              background:#fff;           
+          }
+
+          .title{
+              text-align: center;
+              font-size:22px;
+              color: <%- settings.primaryColor; %>;
+          }
+
+          .subtitle{
+              font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+              font-weight:bolder;
+              text-align: center;
+              font-size:18px;             
+              color: red;
+              font-style:italic;
+              margin-top:-15px;
+          }
+
+          .subnote{
+             position: relative;
+             height:60px;             
+          }
+
+          .cover_adds{
+              position:absolute;
+              left:0;
+              top:0; 
+              font-size:12px;
+              color:<%- settings.primaryColor; %>;
+              line-height:18px;           
+          }
+
+         .ucc_title{
+              position:absolute;
+              right:0;
+              top:0; 
+              text-align:right; 
+              font-size:18px;
+              line-height:25px;
+              word-spacing:0.35em;
+              font-weight:bold;                         
+          }
+          .ucc_logo{
+            position:absolute;
+            left:44.9%;
+            top:0;   
+            height: 120px;  
+            width: 120px; 
+            border-radius:50%;                
+          }
+
+          content{
+              font-family:'Arial Narrow', Arial, sans-serif;
+              font-size: 17px;
+              display:block;
+              padding-top: 50px;
+              clear:both;
+              overflow:hidden;
+              padding:50px 5px 10px;
+          }
+
+          address{
+              font-style:normal;
+          }
+
+          .signatory{
+              width:200px;
+              height:130px;
+              background-image:url(<%- settings.logo; %>);
+              background-repeat: no-repeat;             
+              background-position: 0% 0%;
+              background-size: 200px 65px;
+              position: relative;
+          }
+
+          .signer{
+              position:absolute;
+              left:0;
+              bottom:0;
+          }
+
+          .salute{
+              margin-top:20px;
+          }
+
+          .ref{
+              margin-bottom:20px;
+          }
+
+          .end{
+              position:relative;              
+          }
+
+          .copies{
+              position: absolute;
+              right:25%;
+              top: 0;
+          }
+
+          footer{
+              margin:80px 0 10px;
+              font-size:10px;
+              font-family:cursive;
+              font-style:italic;
+          }
+
+          .heading{
+              text-align:center;
+              text-decoration : underline;
+          }
+
+          .table{
+              border-collapse: collapse;
+              width: 100%;
+              border:thin solid #000;
+              padding: 20px;
+              vertical-align:middle;
+              text-align:center;
+              float:left;
+          }
+
+          .table tr{
+              border-bottom: thin solid #000;             
+          }
+
+          .table td{
+              border-right: thin solid #000;
+              padding: 10px;            
+          }
+
+          .certv{
+              text-align:center;
+          }
+
+          .vbtn{
+              padding:5px;
+              margin-top:-20px;
+              text-decoration:none;
+              font-size:10px;
+              background-color:green;
+              color:#fff;
+              position:relative;
+              top:-10px;
+              border-radius:10px;
+          }
+
+          .sbody{
+              font-weight:600;
+              font-size:11px;
+              text-transform:uppercase;
+              display:inline-block;
+          }
+
+
+          @media print {
+              body{
+                  background:none;
+              }
+
+              .cover{
+                  padding:0;
+                  background:none;
+                  box-shadow:none;
+              }
+
+              .vbtn{
+                  display:none;
+              }
+          }
+
+
+    </style>
+</head>
+<body>
+    <div class="cover">
+          <header>
+              <h3 class="title"><%- settings.instituteLong; %></h3>
+              <h4 class="subtitle">PROMOTION STATISTICS - CLASS P4</h4>              
+              <div class="subnote">                
+                  <img src="<%- settings.logo; %>" class="ucc_logo"/>
+                  <address class="ucc_title">                        
+                    <%- settings.institutePost; %>
+                  </address>
+              </div>
+          </header>  
+          <content>
+              <h4 class="heading"></h4> <hr>             
+              <div class="content">
+                  <table class="table">  
+                      <tr>
+                            <td colspan="4" style="background-color:pink;"><h5 style="margin-bottom:-5px;background-color:pink;color:brown;text-align:left;font-weight:bolder;">PROMOTION CUTOFF [ MAXIMUM GRADE SCORE: <%- rows.length > 0 ? rows[0][0].cutoff.split('&')[1] : 0 %>, AVERAGE SCORE: <%- rows.length > 0 ? rows[0][0].cutoff.split('&')[0] : 0 %> ] </h5></td>
+                      </tr>
+                                          
+                      <tr>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:left;font-weight:bolder;">INDEX NO.</h5></td>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:left;font-weight:bolder;">FULL NAME</h5></td>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:left;font-weight:bolder;">RESULTS (SUMMARY)</h5></td>
+                            <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:left;font-weight:bolder;">STATUS</h5></td>
+                      </tr>  
+                      <%
+                         if(rows.length > 0){
+                             rows.map(row => {
+                      %>                                    
+                      <tr>
+                            <td align="left"><span class="sbody"><%- row[0].index_number %></span></td>
+                            <td align="left"><span class="sbody"><%- (row[0].fname+' '+row[0].lname).toUpperCase() %> </span></td>
+                            <td align="left"><span class="sbody">
+                              <% var sum = 0;
+                                 var j = 0; 
+                                 var trails = [];
+                                 row.map(rex => {                                                                   
+                            
+                                sum += rex.total;
+                                let score = rex.score.split(',');
+                                let grade = rex.grade.split(',');
+                                let remark = rex.detail.split(',');
+                                let cutoff = rex.cutoff.split('&');
+                               
+                                for(var i = 0; i < score.length; i++){
+                                    let ms = score[i].split(':');                                                                                       
+                                    let gt = Number(ms[0]);
+                                    let lt = Number(ms[1]);                        
+                                    let sd = {};
+                                  
+                                    if((gt >= rex.total) && (rex.total >= lt)){                            
+                                        sd.grade = grade[i];
+                                        sd.remark= remark[i];
+                                        if(j==0){
+                                %>
+                                <% (rex.total > 0) && (rex.total <= parseFloat(cutoff[1])) ? trails.push(rex.course_code+': '+sd.grade) : ''  %>
+                                <%	  } j++;																	                   			  
+                                    }                    
+                                }	
+                            })
+                         %>
+                         <%- trails.length > 0 ? 'TRAILS : <em> ('+ trails.join(', ')+' )</em><br><br>' : '<em>No trails</em><hr>'%>
+                         AVG : <em><%- Math.ceil(sum/row.length,2) %></em>
+                             
+                            </td>
+                            <td align="left"><small style="padding:5px;border-radius:15px;background:pink;display:block;font-weight:bolder;letter-spacing:0.25em"><center><em><%- row[0].status == '1' ? 'PROMOTED' : 'REPEATED'%></em></center></small></td>
+                           
+                      </tr>
+                      <%     })
+                         }
+                      %>              
+                  </table>
+                    
+              </div>              
+          </content>
+          <footer>
+              <span>PRAISE <%- new Date().getFullYear()%></span>
+          </footer>        
+    </div>
+</body>
+</html>

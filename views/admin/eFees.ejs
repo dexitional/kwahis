@@ -1,0 +1,600 @@
+<% include 'header.php';%>
+	
+
+	<!-- Icons -->
+	<section class="generic">		
+			
+			<div class="row">				
+				
+                <div class="col-sm-12">
+				
+				<!-- Main Content -->
+				 
+				 
+					  <% if(isset($exbill)){%>
+						
+						 <!-- Student Add & Update  -->
+						 <h5 class="sidebar-title">Bill ( Debt Update )  <a class=""> [ <i class="fa fa-user"></i> STUDENT ID : <%= $std['studentCode'];%> ]</a></h5>
+						 <div class="row">
+							<div class="col-sm-12">
+							   
+								<form action="/shs/postexbill" method="post">
+										<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="classCode" class="kobby">Bill Name</label>
+												<select class="form-control" id="BillCode" name="BillCode">
+												<% 
+												   $cl = $db->getAllRecord("select bl.* from bill bl where SiteID = '{$_SESSION['SiteID']}' and bl.active = 1");
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['id'].'" '.(isset($std) && ($std['BillCode'] == $op['id']) ? 'selected="selected"' : '').'>'.$op['itemName'].'</option>';
+												   }
+												%>											 												
+												</select>
+											</div>
+											<div class="form-group">
+												<label for="BillType" class="kobby">Active</label>
+												<select class="form-control" id="active" name="active">
+													<option value="0" <%= (isset($std) && $std['active'] == 0 ? 'selected="selected"' : '')%>>Disabled</option>
+													<option value="1" <%= (isset($std) && $std['active'] == 1 ? 'selected="selected"' : '')%>>Enabled</option>																					 												
+												</select>
+											</div>
+											
+										</div>
+										<div class="col-sm-6">
+											<div class="form-group">
+												<label for="BillType" class="kobby">Bill Type</label>
+												<select class="form-control" id="BillType" name="BillType">
+													<option value="0" <%= (isset($std) && $std['BillType'] == 0 ? 'selected="selected"' : '')%>>Boarder</option>
+													<option value="1" <%= (isset($std) && $std['BillType'] == 1 ? 'selected="selected"' : '')%>>Day</option>																					 												
+												</select>
+											</div>
+										</div><hr/>										
+									</div>
+										<input type="submit" name="submit" class="btn btn-default btn-color-border-solid" value="Save">
+										<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">	 
+										<input type="hidden"  name="studentCode" value="<%= isset($std)? $std['studentCode'] : 0;%>">	   
+								</form>
+							</div>
+						 </div>				
+					 <% }%>	
+					 
+				 
+				 
+				 
+				
+				    <% if(isset($addbill)){%>
+					
+					 <!-- Student Add & Update  -->
+					 <h5 class="sidebar-title">Bill Generator</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						   
+							<form action="/shs/postbill" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">Biil Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="itemName" id="name" placeholder="Bill Name" value="<%= isset($std)? $std['itemName'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="message" class="kobby">Boarding Bill Content</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" name="itemBHtml" id="message" placeholder="Boarding Bill Content ex:[item,amount;item,...]"><%= isset($std)? $std['itemBHtml'] : '';%></textarea></i>
+										</div>	
+										<div class="form-group">
+											<label for="phone" class="kobby">Boarding Bill Amount</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" name="itemBAmount" id="phone" placeholder="Boarding Bill Amount" value="<%= isset($std)? $std['itemBAmount'] : '';%>"></i>
+										</div>										
+										<div class="form-group">
+											<label for="name" class="kobby">Bill Due Date</label>
+											<input type="date" class="form-control" name="BillDate" id="BillDate" placeholder="Bill Due Date [ex: 2017-02-23]" value="<%= isset($std)? $std['BillDate'] : '';%>">
+										</div>
+                                        <div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>										
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+												<label for="classCode" class="kobby">Academic Term Code</label>
+												<select class="form-control" id="academCode" name="academCode">												 
+												<% 
+												   $cl = $db->getAllRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' order by id desc");
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['academCode'].'" '.(isset($std) && ($std['academCode'] == $op['academCode']) ? 'selected="selected"' : '').'>'.$op['academName'].'</option>';
+												   }
+												%>											 												
+												</select>
+										</div>
+										<div class="form-group">
+											<label for="message" class="kobby">Day Bill Content</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" name="itemDHtml" id="message" placeholder="Day Bill Content ex:[item,amount;item,...]"><%= isset($std)? $std['itemDHtml'] : '';%></textarea></i>
+										</div>	
+										<div class="form-group">
+											<label for="phone" class="kobby">Day Bill Amount</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" name="itemDAmount" id="itemDAmount" placeholder="Day Bill Amount" value="<%= isset($std)? $std['itemDAmount'] : '';%>"></i>
+										</div>										
+										<!--<div class="form-group">
+											<label for="name" class="kobby">Assigned Classes Array  </label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="classArray" id="active" placeholder="Assigned Classes Array [ex: 1,45,6... ]" value="<%= isset($std)? $std['classArray'] : '';%>"></i>
+										</div>
+										-->
+										<div class="form-group">
+											<label for="name" class="kobby">Assigned Students Array  </label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="stdArray" id="active" placeholder="Assigned Student Array [ex: 20170001,20180062,20190019... ]" value="<%= isset($std)? $std['stdArray'] : '';%>"></i>
+										</div>
+										
+												
+									</div>
+								</div>
+								<div class="row">
+								      <div class="col-sm-12"><hr/>
+									       <label for="name" class="kobby">Select Class(es) To Post Student Bill To:</label>
+									  </div>
+								      <div class="col-sm-12">
+									        <% 
+											        $i = 1;							
+													$cl = $db->getAllRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and gradDate IS NULL and classForm = 1");
+													if(!is_null($cl)){
+											%>
+																						
+											<div class="col-sm-4">
+													<fieldset><span>Form 1</span>
+													<%  
+														   foreach($cl as $sx){															  
+													 %>													       
+														   <label class="kobby" for="n<%= $i;%>">
+															  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $sx['id'];%>"
+																<% 
+																	   if(isset($std) && !is_null($std['classArray'])){  
+																		  $mk = explode(",",$std['classArray']);
+																		  foreach($mk as $clx){
+																			   if($clx == $sx['id']){
+																				   echo 'checked="checked"';																   
+																			   }
+																		  }
+																	   }
+																%>>
+															  <span><%= $sx['className'];%></span>										 
+														   </label><hr/>
+					                                 <%  $i++;}%>	
+													</fieldset>
+											</div>
+					                        <% }%>
+											
+											 <% 											        							
+													$cl = $db->getAllRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and gradDate IS NULL and classForm = 2");
+													if(!is_null($cl)){
+											%>
+											<div class="col-sm-4">
+													<fieldset><legend>Form 2</legend>
+													<%  
+														   foreach($cl as $sx){															  
+													 %>													       
+														   <label class="kobby" for="n<%= $i;%>">
+															  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $sx['id'];%>"
+																<% 
+																	   if(isset($std) && !is_null($std['classArray'])){  
+																		  $mk = explode(",",$std['classArray']);
+																		  foreach($mk as $clx){
+																			   if($clx == $sx['id']){
+																				   echo 'checked="checked"';																   
+																			   }
+																		  }
+																	   }
+																%>>
+															  <span><%= $sx['className'];%></span>										 
+														   </label><hr/>
+					                                 <%  $i++;}%>	
+													</fieldset>
+											</div>
+					                        <% }%>
+											
+											
+											 <% 											        							
+													$cl = $db->getAllRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and gradDate IS NULL and classForm = 3");
+													if(!is_null($cl)){
+											%>
+											<div class="col-sm-4">
+													<fieldset><legend>Form 3</legend>
+													<%  
+														   foreach($cl as $sx){															   
+													 %>													       
+														   <label class="kobby" for="n<%= $i;%>">
+															  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $sx['id'];%>"
+																<% 
+																	   if(isset($std) && !is_null($std['classArray'])){  
+																		  $mk = explode(",",$std['classArray']);
+																		  foreach($mk as $clx){
+																			   if($clx == $sx['id']){
+																				   echo 'checked="checked"';																   
+																			   }
+																		  }
+																	   }
+																%>>
+															  <span><%= $sx['className'];%></span>										 
+														   </label><hr/>
+					                                 <%  $i++;}%>	
+													</fieldset>
+											</div>
+					                        <% }%>
+											
+										</div>
+								</div>
+									<input type="submit" class="btn btn-default btn-color-border-solid" value="Save">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">									
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">	                                   																
+							</form>
+						</div>
+					 </div>				
+				<% }%>	
+				
+				
+				
+				
+					 <!-- Student Bills -->					
+					<% if(isset($stbills)){%>
+					 <h5 class="sidebar-title">Student Bills Database   | <a href="<%= $app->urlFor('addbill');%>" class="">[ <i class="fa fa-print"></i> Create Bill ]</a> <%= ($db->checkNextBill($_SESSION['settings']['academNext']) ? '   | <a target="_blank" href="ui/report/pdfBills.php?academ='.$_SESSION['settings']['academNext'].'" onclick="if(!confirm(\'Print New Bills?\'))return false;">[ <i class="fa fa-print"></i> Print New Bills ]</a>' : '')%></h5>
+					 <section class="newsletter">
+						 <form id="newsletters" class="input-group" action="/shs/searchbill" method="get"  accept-charset="utf-8" role="form">
+							<input type="text" class="form-control" name="searchbill" placeholder="Enter Academic Term Code ( ACADEM/ACA ) ...">
+							<button type="submit" class="btn btn-send" data-loading-text="Sending...">Search Bill</button>
+						</form><hr/>
+					</section>
+					
+					<% 
+					     if(isset($scstdc)){
+					%>
+					<blockquote class="info">
+						<h4>Results</h4>
+						<p><span class="badge badge-danger"><%= !is_null($stbills)? count($stbills) : 0 ;%></span> <em>Search results for "<%= isset($typed)? $typed : '';%>"</em></p>
+					</blockquote>
+					<% }%>
+					 <ul class="media-list">								
+							<% 
+						     if(isset($scstdc) && ($scstdc > 0)){							 
+							    foreach($stbills as $st){
+							%>
+								  
+							<li class="media">
+								<a class="pull-left">
+									 <img class="media-object img-circle" src="<%= $_SESSION['settings']['logo'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['itemName'];%></a><small>  | Academic Term Code (ACA) : <%= $st['academCode'];%> | Day Student Fees : GHC <%= $st['itemDAmount'];%>  | Boarding Student Fees : GHC <%= $st['itemBAmount'];%></small></h5>									
+									<ul class="tags">	
+										<% if($db->checkBillSend($st['id'])){ %>
+										  <li><a title="Bill Sent" style="background:#eee;color:#666;display:inline-block;margin-right:0;"> <i class="fa fa-send"></i> Sent</a><a href="<%= $app->urlFor("revokebills",array('id' => $st['id']));%>" onclick="if(!confirm('Revoke Bill!'))return false;" style="display:inline-block;margin-left:0;" title="Delete Sent Bills"><i class="fa fa-stop"></i></a><% if($_SESSION['settings']['sms_active'] == 1) : %><a href="<%= $app->urlFor("txtbills",array('id' => $st['id'],'academ' => $st['academCode']));%>" style="display:inline-block;margin-left:0;margin-right:0;" title="SMS Bill to Parents" onclick="if(!confirm('Send New Bills to Parents Via SMS?'))return false;"><i class="fa fa-paper-plane"></i> SMS Bill to Parents</a><% endif;%></li>
+											  <%
+												  
+												  if(!empty($st['classArray'])){
+													  $d = explode(',',$st['classArray']);
+													  $i = 1;
+													  foreach($d as $ms){
+														$sl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$ms}'");
+														if(!is_null($sl)){
+														  echo '<li><a target="_blank" onclick="if(!confirm(\'View assigned members!\'))return false;" href="ui/report/pdfBills?academ='.$st['academCode'].'&class='.$ms.'"> <i class="fa fa-group"></i> '.$sl['className'].'</a></li>';
+														}
+														$i++;
+													  }
+												  }
+												  
+												  
+												  if(!empty($st['stdArray'])){
+													 echo '<li><a target="_blank" onclick="if(!confirm(\'View assigned members!\'))return false;" href="ui/report/pdfBills?academ='.$st['academCode'].'&students='.urlencode($st['stdArray']).'" title="'.$st['stdArray'].'"><i class="fa fa-group"></i> Std. Members</a></li>';
+												  }
+												  
+										      }else{ %>											 
+												  <li><a href="<%= $app->urlFor("editbill",array('id' => $st['id']));%>" onclick="if(!confirm('Edit Bill!'))return false;" title="Edit Bill"> <i class="fa fa-edit"></i> edit</a></li>
+												  <li><a href="<%= $app->urlFor("delbill",array('id' => $st['id']));%>" onclick="if(!confirm('Delete Bill!'))return false;" title="Delete Bill"> <i class="fa fa-trash"></i> delete</a></li>
+												  <li><a href="<%= $app->urlFor("sendbills",array('id' => $st['id']));%>" onclick="if(!confirm('Send Bill!'))return false;" title="Send Bill"> <i class="fa fa-send"></i> Send</a></li>
+										           <%
+													if(!empty($st['classArray'])){ 
+														 $d = explode(',',$st['classArray']);
+														  $i = 1;
+														  echo'<li><a><i class="fa fa-group"></i> Classes [ ';
+														  foreach($d as $ms){
+															 $sl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$ms}'");
+															 echo $sl['className'].($i == count($d)? '':',');
+															 $i++;
+														  }
+														 echo ' ]</a></li>';
+													}
+													
+													if(!empty($st['stdArray'])){
+													   echo '<li><a target="_blank" onclick="if(!confirm(\'Members of Posted Student Bill!\n\nSTUDENT CODES\n\n'.$st['stdArray'].'\'))return false;" title="'.$st['stdArray'].'"><i class="fa fa-group"></i> Std. Members</a></li>';
+												    }
+													
+													%>										 
+										 <% }%>
+										<li><a target="_blank" href="ui/report/pdfBill.php?bill=<%= $st['id'];%>" onclick="if(!confirm('View Bill!'))return false;" title="View Bill"> <i class="fa fa-eye"></i> view</a></li>
+										
+										<li> | <em>Created on <%= date('F j,Y',strtotime($st['BillDate']));%></em></li>							   				
+									</ul>
+									
+								</div><hr/>
+							</li>                            	  
+							<% }}elseif(isset($scstdc) && $scstdc == 0){ %>
+                            <li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a>No record found !</a></h5>							
+								</div><hr/>
+							</li>
+                            <% }elseif(isset($scstdc) && $scstdc == -1){
+                                  if(!is_null($stbills)){ 
+								   foreach($stbills as $st){
+							 %>	
+								  
+							<li class="media">
+								<a class="pull-left">
+									 <img class="media-object img-circle" src="<%= $_SESSION['settings']['logo'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['itemName'];%></a><small>  | Academic Term Code (ACA) : <%= $st['academCode'];%> | Day Student Fees : GHC <%= $st['itemDAmount'];%>  | Boarding Student Fees : GHC <%= $st['itemBAmount'];%></small></h5>									
+									<ul class="tags">	
+										<% if($db->checkBillSend($st['id'])){ %>
+										  <li><a title="Bill Sent" style="background:#eee;color:#666;display:inline-block;margin-right:0;"> <i class="fa fa-send"></i> Sent</a><a href="<%= $app->urlFor("revokebills",array('id' => $st['id']));%>" onclick="if(!confirm('Revoke Bill!'))return false;" style="display:inline-block;margin-left:0;" title="Delete Sent Bills"><i class="fa fa-stop"></i></a></li>
+											  <%
+												 if(!empty($st['classArray'])){
+													  $d = explode(',',$st['classArray']);
+													  $i = 1;
+													  foreach($d as $ms){
+														$sl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$ms}'");
+														if(!is_null($sl)){
+														  echo '<li><a target="_blank" onclick="if(!confirm(\'View assigned members!\'))return false;" href="ui/report/pdfBills?academ='.$st['academCode'].'&class='.$ms.'"> <i class="fa fa-group"></i> '.$sl['className'].'</a></li>';
+														}
+														$i++;
+													  }
+												  }
+												  
+												  
+												  if(!empty($st['stdArray'])){
+													 echo '<li><a target="_blank" onclick="if(!confirm(\'View assigned members!\'))return false;" href="ui/report/pdfBills?academ='.$st['academCode'].'&students='.urlencode($st['stdArray']).'" title="'.$st['stdArray'].'"><i class="fa fa-group"></i> Std. Members</a></li>';
+												  }
+												  
+											  									
+										      }else{%>
+											 
+												  <li><a href="<%= $app->urlFor("editbill",array('id' => $st['id']));%>" onclick="if(!confirm('Edit Bill!'))return false;" title="Edit Bill"> <i class="fa fa-edit"></i> edit</a></li>
+												  <li><a href="<%= $app->urlFor("delbill",array('id' => $st['id']));%>" onclick="if(!confirm('Delete Bill!'))return false;" title="Delete Bill"> <i class="fa fa-trash"></i> delete</a></li>
+												  <li><a href="<%= $app->urlFor("sendbills",array('id' => $st['id']));%>" onclick="if(!confirm('Send Bill!'))return false;" title="Send Bill"> <i class="fa fa-send"></i> Send</a></li>
+										 
+										           <%
+														if(!empty($st['classArray'])){ 
+														 $d = explode(',',$st['classArray']);
+														  $i = 1;
+														  echo'<li><a><i class="fa fa-group"></i> Classes [ ';
+														  foreach($d as $ms){
+															 $sl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$ms}'");
+															 echo $sl['className'].($i == count($d)? '':',');
+															 $i++;
+														  }
+														 echo ' ]</a></li>';
+													}
+													
+													if(!empty($st['stdArray'])){
+													   echo '<li><a target="_blank" onclick="if(!confirm(\'Members of Posted Student Bill!\n\nSTUDENT CODES\n\n'.$st['stdArray'].'\'))return false;" title="'.$st['stdArray'].'"><i class="fa fa-group"></i> Std. Members</a></li>';
+												    }
+													%>		
+										 
+										 <% }%>
+										<li><a target="_blank" href="ui/report/pdfBill.php?bill=<%= $st['id'];%>" onclick="if(!confirm('View Bill!'))return false;" title="View Bill"> <i class="fa fa-eye"></i> view</a></li>
+										
+										<li> | <em>Created on <%= date('F j,Y',strtotime($st['BillDate']));%></em></li>						
+							<% }}}%>
+					</ul>
+                   
+					<% }%>	
+				
+				
+				
+				
+				
+				
+				
+				
+					 <!-- Fees Debtors -->					
+					<% if(isset($debtors)){%>
+					 <h5 class="sidebar-title">Fees Debtors Database   | <a target="_blank" href="ui/report/pdfDebt.php" class="">[ <i class="fa fa-print"></i> Print Debtors ]</a></h5>
+					 <section class="newsletter">
+						 <form id="newsletters" class="input-group" action="/shs/searchdebt" method="get"  accept-charset="utf-8" role="form">
+							<input type="text" class="form-control" name="searchdebt" placeholder="Enter Student Reference Number ( ID ) ...">
+							<button type="submit" class="btn btn-send" data-loading-text="Sending...">Search Student</button>
+						</form><hr/>
+					</section>
+					
+					<% 
+					     if(isset($scstdc)){
+					%>
+					<blockquote class="info">
+						<h4>Results</h4>
+						<p><span class="badge badge-danger"><%= !is_null($debtors)? count($debtors) : 0 ;%></span> <em>Search results for "<%= isset($typed)? $typed : '';%>"</em></p>
+					</blockquote>
+					<% }%>
+					 <ul class="media-list">								
+							<% 
+						     if(isset($scstdc) && ($scstdc > 0)){ 
+							 
+							    foreach($debtors as $sm){
+								  $st = $db->getAllRecord("select rd.id as rid,rd.*,bl.*,st.* from fees rd, bill bl,student st where rd.SiteID = '{$_SESSION['SiteID']}' and rd.studentCode = st.studentCode and rd.BillCode = bl.id and rd.payStatus <> 1 and rd.studentCode = '{$sm[0]['studentCode']}'");
+							%>
+								  
+							<li class="media">
+								<a class="pull-left">
+											<img class="media-object img-circle" src="<%= $st[0]['photo']=='' ? '/shs/ui/kobby_webcam/saved_images/students/none.png' : $st[0]['photo'];%>" alt="<%= $st[0]['fName']." ".$st[0]['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a><%= $st[0]['fName']." ".$st[0]['lName'];%></a><small> | Student ID : <%= $st[0]['studentCode'];%> | Last Payment: <%= $st[0]['payDate'] != null ? date('F j,Y',strtotime($st[0]['payDate'])) : 'none';%></small></h5>									
+									<ul class="tags">									   																		
+										<!-- Subjects and Classes to mark -->
+										<% $i = 0; $sum = 0;
+										      foreach($st as $rs){	
+											   $diff = $rs['BillType'] == 0 ? ($rs['itemBAmount'] - $rs['payAmount']) : ($rs['itemDAmount'] - $rs['payAmount']);
+											   if($diff > 0){
+												   $sum += $diff;
+										%>
+										<li><a href="<%= $app->urlFor("payfees",array('id' => $rs['rid']));%>" onclick="if(!confirm('Pay Debts!'))return false;" style="display:inline-block;margin-right:0;">ACA: <%= $rs['academCode'];%>, DEBT : GHC <%= ($rs['BillType'] == 0 ? ($rs['itemBAmount'] - $rs['payAmount']) : ($rs['itemDAmount'] - $rs['payAmount']))%> <i class="fa fa-sell"></i></a><a href="<%= $app->urlFor("exbill",array('id' => $rs['rid']));%>" onclick="if(!confirm('Update Debt!'))return false;" style="display:inline-block;margin-left:0;" title="Correct Student Bill">| Bill <i class="fa fa-exchange"></i></a></li>
+										
+										<% }$i++;}%>										
+										
+                                       	<li><em>TOTAL DEBT : GHC <%= $sum;%><!-- Mass payment of Debt link for debtor-->	 </em></li>			
+									</ul>
+									
+								</div><hr/>
+							</li>						
+					       <%  }}elseif(isset($scstdc) && $scstdc == 0){%>	
+                            <li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html">No results found!!!</a></h5>							
+								</div><hr/>
+							</li>
+                           <% }elseif(isset($scstdc) && $scstdc == -1){ %>
+                            <li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html">Please enter a search keyword!!!</a></h5>							
+								</div><hr/>
+							</li>								
+							<% }%>
+					</ul>
+                   
+					<% }%>	
+					
+					
+					<% if(isset($payfees)){
+						      foreach($payfees as $st){
+								  
+								  // Calculate Payment Balance or Debt left to pay
+									  $payLog = $st['payLog'];
+									  if($payLog == ''){																 
+										  $newAmount = $st['BillType'] == 0 ? $st['itemBAmount'] : $st['itemDAmount'];										  
+									  }else{																 
+										  $newAmount = $st['BillType'] == 0 ? $st['itemBAmount'] : $st['itemDAmount'];
+										  $log = explode(",",$payLog);
+										  for($i=0;$i < count($log);$i++){
+											  $num = explode(":",$log[$i]);
+											  $newAmount -= $num[1];
+										  }																  
+									  }			  
+					%>
+					
+					
+					 <!-- Pay Fees  -->
+					 <h5 class="sidebar-title">Pay Fees</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/payform" method="post">
+									<div class="row">
+									<div class="col-sm-5">
+										<ul class="media-list">				 
+												<li class="media">
+													<a class="pull-left">
+														<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ui/kobby_webcam/saved_images/students/none.png' : $st['photo'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+													</a>
+													<div class="media-body">
+														<h5 class="media-heading"><a><% echo $st['fName']." ".$st['lName'];%></a></h5>									
+														<ul class="tags">												
+															<li><a>Student ID : <%= $st['studentCode'];%> || ACA: <%= $st['academCode'];%> || Amount : GHC <%= $newAmount;%></a></li>																						
+														</ul>														
+													</div>
+												</li>									
+										</ul>
+									</div>
+									<div class="col-sm-4">
+										<div class="form-group">
+											<label for="subject" class="kobby">Amount (GHC)</label>
+											<i class="glyphicon glyphicon-user"><input type="integer" name="amount" value="<%= ($st['payAmount'] > 0 ? "" : "")%>" class="form-control subject" id="subject" placeholder="Amount (GHC)"></i>
+										</div>										
+									</div>
+									<div class="col-sm-2">
+										<div class="form-group">
+											<input type="submit" class="btn btn-default btn-color-border-solid" value="Pay">
+											<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+											<input type="hidden" name="rid" value="<%= $st['rid'];%>">
+                                            <input type="hidden" name="payLog" value="<%= $st['payLog'];%>">
+											<input type="hidden" name="studentCode" value="<%= $st['studentCode'];%>">
+                                            <input type="hidden" name="bill" value="<%= ($st['BillType'] == 0 ? $st['itemBAmount'] : $st['itemDAmount'])%>">											
+                                            											
+										</div>										
+									</div>
+								</div><hr/>									
+							</form>
+						</div>
+					 </div>
+					<% }}%>
+					 
+					 
+					
+					<% if(isset($receipt)){%>
+					
+					 <!-- Receipts Database -->
+					 <h5 class="sidebar-title">Receipts Database</h5>
+					 <section class="newsletter">
+						 <form id="newsletters" class="input-group" action="/shs/searchrd" method="get"  accept-charset="utf-8" role="form">
+							<input type="text" class="form-control" name="searchrd" placeholder="Enter Student Reference Number ( ID ) ...">
+							<button type="submit" class="btn btn-send" data-loading-text="Sending...">Search Student</button>
+						</form><hr/>
+					</section>
+					
+					<% 
+					     if(isset($scstdc)){
+					%>
+					<blockquote class="info">
+						<h4>Results</h4>
+						<p><span class="badge badge-danger"><%= !is_null($receipt)? count($receipt) : 0 ;%></span> <em>Search results for "<%= isset($typed)? $typed : '';%>"</em></p>
+					</blockquote>
+					<% }%>
+					 <ul class="media-list">								
+							<% 
+						     if(isset($scstdc) && ($scstdc > 0)){ 						      
+							   	foreach($receipt as $sm){	
+								 $st = $db->getAllRecord("select rd.id as rid,rd.*,bl.*,st.* from fees rd, bill bl,student st where rd.SiteID = '{$_SESSION['SiteID']}' and rd.studentCode = st.studentCode and rd.BillCode = bl.id and rd.payStatus <> 0 and rd.studentCode = '{$sm[0]['studentCode']}'");
+								
+								%>
+								
+							<li class="media">
+								<a class="pull-left" href="blog-left-sidebar.html">
+											<img class="media-object img-circle" src="<%= $st[0]['photo']=='' ? '/shs/ui/kobby_webcam/saved_images/students/none.png' : $st[0]['photo'];%>" alt="<%= $st[0]['fName']." ".$st[0]['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st[0]['fName']." ".$st[0]['lName'];%></a><small> | Student ID : <%= $st[0]['studentCode'];%> | Last Payment: <%= date('F j,Y',strtotime($st[0]['payDate']));%></small></h5>									
+									<ul class="tags">									   																		
+										<!-- List of Debts for a particular student -->
+										<%  $i = 0;
+										       foreach($st as $rs){	%>
+										<li><a href="<%= $app->urlFor("pdfreceipt",array('id' => $rs['rid']));%>">ACA: <%= $rs['academCode'];%>, RECEIPT NO. <%= $rs['rid'];%> | <i class="fa fa-print"></i></a></li>
+										<% $i++; }%>																		
+									</ul>
+									
+								</div><hr/>
+							</li>						
+					       <% }}elseif(isset($scstdc) && $scstdc == 0){%>	
+                            <li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html">No results found!!!</a></h5>							
+								</div><hr/>
+							</li>
+                           <% }elseif(isset($scstdc) && $scstdc == -1){ %>
+                            <li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html">Please enter a search keyword!!!</a></h5>							
+								</div><hr/>
+							</li>								
+							<% }%>
+					</ul>
+                   
+					<% }%>	
+
+
+					 
+				</div>				
+			</div>			
+		</div>
+	</section>
+	<!-- End Icon -->
+
+	
+<% include 'footer.php';%>

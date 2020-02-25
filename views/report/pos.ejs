@@ -1,0 +1,235 @@
+<!DOCTYPE>
+<html lang="en">
+<head>
+    <title>CLASS RANKING </title>
+    <link href="http://www.allfont.de/allfont.css?fonts=arial-narrow" rel="stylesheet" type="text/css" />
+    <style type="text/css" >
+          body{
+            background-color:#eee;              
+          }
+
+          .cover{
+              width: 920px;             
+              margin: 10px auto;  
+              box-shadow:2px 2px 4px #999;
+              padding:20px 35px; 
+              background:#fff;           
+          }
+
+          .title{
+              text-align: center;
+              font-size:22px;
+              color: <%- settings.primaryColor; %>;
+          }
+
+          .subtitle{
+              font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+              font-weight:bolder;
+              text-align: center;
+              font-size:18px;             
+              color: red;
+              font-style:italic;
+              margin-top:-15px;
+          }
+
+          .subnote{
+             position: relative;
+             height:60px;             
+          }
+
+          .cover_adds{
+              position:absolute;
+              left:0;
+              top:0; 
+              font-size:12px;
+              color:<%- settings.primaryColor; %>;
+              line-height:18px;           
+          }
+
+         .ucc_title{
+              position:absolute;
+              right:0;
+              top:0; 
+              text-align:right; 
+              font-size:18px;
+              line-height:25px;
+              word-spacing:0.35em;
+              font-weight:bold;                         
+          }
+          .ucc_logo{
+            position:absolute;
+            left:44.9%;
+            top:0;   
+            height: 120px;  
+            width: 120px; 
+            border-radius:50%;                
+          }
+
+          content{
+              font-family:'Arial Narrow', Arial, sans-serif;
+              font-size: 17px;
+              display:block;
+              padding-top: 50px;
+              clear:both;
+              overflow:hidden;
+              padding:50px 5px 10px;
+          }
+
+          address{
+              font-style:normal;
+          }
+
+          .signatory{
+              width:200px;
+              height:130px;
+              background-image:url(<%- settings.logo; %>);
+              background-repeat: no-repeat;             
+              background-position: 0% 0%;
+              background-size: 200px 65px;
+              position: relative;
+          }
+
+          .signer{
+              position:absolute;
+              left:0;
+              bottom:0;
+          }
+
+          .salute{
+              margin-top:20px;
+          }
+
+          .ref{
+              margin-bottom:20px;
+          }
+
+          .end{
+              position:relative;              
+          }
+
+          .copies{
+              position: absolute;
+              right:25%;
+              top: 0;
+          }
+
+          footer{
+              margin:80px 0 10px;
+              font-size:10px;
+              font-family:cursive;
+              font-style:italic;
+          }
+
+          .heading{
+              text-align:center;
+              text-decoration : underline;
+          }
+
+          .table{
+              border-collapse: collapse;
+              width: 100%;
+              border:thin solid #000;
+              padding: 20px;
+              vertical-align:middle;
+              float:left;
+          }
+
+          .table tr{
+              border-bottom: thin solid #000;             
+          }
+
+          .table td{
+              border-right: thin solid #000;
+              padding: 10px;            
+          }
+
+          .certv{
+              text-align:center;
+          }
+
+          .vbtn{
+              padding:5px;
+              margin-top:-20px;
+              text-decoration:none;
+              font-size:10px;
+              background-color:green;
+              color:#fff;
+              position:relative;
+              top:-10px;
+              border-radius:10px;
+          }
+
+          .sbody{
+              font-weight:600;
+              font-size:15px;
+              text-transform:uppercase;
+              display:inline-block;
+          }
+
+
+          @media print {
+              body{
+                  background:none;
+              }
+
+              .cover{
+                  padding:0;
+                  background:none;
+                  box-shadow:none;
+              }
+
+              .vbtn{
+                  display:none;
+              }
+          }
+
+    </style>
+</head>
+<body>
+    <div class="cover">
+          <header>
+              <h3 class="title"><%- settings.instituteLong; %></h3>
+              <h4 class="subtitle">CLASS <%- rows.length > 0 ? rows[0].gname : '' %> | RANKING</h4>              
+              <div class="subnote">
+                    <div class="cover_adds"> 
+                        <dl class="note" style="display:none;">
+                            <dt><b>TERM:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display:inline-block;vertical-align:top;font-weight:bold;"><%- rows.length > 0 ? rows[0].semester : '' %></div></dt>                   
+                            <dt><b>CLASS:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display:inline-block;vertical-align:top;font-weight:bold;"><%- rows.length > 0 ? rows[0].gname : '' %></div></dt>                   
+                        </dl>                       
+                    </div>
+                
+                  
+                  <img src="<%- settings.logo; %>" alt="UCC LOGO" class="ucc_logo"/>
+                 
+              </div>
+          </header>  
+          <content>
+                <h4 class="heading"><%- rows.length > 0 ? rows[0].prog.toUpperCase() : '' %></h4>              
+                <h5 class="heading"><%- rows.length > 0 ? rows[0].acad+' ACADEMIC YEAR, TERM '+rows[0].term : '' %></h5>              
+                              
+                <div class="content">
+                    <table class="table">                     
+                        <tr>
+                              <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">INDEX NO.</h5></td>
+                              <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:left;font-weight:bolder;">STUDENT</h5></td>
+                              <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">AVERAGE</h5></td>
+                              <td style="background-color:#eee;"><h5 style="margin-bottom:-5px;background-color:#eee;text-align:center;font-weight:bolder;">POSITION</h5></td>
+                        </tr>
+                        <% if(rows.length > 0){                        
+                            rows.map((row,i)=>{
+                        %>
+                        <tr>
+                              <td align="center"><span class="sbody"><%- row.index_number %> </span></td>
+                              <td align="left"><span class="sbody"><%- row.fname+' '+row.lname %> </span></td>
+                              <td align="center"><span class="sbody" style="font-size:15px;font-weight:bolder;text-align:center"><%- row.avg %> </span></td>                            
+                              <td align="center"><span class="sbody" style="font-size:15px;font-weight:bolder;text-align:center;font-style:italic"><%- (i+1)%> </span></td>                            
+                        </tr>
+                        <% }) }%>                       
+                      </table>                  
+                </div>              
+            </content>
+    
+               
+    </div>
+</body>
+</html>

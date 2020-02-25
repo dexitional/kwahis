@@ -1,0 +1,1166 @@
+<% include 'header.php';%>
+	
+
+	<!-- Icons -->
+	<section class="generic">		
+			
+			<div class="row">			
+				
+                <div class="col-sm-12">
+				
+				<!-- Main Content -->
+				
+				<!-- Photo Upload -->
+				<% if(isset($photo)){%>
+					
+					 <!-- Student Add & Update  -->
+					 <h5 class="sidebar-title">Photo Manager</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						   
+							<form action="/shs/ad_assets/webcam/file.php" method="post" id="form6">
+								<div class="row">
+									<div class="col-sm-12">
+										   
+													<ul class="kframe pull-center">
+														<li class="">
+															<i class="fa fa-photo" style="position:absolute;left:0;" onclick="document.getElementById('browse_img').click()"></i>
+															<!--<i class="fa fa-camera" onclick="window.open('/shs/ui/kobby_camera/upload.php','Photo Album','height=480,width=320')"></i>-->
+															<i class="fa fa-camera" onclick="window.open('/shs/ad_assets/webcam/photo.php','Photo Album','height=340,width=300')"></i>
+															<span id="kb_preview">                                                       		  									
+															   <img src="<% echo isset($_SESSION['spath']) && !is_null($_SESSION['spath']) ? $_SESSION['spath'].'?'.rand() : '/shs/ad_assets/img/blank.jpg' %>" alt="" class="sc-image">
+															</span>
+															<!--<div class="sc-content">
+																<h2>“Please take a snapshot of student using a Webcam OR  " <a href="#" class="btn btn-default"><i class="fa fa-photo"></i> <span> UPLOAD PHOTO</span></a></h2>
+																
+															</div>-->
+														</li>	
+                                                        <li>
+														    <a href="<%= $app->urlFor('savephoto',array('id'=>$_SESSION['spath'])); %>" class="btn btn-primary" style="margin:50px auto;"><i class="fa fa-photo"></i> <span> Save Photo</span></a><hr>
+														
+														</li>														
+													</ul>
+																
+									</div>
+								</div>
+									<!--<input type="submit" name="submit" class="btn btn-default btn-color-border-solid" value="<% if(isset($std['id'])){echo 'Update';}else{echo 'Add';}%> Student">
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">-->
+									<input type="file"  id="browse_img" name="photo" style="opacity:0;"value="henrik.jpg">
+							</form>
+						</div>
+					 </div>				
+				<% }%>	
+				
+				
+				
+				
+				<% if(isset($tscript)){%>
+				 <!-- Transcript of Student-->
+				
+				 <h6 class="sidebar-title">Transcript - <%= $tscript['fName'],' '.$tscript['lName'].' ( Student Code : '.$tscript['studentCode'].' )'; %>    | <a target="_blank" href="../ui/report/pdfTrans.php?std=<%= $tscript['studentCode'];%>" onclick="if(!confirm('Print Student's Transcript?'))return false;">[ <i class="fa fa-print"></i> Print Transcript ]</a>    | <a href="<%= $app->urlFor('addtranscript',array('student' => $tscript['studentCode']));%>" onclick="if(!confirm('Add Student Terminal Report?'))return false;">[ <i class="fa fa-print"></i> ADD TRANSCRIPT ]</a>   | <a target="_blank" href="../ui/report/pdfResultTemp.php?academ=<%= $_SESSION['settings']['academ'];%>&std=<%= $tscript['studentCode'];%>" onclick="if(!confirm('Print Students Terminal Reports!'))return false;">[ <i class="fa fa-print"></i> Temp Results ]</a></h6>
+				<% 
+				     
+				    $sl = $db->getAllRecord("select distinct(academCode) from result where SiteID = '{$_SESSION['SiteID']}' and studentCode = '{$tscript['studentCode']}' order by academCode DESC");
+				    if(!is_null($sl)){						  
+					   foreach($sl as $rl){				         
+				        $sx = $db->getAllRecord("select rt.*,st.subjName,cm.academName,pf.id as pid from result rt,subject st,academ cm,performance pf where rt.SiteID = '{$_SESSION['SiteID']}' and rt.studentCode = pf.studentCode and pf.academCode = cm.academCode and rt.subjectCode = st.subjCode and rt.academCode = cm.academCode and rt.academCode = '{$rl['academCode']}' and rt.studentCode = '{$tscript['studentCode']}' order by rt.id ASC");
+				        
+						    if($sx != null){
+				
+				%>
+
+				
+					<section class="cart-page generic animated fadeInUp visible"><span class="badge badge-danger"><%= !is_null($sx)? count($sx) : 0 ;%></span>
+						<div class="container">
+						    <h6 class="sidebar-title"><%= $sx[0]['academName'];%>  | <a target="_blank" href="../ui/report/pdfResult.php?academ=<%= $sx[0]['academCode'];%>&std=<%= $tscript['studentCode'];%>" onclick="if(!confirm('Print Students Terminal Reports!'))return false;">[ <i class="fa fa-print"></i> Print Results ]</a> <% if($_SESSION['settings']['sms_active'] == 1):%>  |     <a href="<%= $app->urlFor('txtres',array('academ'=>$rl['academCode'],'std'=>$tscript['studentCode']));%>" title="SMS Terminal Reports" onclick="if(!confirm('Send Student Terminal Report to Parents and Guardians!'))return false;">[ <i class="fa fa-paper-plane"></i> SMS TR ]</a><% endif;%>    | <a href="<%= $app->urlFor('editranscript',array('id' => $tscript['studentCode'],'class' => $tscript['classCode'],'academ' => $rl['academCode'],'perf' => $sx[0]['pid']));%>" onclick="if(!confirm('Edit Students Terminal Report?'))return false;">[ <i class="fa fa-print"></i> UPDATE RESULTS ]</a></h6>                            						
+							<div class="row">
+								<div class="col-sm-4">
+									<h4>Course</h4>
+								</div>
+								<div class="col-sm-1">
+									<h4>Class</h4>
+								</div>
+								<div class="col-sm-1">
+									<h4>Exam</h4>
+								</div>
+								<div class="col-sm-1">
+									<h4>Grade</h4>
+								</div>
+								<div class="col-sm-3">
+									<h4>Remarks</h4>
+								</div>
+							</div>
+							<div class="row">				
+								<div class="col-sm-12 panel">									
+										<ol class="table" style="background: rgba(61, 165, 226, 0.1);">
+                                          <% 									   
+										       foreach($sx as $df){
+                                                    $rate = $db->getRating($df['totalScore'],$df['scheme']);%>
+											  										
+											<li>
+												<span class="col-sm-4"><small><%= $df['subjName'];%></small></span>
+												<span class="col-sm-1"><%= $df['classScore'];%></span>
+												<span class="col-sm-1"><%= $df['examScore'];%></span>
+												<span class="col-sm-1"><%= $rate[0];%></span>
+												<span class="col-sm-3"><%= $rate[1];%></span>											
+											</li><div class="clearfix"></div>
+											<% }%>																					
+										</ol>									
+								</div>
+							</div>
+						</div>
+					</section>						               									
+				<% }}}else{%>
+				    <div class="row">
+							    <div class="col-sm-12"><p><center><b><em>There are no results or transcript registered against this student!</em></b></center></p><a href="javascript:history.back();" class="btn btn-color-shadow pull-left" style="margin-right:15px;"><i class="fa fa-arrow-left"></i> Go Back</a></div><hr>
+								<br/><br/>
+					</div>
+				
+				<% }} %>
+				
+				
+				
+				
+				
+				<% if(isset($addtranscript)){%> 
+					  <!-- All Subjects Update  -->
+					 
+					 <h5 class="sidebar-title">Transcript Form <span class="badge badge-success"><%= !is_null($std)? count($std) : 0 ;%></span></h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/transave" method="post">
+								<div class="row">
+									<div class="col-sm-6">
+									   	 <ul class="media-list">				 
+											<li class="media">
+												<a class="pull-left" href="javascript:;">
+													<!--<img class="media-object img-circle" src="<%= isset($std) && $std[0]['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $std[0]['photo'].'?'.rand();%>" alt="<%= isset($std)? $std[0]['fName']." ".$std[0]['lName'] :'';%>">-->
+													<img class="media-object img-circle" src="<%= is_null($std[0]['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$std[0]['pic'];%>" alt="<%= isset($std)? $std[0]['fName']." ".$std[0]['lName'] :'';%>">
+												</a>
+												<div class="media-body">
+												    <blockquote class="warning">											
+														<p><%= isset($std)? $std[0]['fName'].' '.$std[0]['lName']:''%></p>											
+													</blockquote>								
+												</div>
+											</li>
+                                         </ul>	
+										
+									</div>
+									<div class="col-sm-2">										
+
+                                         <div class="form-group">
+												<label for="classCode" class="kobby">Scoring Scheme</label>
+												<select class="form-control" id="scheme" name="scheme">
+												<% 
+												   $cl = $db->getAllRecord("select * from scheme where SiteID = '{$_SESSION['SiteID']}' and active = 1 order by id desc");
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['id'].'" '.(isset($std) && ($std[0]['scheme'] == $op['id']) ? 'selected="selected"' : '').'>'.$op['title'].' ( '.$op['id'].' )'.'</option>';
+												   }
+												%>											 												
+												</select>
+										</div>										
+									</div>
+									<div class="col-sm-4">										
+
+                                         <div class="form-group">
+												<label for="classCode" class="kobby">Academic Year - Term</label>
+												<select class="form-control" id="academx" name="academCode" onchange="document.getElementById('acaterm').value = this.options[this.selectedIndex].getAttribute('data-value');" onload="document.getElementById('acaterm').value = this.options[this.selectedIndex].getAttribute('data-value');">
+												<option>Select Academic Year-Term</option>
+												<% 
+												   $cl = $db->getAllRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' order by id desc");
+												   foreach($cl as $op){
+													   echo '<option data-value="'.$op['academTerm'].'" value="'.$op['academCode'].'" '.(isset($std) && ($std[0]['academCode'] == $op['academCode']) ? 'selected="selected"' : '').'>'.$op['academName'].'</option>';
+												   }
+												%>											 												
+												</select>
+										</div>										
+									</div>
+								</div><hr>
+								
+								<% 											    
+									 if(!is_null($std)){
+											$i = 1;											 												
+								%>	
+								<div class="row">								
+								   <% 
+								         $j = 2;
+										 foreach($std as $st){
+								              if($j%2 == 0){
+								   %>
+									<div class="col-sm-6">									
+									   <!-- Add form -->
+										<ul class="tags col-sm-6">												
+												<li><%= $st['subjName'];%></li>										
+										</ul>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Class Scs.</label>
+											<input type="number" step="any" min="-1" max="30" class="form-control subject" id="subject" name="c<%= $j%>" value="<%= $st['classScore'];%>" placeholder="Class score">
+										</div>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Exam Scs.</label>
+											<input type="number" step="any" min="-1" max="70" class="form-control subject" id="subject" name="e<%= $j%>" value="<%= $st['examScore'];%>" placeholder="Exam score">
+											<input type="hidden"  name="t<%= $j%>" value="<%= $st['id'];%>">
+										</div>										
+									</div>
+								   <% $i++;}$j++;}%>
+									
+									 <% 
+								         $j = 2;
+										 foreach($std as $st){
+								              if($j%2 == 1){
+								   %>
+									<div class="col-sm-6">									
+									   <!-- Add form -->
+										<ul class="tags col-sm-6">												
+												<li><%= $st['subjName'];%></li>										
+										</ul>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Class Scs.</label>
+											<input type="number" step="any" min="-1" max="30" class="form-control subject" id="subject" name="c<%= $j%>" value="<%= $st['classScore'];%>" placeholder="Class score">
+										</div>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Exam Scs.</label>
+											<input type="number" step="any" min="-1" max="70" class="form-control subject" id="subject" name="e<%= $j%>" value="<%= $st['examScore'];%>" placeholder="Exam score">
+											<input type="hidden"  name="t<%= $j%>" value="<%= $st['id'];%>">
+										</div>												
+									</div>
+								   <% $i++;}$j++;}%>
+								</div><hr>
+								<% }%>
+								    <input type="hidden"  name="total" value="<%= $i%>">
+									<% @$cm = $db->getOneRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' and academCode = '{$std[0]['academCode']}'");%>	
+                                    <input type="hidden"  name="academTerm" id="acaterm" value="<%= isset($std[0]['academCode']) ? $cm['academTerm'] : '';%>">
+                                    <input type="hidden"  name="perf" id="perf" value="<%= isset($perf) ? $perf : '';%>">									
+                                    <input type="hidden"  name="studentCode" value="<%= isset($std[0]['studentCode']) ? $std[0]['studentCode'] : '';%>">
+                                    <input type="hidden"  name="classCode" value="<%= isset($std[0]['classCode']) ? $std[0]['classCode'] : '';%>">									
+									<input type="submit"  class="btn btn-default btn-color-border-solid" value="Save Scores" onclick="if(!confirm('Save Result?'))return false;">
+									<a href="<%= $app->urlFor('tcancel',array('academ'=> ($addtranscript == 0 ? $academ : 0),'id'=>$std[0]['studentCode']))%>" class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel Results Edit?'))return false;">Cancel</a>
+							</form>						
+						</div>
+					 </div>	
+                    <% }%>
+					
+				
+				
+				
+				
+				 <!-- Class list of selected Student -->
+				<% if(isset($clist)){%>
+				    
+					<% if($clist > 0):%>
+					
+				     <h5 class="sidebar-title">Class List - <%= $std[0]['class']%> <span class="badge badge-success"><%= !is_null($std)? count($std) : 0 ;%></span></h5>
+					  <div class="row">
+					    <div class="col-sm-12"> <a href="<%= $app->urlFor('putxls',array('name'=>$clist,'query'=>$sql));%>" class="btn btn-color-shadow">Export to Excel</a><a href="javascript:history.back();" class="btn btn-color-shadow pull-left" style="margin-right:15px;"><i class="fa fa-arrow-left"></i> Go Back</a></div><hr>
+					    <br/><br/>
+					 </div>
+					 
+					 <div class="row">
+					       
+							<div class="col-sm-6">
+								 <ul class="media-list">
+                                    <% 
+										   $i = 2;   
+											  foreach($std as $st){
+											    if(($i%2) == 0){
+									 %>								 
+									<li class="media">
+										<a class="pull-left" target="_blank" href="../ui/report/pdfStud.php?student=<%= $st['studentCode']%>" onclick="if(!confirm('View Student Record!'))return false;" title="View Student's File">
+											<!--<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										    <img class="media-object img-circle" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										</a>
+										<div class="media-body">
+											<blockquote class="warning">											
+												<p><%= $st['fName']." ".$st['lName'];%><br>
+                                                <small>Student ID: <b style="font-size:14px;"><%= $st['studentCode'];%></b></small>												
+												</p><p>( <%= $st['course'];%> )<br>
+                                                <small>Student Token: <b style="font-size:14px;"><a target="_blank" href="../ui/report/pdfResultTemp.php?token=<%= urlencode($st['loginToken'])%>"><%= $st['loginToken'];%></a></b></small></p>												
+											</blockquote>							
+										</div>
+									</li>
+									<% }$i++;}%>								
+								 </ul>									
+							</div>							
+							<div class="col-sm-6">										
+								<ul class="media-list">				 
+									<% 
+										   $i = 2;   
+											  foreach($std as $st){
+											    if(($i%2) == 1){
+									 %>								 
+									<li class="media">
+										<a class="pull-left" target="_blank" href="../ui/report/pdfStud.php?student=<%= $st['studentCode']%>" onclick="if(!confirm('View Student Record!'))return false;" title="View Student's File">
+											<!--<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										    <img class="media-object img-circle" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										</a>
+										<div class="media-body">
+											<blockquote class="warning">											
+												<p><%= $st['fName']." ".$st['lName'];%><br>
+                                                <small>Student ID: <b style="font-size:14px;"><%= $st['studentCode'];%></b></small>												
+												</p><p>( <%= $st['course'];%> )<br>
+                                                <small>Student Token: <b style="font-size:14px;"><a target="_blank" href="../ui/report/pdfResultTemp.php?token=<%= urlencode($st['loginToken'])%>"><%= $st['loginToken'];%></a></b></small></p>												
+											</blockquote>										
+										</div>
+									</li>
+									<% }$i++;}%>								
+								 </ul>			                                        										
+							</div>
+					 </div>
+					 <% else:%>
+					        <div class="row">
+							    <br/><br/>
+								<div class="col-sm-12"><p><em>There are no students assigned to this Class!</em></p><a href="javascript:history.back();" class="btn btn-color-shadow pull-left" style="margin-right:15px;"><i class="fa fa-arrow-left"></i> Go Back</a></div><hr>
+								<br/><br/>
+							</div>
+					 <% endif;%>
+				
+				<% }%>
+				
+				
+				
+				
+				<% if(isset($listd)){%>
+				
+					 <!-- Student list un-ordered -->
+					 <h5><hr/><a href="<%= $app->urlFor('addstd');%>" title="Add New Student" onclick="if(!confirm('Add New Student?'))return false;">[ <i class="fa fa-user-plus"></i> Add ]</a>   |     <a href="<%= $app->urlFor('excel',array('name'=>'studentDB_'.date('Ymd')));%>" onclick="if(!confirm('Export Current Students Database!'))return false;" title="Download Current Student Database">[ <i class="fa fa-download"></i> DATA ]</a>  |     <a target="_blank" href="ui/report/pdfAward.php" title="Print Awards & Achievement List" onclick="if(!confirm('View Awards & Achievement for current period!'))return false;">[ <i class="fa fa-navicon"></i> Awards ]</a>  |     <a target="_blank" href="ui/report/pdfWassceStd.php" title="Print WASSCE Candidates List" onclick="if(!confirm('View WASSCE Candidates List for current period!'))return false;">[ <i class="fa fa-navicon"></i> Candidates ]</a>  |     <a target="_blank" href="ui/report/pdfWassce30.php" title="Print WAEC 30% Breakdown" onclick="if(!confirm('View WAEC 30% BREAKDOWN for current period!'))return false;">[ <i class="fa fa-navicon"></i> WAEC 30% ]</a>  |     <a target="_blank" href="ui/report/pdfParent.php" title="Print Parents & Guardians List" onclick="if(!confirm('View Parents and Guardians list for all current Students!'))return false;">[ <i class="fa fa-navicon"></i> PTA List ]</a> <% if($_SESSION['settings']['sms_active'] == 1):%>   |     <a href="javascript:;" title="SMS Notice to Parents and Guardians!" onclick="if(!confirm('Send Notice to Parents and Guardians!')){return false;}else{  var ins = prompt('Please enter the Message to send to Phones!'); if(ins != null){ window.location = '/shs/txtpta/'+ins;}else{return false;}}">[ <i class="fa fa-paper-plane"></i> SMS PTA ]</a> <% endif;%>    | <a target="_blank" <%= $_SESSION['settings']['resultCertified'] > 0 ? 'href="ui/report/pdfReport.php' : 'href="ui/report/pdfReportTemp.php'%>" title="Print Terminal Reports (TR)" onclick="if(!confirm('Print Terminal Reports for all Current Students?'))return false;">[ <i class="fa fa-print"></i> Print TR ]</a> <% if($_SESSION['settings']['sms_active'] == 1):%>   |     <a href="<%= $app->urlFor('txtresall');%>" title="SMS Terminal Reports (TR)" onclick="if(!confirm('Send Students Terminal Reports to Parents and Guardians!'))return false;">[ <i class="fa fa-paper-plane"></i> SMS TR ]</a><% endif;%>   | <a target="_blank" href="ui/report/student.xls" title="Download Excel Upload Format or Sample" onclick="if(!confirm('Download Student upload Excel Sample!'))return false;">[ <i class="fa fa-cloud-download"></i> ]</a>    | <form style="display:inline;clear:both;" action="/shs/ad_assets/excel_setup.php" method="post" enctype="multipart/form-data" id="formstd"><input type="file" name="student" style="display:none;" id="student_upl" onchange="this.form.submit();"/></form><a href="javascript:;" onclick="if(!confirm('Upload Completed Student Excel template!')){return false;}else{document.getElementById('student_upl').click();}" title="Upload Students Using Excel File">[ <i class="fa fa-cloud-upload"></i> ]</a><% if($_SESSION['settings']['sms_active'] == 1):%>   |     <a href="javascript:;" title="SMS Notice to Tutors!" onclick="if(!confirm('Send Notice to Tutors!')){return false;}else{  var ins = prompt('Please enter the Message to send to Tutors Phones!'); if(ins != null){window.location = '/shs/txtutor/'+ins;}else{return false;}}">[ <i class="fa fa-paper-plane"></i> SMS Tutors ]</a> <% endif;%></h5>
+                     <h5 class="sidebar-title">Current Students <span class="badge badge-danger"><%= !is_null($std)? count($std) : 0 ;%></span></h5>
+                    <ul class="media-list">
+                           
+                           <% 
+                            if(!is_null($std)){						   
+						      foreach($std as $st){
+                               $sl = $db->getOneRecord("select * from hall where SiteID = '{$_SESSION['SiteID']}' and id = '{$st['hall']}'");
+                               $sm = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$st['classCode']}'");
+                               $cr = $db->getOneRecord("select * from course where SiteID = '{$_SESSION['SiteID']}' and courseCode = '{$st['courseCode']}'");							   
+						       $ss = $db->getOneRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' and active = 1");							   
+						 
+						   %>						   
+							<li class="media">
+								<a class="pull-left" id="c<%= $st['id']%>" target="_blank" href="ui/report/pdfStud.php?student=<%= $st['studentCode']%>" onclick="if(!confirm('View Student Record!'))return false;" title="View Student's File">
+									<!--<img class="media-object img-circle"  src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" data-id="<%= rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>" title="<%= $st['fName']." ".$st['lName'];%>">-->
+									<img class="media-object img-circle"  src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" data-id="<%= rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>" title="<%= $st['fName']." ".$st['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['fName']." ".$st['lName'];%></a><small> | <b>Student ID : <%= $st['studentCode'];%></b>  <a href="<%= $app->urlFor('chgindex',array('cl'=> $st['classCode'],'id'=> $st['studentCode'],'sid'=> $st['id'])); %>" onclick="if(!confirm('Change Student Code!'))return false;" style="color:#93db3b;"> <i class="fa fa-edit fa-lg"></i></a> | <b>Year</b> : <%= $db->getYear($st['classDate']);%> | <b>Course</b> : <%= !is_null($cr)? $cr['courseName']:'';%> | <b>Class</b> : <%= !is_null($sm)? $sm['className']:'';%><%= !is_null($sl)? ' | <b>House</b> : '.$sl['hallName']:'';%> | <b>Admitted on</b> : <%= date('F j, Y',strtotime($st['admitDate']));%></small>  |  <small><em><%= (!is_null($st['gradDate']) ? '<i class="fa fa-mortar-board fa-lg"></i> <b>Graduated<b>   -   '.date('jS F , Y',strtotime($st['gradDate'])):'<i class="fa fa-address-book-o fa-lg"></i> Schooling')%></em></small></h5>									
+									<ul class="tags">
+									   <% if($st['active'] == 1){ %>
+										  <li><a href="<%= $app->urlFor('stactive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable Student!'))return false;" style="color:#93db3b;background:none;" title="Disable Student"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }else{%>
+										  <li><a href="<%= $app->urlFor('stactive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable Student!'))return false;" style="color:#eb7395;background:none;" title="Enable Student"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }%> 
+										<li><a href="<%= $app->urlFor('delstd',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;" title="Delete Record"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editstd',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:35px;" title="Edit Record"><i class="fa fa-edit fa-lg"></i></a></li>
+										<li><a onclick="if(!confirm('Please take snapshot of student!')){return false;}else{ window.open('/shs/ad_assets/webcam/photo.php?id=<%= $st['studentCode']%>&loc=students','Photo Album','height=350,width=300'); }" title="Take Snapshot"><i class="fa fa-camera"></i></a></li>
+										<li><a onclick="if(!confirm('Please upload photo of student!')){return false;}else{document.getElementById('p<%= $st['id']%>').click();}" title="Upload photo"><i class="fa fa-photo"></i></a><form style="display:inline;clear:both;" action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="f<%= $st['id']%>"><input type="file" name="std" id="p<%= $st['id']%>" style="display:none;" onchange="this.form.submit();"/><input type="hidden" name="id" value="<%= $st['studentCode']%>"/><input type="hidden" name="loc" value="students"/></form></li>
+										<li><a onclick="if(!confirm('Remove Student Photo!')){return false;}" title="Remove Photo" href="<%= $app->urlFor('rmstphoto',array('id'=> $st['id'])); %>"><i class="fa fa-close"></i></a></li>
+										<li><a target="_blank" href="ui/admin/tuto1.php?person=<%= $st['studentCode'];%>" onclick="if(!confirm('View Student Identification Card!'))return false;" title="Student Identification Card" style="background:#eee;color:#666;display:inline-block;margin-right:0;"> ID CARD</a><a target="_blank" href="ui/admin/tuto1.php?class=<%= $st['classCode'];%>" style="display:inline-block;margin-left:0;margin-right:0;" onclick="if(!confirm('View Class Identification Cards!'))return false;" title="View Class ID Cards">C</a><a target="_blank" href="ui/admin/tuto1.php?form=<%= $st['admitDate'];%>" onclick="if(!confirm('View <%= $db->getYear($st['classDate']) == 'Completed'? 'Year Group:'.(date('Y',strtotime($st['classDate'])) + 3) : 'Form '.$db->getYear($st['classDate']);%> Identification Cards!'))return false;" style="display:inline-block;margin-left:0;margin-right:10px;background:#eee;color:#666;" title="View <%= $db->getYear($st['classDate']) == 'Completed'? 'Year Group:'.(date('Y',strtotime($st['classDate'])) + 3) : 'Form '.$db->getYear($st['classDate']);%> ID Cards"><%= $db->getYear($st['classDate']) == 'Completed'? 'YG:'.(date('Y',strtotime($st['classDate'])) + 3) : 'F'.$db->getYear($st['classDate']);%></a></li>																			
+									  	<li><a href="<%= $app->urlFor('clist',array('id'=> $st['classCode'],'name' => $sm['className'])); %>" onclick="if(!confirm('View Class List!'))return false;"><i class="fa fa-group "></i> Class list</a></li>										
+										<li><a href="<%= $app->urlFor('tscript',array('id'=> $st['studentCode'])); %>" style="background:#eee;color:#666;" onclick="if(!confirm('View Transcript of Student!'))return false;"><i class="fa fa-book"></i>  Transcript</a></li>																			
+									    <li><a href="<%= $app->urlFor('resetstd',array('id'=> $st['studentCode'])); %>" onclick="if(!confirm('Reset Student Password!'))return false;">Reset PWD</a></li>																				
+									
+									   <% 
+											/*$sl = $db->getAllRecord("select rd.*,bl.academCode from fees rd,bill bl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.BillCode = bl.id and rd.active = 1 and studentCode = '{$st['studentCode']}' order by id DESC limit 1");
+											if(!is_null($sl)){ 						      
+											   foreach($sl as $sm){	
+											%>
+												<li><a target="_blank" href="ui/report/pdfBill.php?bill=<%= $sm['BillCode'];%>&status=<%= $st['affiliation'];%>&student=<%= $st['studentCode'];%>" onclick="if(!confirm('View Bill of Student!'))return false;" title="Bill for ACADEM : <%= $sm['academCode'];%>" style="display:inline-block;margin-left:10px;margin-right:0;background:#eee;color:#666;">Bill ( <%= $sm['academCode'];%> )</a></li>																			
+									   <%  }}*/%>	
+
+									   
+									  <% 
+											$sl = $db->getAllRecord("select rd.id as rid,rd.*,bl.* from fees rd, bill bl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.BillCode = bl.id and rd.payStatus <> 1 and rd.studentCode = '{$st['studentCode']}'");
+											if(!is_null($sl)){ 						      
+											   foreach($sl as $sm){	
+											%>
+												 <li><a target="_blank" href="ui/report/pdfBill.php?bill=<%= $sm['BillCode'];%>&status=<%= $st['affiliation'];%>&student=<%= $st['studentCode'];%>" onclick="if(!confirm('View Bill of Student!'))return false;" title="Bill for ACADEM : <%= $sm['academCode'];%>" style="display:inline-block;margin-left:10px;margin-right:0;background:#eee;color:#666;">B</a><a href="<%= $app->urlFor('payfees',array('id'=> $sm['rid'])); %>" onclick="if(!confirm('Pay  GHC <%= ($sm['BillType'] == 0 ? ($sm['itemBAmount'] - $sm['payAmount']) : ($sm['itemDAmount'] - $sm['payAmount']))%> Debt!'))return false;" title="Pay Bill for ACADEM : <%= $sm['academCode']%>" style="display:inline-block;margin-left:0;margin-right:10px;background:pink;color:#333;font-weight:bolder;"><i class="fa fa-money fa-lg"></i> GHC <%= ($sm['BillType'] == 0 ? ($sm['itemBAmount'] - $sm['payAmount']) : ($sm['itemDAmount'] - $sm['payAmount']))%></a></li>												
+									  <%  }}%>
+									  
+																			  
+									</ul>									
+								</div><hr/>
+							</li>
+						<% }}%>							
+					</ul>
+					
+				<% }%>	
+				
+				
+				
+				
+				<% if(isset($addstd)){%>
+					
+					 <!-- Student Add & Update  -->
+					 <h5 class="sidebar-title">Student Registration</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						   
+							<form action="/shs/postd" method="post">
+									<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="name" class="kobby">First Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" required class="form-control" id="name" placeholder="First Name" name="fName" value="<%= isset($std)? $std['fName'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="subject" class="kobby">Last Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control subject" name="lName" id="subject" placeholder="Last Name" value="<%= isset($std)? $std['lName'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="email" class="kobby">Email</label>
+											<i class="glyphicon glyphicon-envelope"><input type="email" required class="form-control" name="email" id="email" placeholder="Email" value="<%= isset($std)? $std['email'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="phone" class="kobby">Phone number</label>
+											<i class="glyphicon glyphicon-erase"><input type="text" class="form-control" required name="phone" id="phone" placeholder="Phone number" value="<%= isset($std)? $std['phone'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="active" class="kobby">Gender</label>
+											<select class="form-control" id="sex" name="sex">
+												<option value="1" <%= isset($std) && $std['sex'] == '1'? 'selected="selected"' : '';%>>Male</option>
+												<option value="2" <%= isset($std) && $std['sex'] == '2'? 'selected="selected"' : '';%>>Female</option>												
+											</select>
+										</div>
+										<div class="form-group">
+										    <label for="dob" class="kobby">Date of Birth</label>
+											<input type="date" name="dob" id="dob" placeholder="Date of Birth" name="dob" class="form-control" value="<%= isset($std)? $std['dob'] : '';%>" onblur="document.getElementById('age').value = getAge(this.value);">
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Hometown</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="hometown" id="name" placeholder="Hometown" value="<%= isset($std)? $std['hometown'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Guardian Name</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="guardian" id="name" placeholder="Guardian Name" value="<%= isset($std)? $std['guardian'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Guardian Contact</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="guardianPhone" id="name" placeholder="Guardian Contact" value="<%= isset($std)? $std['guardianPhone'] : '';%>"></i>
+										</div>
+										
+										<div class="form-group">
+											<label for="name" class="kobby">Admission Date</label>
+											<input type="date" class="form-control" name="admitDate" id="admitDate" placeholder="Admission Date [ex: 2017-02-23]" value="<%= isset($std)? $std['admitDate'] : '';%>">
+										</div>
+										<% if(isset($std)):%>
+										<div class="form-group">
+											<label for="name" class="kobby">Student Identification Number</label>
+											<!--<a class="btn btn-primary" id="gencode">Auto-generate ID</a><hr>-->
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" readonly="readonly" name="studentCode" id="studentCode" placeholder="Student Identification Number" value="<%= isset($std)? $std['studentCode'] :''%>" <%= isset($std)? '' : 'readonly="readonly"';%>></i>
+										</div>
+										<% else :%>
+										<div class="form-group">
+											<input type="hidden" name="studentCode" id="studentCode"  value=""></i>
+										</div>
+										<% endif;%>
+										
+										<div class="form-group">
+											<label for="active" class="kobby">Active</label>
+											<select class="form-control" id="active" name="active">
+												<option value="0" <%= isset($std) && $std['active'] == 0? 'selected="selected"' : '';%>>Disabled</option>
+												<option value="1" <%= isset($std) && $std['active'] == 1? 'selected="selected"' : '';%>>Enabled</option>												
+											</select>
+										</div>
+										
+										
+									</div>
+									<div class="col-sm-6">
+									
+									  <% if(isset($std)):%>
+										<div class="form-group">										  
+											<label for="subject" class="kobby" style="text-align:center">
+											  <!--<img class="media-object img-circle"  src="<%= $std['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $std['photo'].'?'.rand();%>" data-id="<%= rand();%>" alt="<%= $std['fName']." ".$std['lName'];%>" title="<%= $std['fName']." ".$std['lName'];%>">-->
+									          <img class="media-object img-circle"  src="<%= is_null($std['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$std['pic'];%>" data-id="<%= rand();%>" alt="<%= $std['fName']." ".$std['lName'];%>" title="<%= $std['fName']." ".$std['lName'];%>">
+								            </label>
+										</div>
+									  <% endif;%>									  
+										
+										<div class="form-group">
+											<label for="message" class="kobby">Residential Address</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" name="address" id="message" placeholder="Residential Address"><%= isset($std)? $std['address'] : '';%></textarea></i>
+										</div>									
+										
+										<div class="form-group">
+											<label for="name" class="kobby">Age</label>
+											<input type="text" class="form-control" name="age" id="age" placeholder="Age" value="<%= isset($std)? $std['age'] : '';%>">
+										</div>
+										
+										<div class="form-group">
+											<label for="name" class="kobby">Nationality</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="nationality" id="name" placeholder="Nationality" value="<%= isset($std)? $std['nationality'] : '';%>"></i>
+										</div>
+										<div class="form-group">
+											<label for="message" class="kobby">Guardian Address</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" name="guardianAddress" id="message" placeholder="Guardian Address"><%= isset($std)? $std['guardianAddress'] : '';%></textarea></i>
+										</div>
+										<div class="form-group">
+											<label for="name" class="kobby">Guardian E-Mail</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" name="guardianEmail" id="name" placeholder="Guardian E-Mail" value="<%= isset($std)? $std['guardianEmail'] : '';%>"></i>
+										</div>
+                                        <div class="form-group">
+											<label for="affiliation" class="kobby">Affiliation</label>
+											<select class="form-control" id="affiliation" name="affiliation">
+												<option value="0" <%= isset($std) && $std['affiliation'] == 0? 'selected="selected"' : '';%>>Boarder</option>
+												<option value="1" <%= isset($std) && $std['affiliation'] == 0? 'selected="selected"' : '';%>>Day</option>												
+											</select>
+										</div>
+										
+										<div class="form-group">
+											<label for="classCode" class="kobby">Assigned House</label>
+											<select class="form-control" id="hall" name="hall">
+											   <option value="" <%= isset($std) && $std['hall'] == ''? 'selected="selected"' : '';%>>Select house</option>
+											<% 
+											   $cl = $db->getAllRecord("select * from hall where SiteID = '{$_SESSION['SiteID']}' and active = 1");
+											   if(!is_null($cl)){
+											   foreach($cl as $op){
+												   echo '<option value="'.$op['id'].'" '.(isset($std) && $std['hall'] == $op['id'] ? 'selected="selected"' : '').'>'.$op['hallName'].'</option>';
+											   }}
+											%>											 												
+											</select>
+										</div>     
+
+										<div class="form-group">
+											<label for="classCode" class="kobby">Assigned Class</label>
+											<select class="form-control" id="classCode" name="classCode">
+											   <option value="" <%= isset($std) && $std['classCode'] == ''? 'selected="selected"' : '';%>>Select Class</option>
+											<% 
+											   $cl = $db->getAllRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and gradDate IS NULL");
+											  if(!is_null($cl)){
+											    foreach($cl as $op){
+												   echo '<option value="'.$op['id'].'" '.(isset($std) && $std['classCode'] == $op['id'] ? 'selected="selected"' : '').'>'.$op['className'].'</option>';
+											  }}
+											%>											 												
+											</select>
+										</div>
+                                        
+                                        <div class="form-group">
+											<label for="classCode" class="kobby">Assigned Course option</label>
+											<select class="form-control" id="courseCode" name="courseCode">
+											    <option value="" <%= isset($std) && $std['courseCode'] == ''? 'selected="selected"' : '';%>>Select Course</option>
+											<% 
+											   $cl = $db->getAllRecord("select * from course where SiteID = '{$_SESSION['SiteID']}' and active = 1");
+											   if(!is_null($cl)){
+											   foreach($cl as $op){
+												   echo '<option value="'.$op['courseCode'].'" '.(isset($std) && $std['courseCode'] == $op['courseCode'] ? 'selected="selected"' : '').'>'.$op['courseName'].'</option>';
+											   }}
+											%>											 												
+											</select>
+										</div>  										
+										
+											
+									</div>
+								</div>
+									<input type="submit" name="submit" <%= isset($std) && !is_null($std['gradDate']) ? 'disabled="disabled"' : '';%> onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="<% if(isset($std['id'])){echo 'Update';}else{echo 'Add';}%> Student">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+									<input type="hidden"  name="id" value="<%= isset($std)? $std['id'] : 0;%>">
+                                    <input type="hidden"  name="course" value="<%= isset($std)? $std['courseCode'] : null;%>">                                    									
+                                    <input type="hidden"  name="class" value="<%= isset($std)? $std['classCode'] : null;%>">                                    									
+                                    <input type="hidden"  name="photo" value="<%= isset($std)? $std['photo'] : '/shs/ui/img/blank.jpg';%>">																
+							</form>
+						</div>
+					 </div>				
+				<% }%>	
+				
+				
+				
+				<% if(isset($scstd)){%>
+				
+					 <!-- Student search -->
+					 <h5 class="sidebar-title">Student Database   |    <a href="<%= $app->urlFor('addstd');%>" onclick="if(!confirm('Add New Student?'))return false;">[ <i class="fa fa-print"></i> Add New Student ]</a></h5>
+					 <section class="newsletter">
+						 <form id="newsletters" class="input-group" action="searchst" method="get" accept-charset="utf-8" role="form">
+							<input type="text" class="form-control" name="searchst" placeholder="Enter First Name, Last Name or Student Code...">
+							<button type="submit" class="btn btn-send" data-loading-text="Sending...">Search Student</button>
+						</form><hr/>
+					</section>
+					
+					<% 
+					     if(isset($scstdc)){
+					%>
+					<blockquote class="info">
+						<h4>Results</h4>
+						<p><span class="badge badge-danger"><%= !is_null($scstd)? count($scstd) : 0 ;%></span> <em>Search results for "<%= isset($typed)? $typed : '';%>"</em></p>
+					</blockquote>
+					<% }%>					
+					  <ul class="media-list">                           
+                           <% 
+						  if(isset($scstdc) && ($scstdc > 0)){	
+                           
+						   	  foreach($scstd as $st){
+                               $sl = $db->getOneRecord("select * from hall where SiteID = '{$_SESSION['SiteID']}' and id = '{$st['hall']}'");
+                               $sm = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$st['classCode']}'");
+                               $cr = $db->getOneRecord("select * from course where SiteID = '{$_SESSION['SiteID']}' and courseCode = '{$st['courseCode']}'");							   
+						       $ss = $db->getOneRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' and active = 1");							   
+						 
+						   %>						   
+							<li class="media">
+								<a class="pull-left" id="c<%= $st['id']%>" target="_blank" href="ui/report/pdfStud.php?student=<%= $st['studentCode']%>" onclick="if(!confirm('View Student Record!'))return false;" title="View Student's File">
+									<!--<img class="media-object img-circle"  src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" data-id="<%= rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>" title="<%= $st['fName']." ".$st['lName'];%>">-->
+									<img class="media-object img-circle"  src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" data-id="<%= rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>" title="<%= $st['fName']." ".$st['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['fName']." ".$st['lName'];%></a><small> | <b>Student ID : <%= $st['studentCode'];%></b>  <a href="<%= $app->urlFor('chgindex',array('cl'=> $st['classCode'],'id'=> $st['studentCode'],'sid'=> $st['id'])); %>" onclick="if(!confirm('Change Student Code!'))return false;" style="color:#93db3b;"> <i class="fa fa-edit fa-lg"></i></a> | <b>Year</b> : <%= $db->getYear($st['classDate']);%> | <b>Course</b> : <%= !is_null($cr)? $cr['courseName']:'';%> | <b>Class</b> : <%= !is_null($sm)? $sm['className']:'';%><%= !is_null($sl)? ' | <b>House</b> : '.$sl['hallName']:'';%> | <b>Admitted on</b> : <%= date('F j, Y',strtotime($st['admitDate']));%></small>  |  <small><em><%= (!is_null($st['gradDate']) ? '<i class="fa fa-mortar-board fa-lg"></i> <b>Graduated<b>   -   '.date('jS F , Y',strtotime($st['gradDate'])):'<i class="fa fa-address-book-o fa-lg"></i> Schooling')%></em></small></h5>									
+									<ul class="tags">
+									   <% if($st['active'] == 1){ %>
+										  <li><a href="<%= $app->urlFor('stactive',array('state' => 0,'id'=> $st['id'])); %>" onclick="if(!confirm('Disable Student!'))return false;" style="color:#93db3b;background:none;" title="Disable Student"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }else{%>
+										  <li><a href="<%= $app->urlFor('stactive',array('state' => 1,'id'=> $st['id'])); %>" onclick="if(!confirm('Enable Student!'))return false;" style="color:#eb7395;background:none;" title="Enable Student"><i class="fa fa-toggle-on fa-2x"></i></a></li>
+									   <% }%> 
+										<li><a href="<%= $app->urlFor('delstd',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;" title="Delete Record"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editstd',array('id'=> $st['id'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:35px;" title="Edit Record"><i class="fa fa-edit fa-lg"></i></a></li>
+										<li><a onclick="if(!confirm('Please take snapshot of student!')){return false;}else{ window.open('/shs/ad_assets/webcam/photo.php?id=<%= $st['studentCode']%>&loc=students','Photo Album','height=350,width=300'); }" title="Take Snapshot"><i class="fa fa-camera"></i></a></li>
+										<li><a onclick="if(!confirm('Please upload photo of student!')){return false;}else{document.getElementById('p<%= $st['id']%>').click();}" title="Upload photo"><i class="fa fa-photo"></i></a><form style="display:inline;clear:both;" action="/shs/ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="f<%= $st['id']%>"><input type="file" name="std" id="p<%= $st['id']%>" style="display:none;" onchange="this.form.submit();"/><input type="hidden" name="id" value="<%= $st['studentCode']%>"/><input type="hidden" name="loc" value="students"/></form></li>
+										<li><a onclick="if(!confirm('Remove Student Photo!')){return false;}" title="Remove Photo" href="<%= $app->urlFor('rmstphoto',array('id'=> $st['id'])); %>"><i class="fa fa-close"></i></a></li>
+										<li><a target="_blank" href="ui/admin/tuto1.php?person=<%= $st['studentCode'];%>" onclick="if(!confirm('View Student Identification Card!'))return false;" title="Student Identification Card" style="background:#eee;color:#666;display:inline-block;margin-right:0;"> ID CARD</a><a target="_blank" href="ui/admin/tuto1.php?class=<%= $st['classCode'];%>" style="display:inline-block;margin-left:0;margin-right:0;" onclick="if(!confirm('View Class Identification Cards!'))return false;" title="View Class ID Cards">C</a><a target="_blank" href="ui/admin/tuto1.php?form=<%= $st['admitDate'];%>" onclick="if(!confirm('View <%= $db->getYear($st['classDate']) == 'Completed'? 'Year Group:'.(date('Y',strtotime($st['classDate'])) + 3) : 'Form '.$db->getYear($st['classDate']);%> Identification Cards!'))return false;" style="display:inline-block;margin-left:0;margin-right:10px;background:#eee;color:#666;" title="View <%= $db->getYear($st['classDate']) == 'Completed'? 'Year Group:'.(date('Y',strtotime($st['classDate'])) + 3) : 'Form '.$db->getYear($st['classDate']);%> ID Cards"><%= $db->getYear($st['classDate']) == 'Completed'? 'YG:'.(date('Y',strtotime($st['classDate'])) + 3) : 'F'.$db->getYear($st['classDate']);%></a></li>																			
+									  	<li><a href="<%= $app->urlFor('clist',array('id'=> $st['classCode'],'name' => $sm['className'])); %>" onclick="if(!confirm('View Class List!'))return false;"><i class="fa fa-group "></i> Class list</a></li>										
+										<li><a href="<%= $app->urlFor('tscript',array('id'=> $st['studentCode'])); %>" style="background:#eee;color:#666;" onclick="if(!confirm('View Transcript of Student!'))return false;"><i class="fa fa-book"></i>  Transcript</a></li>																			
+									    <li><a href="<%= $app->urlFor('resetstd',array('id'=> $st['studentCode'])); %>" onclick="if(!confirm('Reset Student Password!'))return false;">Reset PWD</a></li>																				
+									
+									   <% 
+											/*$sl = $db->getAllRecord("select rd.*,bl.academCode from fees rd,bill bl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.BillCode = bl.id and rd.active = 1 and studentCode = '{$st['studentCode']}' order by id DESC limit 1");
+											if(!is_null($sl)){ 						      
+											   foreach($sl as $sm){	
+											%>
+												<li><a target="_blank" href="ui/report/pdfBill.php?bill=<%= $sm['BillCode'];%>&status=<%= $st['affiliation'];%>&student=<%= $st['studentCode'];%>" onclick="if(!confirm('View Bill of Student!'))return false;" title="Bill for ACADEM : <%= $sm['academCode'];%>" style="display:inline-block;margin-left:10px;margin-right:0;background:#eee;color:#666;">Bill ( <%= $sm['academCode'];%> )</a></li>																			
+									   <%  }}*/%>	
+
+									   
+									   <% 
+											$sl = $db->getAllRecord("select rd.id as rid,rd.*,bl.* from fees rd, bill bl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.BillCode = bl.id and rd.payStatus <> 1 and rd.studentCode = '{$st['studentCode']}'");
+											if(!is_null($sl)){ 						      
+											   foreach($sl as $sm){	
+											%>
+												 <li><a target="_blank" href="ui/report/pdfBill.php?bill=<%= $sm['BillCode'];%>&status=<%= $st['affiliation'];%>&student=<%= $st['studentCode'];%>" onclick="if(!confirm('View Bill of Student!'))return false;" title="Bill for ACADEM : <%= $sm['academCode'];%>" style="display:inline-block;margin-left:10px;margin-right:0;background:#eee;color:#666;">B</a><a href="<%= $app->urlFor('payfees',array('id'=> $sm['rid'])); %>" onclick="if(!confirm('Pay  GHC <%= ($sm['BillType'] == 0 ? ($sm['itemBAmount'] - $sm['payAmount']) : ($sm['itemDAmount'] - $sm['payAmount']))%> Debt!'))return false;" title="Pay Bill for ACADEM : <%= $sm['academCode']%>" style="display:inline-block;margin-left:0;margin-right:10px;background:pink;color:#333;font-weight:bolder;"><i class="fa fa-money fa-lg"></i> GHC <%= ($sm['BillType'] == 0 ? ($sm['itemBAmount'] - $sm['payAmount']) : ($sm['itemDAmount'] - $sm['payAmount']))%></a></li>												
+									  <%  }}%>
+									  
+																			  
+									</ul>									
+								</div><hr/>
+							</li>
+						
+							  <%  }}elseif(isset($scstdc) && $scstdc == 0){%>	
+							  
+									<li class="media">								
+										<div class="media-body">
+											<h5 class="media-heading"><a>No results found!!!</a></h5>							
+										</div><hr/>
+									</li>
+									
+								<% }elseif(isset($scstdc) && $scstdc == -1){ %>
+								
+									<li class="media">								
+										<div class="media-body">
+											<h5 class="media-heading"><a>Please enter a search keyword!!!</a></h5>							
+										</div><hr/>
+									</li>									
+							    <% }%>
+					</ul>				 
+					
+					<% }%>	
+					
+					
+					
+					
+				<% if(isset($addconduct)){%>
+					
+					 <!-- Student Add & Update  -->
+					 <h5 class="sidebar-title">Student Appraisal Form | <%= $addconduct['className'];%></h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						   
+							<form action="/shs/postconduct" method="post">
+							
+							<% 
+							    $i = 1;
+								//var_dump($std);exit;
+								if(!is_null($std)){
+								$cert = $db->getOneRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' and active = 1");
+								foreach($std as $ms){							
+							%>
+								<div class="row">
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label for="name" class="kobby"><%= $ms['studentCode']%> | <%= $ms['fName'].' '.$ms['lName'];%></label><br>
+											<center class="media">
+											   <!--<img class="media-object img-circle" width="80px" src="<%= $ms['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $ms['photo'];%>" alt="<%= $ms['fName']." ".$ms['lName'];%>">-->
+											   <img class="media-object img-circle" width="80px" src="<%= is_null($ms['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$ms['pic'];%>" alt="<%= $ms['fName']." ".$ms['lName'];%>">
+										      </center>
+											<input type="hidden" name="t<%= $i;%>" value="<%= isset($ms)? $ms['id'] : '';%>">
+										</div>
+									</div>
+									<div class="col-sm-2" style="<%= $_SESSION['settings']['academTerm'] == 3 && $cert['resultCertified'] == 1 ? 'display:block': 'display:none;'%>">
+										<div class="form-group">
+											<label for="active" class="kobby">Exam Status</label>
+											<select class="form-control" id="active" name="p<%= $i;%>">
+												<option value="0" <%= isset($ms) && $ms['promoteTo'] == 0 || $ms['promoteTo'] == ''? 'selected="selected"' : ''%>>None</option>
+												<option value="1" <%= isset($ms)&& $ms['promoteTo'] == 1? 'selected="selected"' : ''%>>Promotion</option>
+												<option value="2" <%= isset($ms)&& $ms['promoteTo'] == 2? 'selected="selected"' : ''%>>Repetition</option>												
+											</select>
+										</div>
+									</div>								
+									<div class="col-sm-2">
+										<div class="form-group">
+											<label for="message" class="kobby">Student's Conduct</label>
+											<textarea class="form-control message"  name="m<%= $i;%>" placeholder="Conduct & Remarks"><%= isset($ms)? $ms['conduct'] : '';%></textarea>
+										</div>
+                                    </div>
+                                    <div class="col-sm-3">
+										<div class="form-group">
+											<label for="message" class="kobby">Term's Report on student</label>
+											<textarea class="form-control message" name="r<%= $i;%>" placeholder="Term's Report on student"><%= isset($ms)? $ms['termNote'] : '';%></textarea>
+										</div>
+                                    </div>
+									<div class="col-sm-2">
+									   <div class="form-group">
+											<label for="message" class="kobby">Total Attendance for term</label>
+											<input type="number" class="form-control" name="s<%= $i;%>" id="s<%= $i;%>" placeholder="Total Attendance for term" value="<%= isset($ms)? $ms['attendance'] : '';%>">
+									  </div>
+								   </div>
+								   <!--<div class="col-sm-2">
+									   <div class="form-group">
+											<label for="message" class="kobby">Total Class Attendance</label>
+											<i class="glyphicon glyphicon-cloud"><textarea class="form-control message" history.back(); name="m<%= $i;%>" placeholder="Conduct & Remarks"><%= isset($ms)? $ms['conduct'] : '';%></textarea></i>
+									   </div>
+								   </div>
+                                   -->								
+								</div><hr/>							
+								
+							<% $i++;}}%>
+																	
+									<input type="hidden"  name="classCode" value="<%= isset($std)? $addconduct['id'] : 0;%>">
+                                    <input type="hidden"  name="total" value="<%= isset($rows)? $rows : 0;%>">
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+							</form>
+							
+						</div>
+					 </div>				
+				<% }%>
+
+
+				
+				
+				<% if(isset($albumstd)){
+					     
+				%>
+				
+					<!-- Class Album -->
+					<h5 class="sidebar-title">Class Manager 
+					    <% 
+						    if(isset($_GET['class'])){
+							   $cla = $db->getOneRecord("select * from class where id = '{$_GET['class']}' and SiteID = '{$_SESSION['SiteID']}'");
+							   echo '| '.$cla['className'].' CLASS';
+						    }
+					    %>
+					</h5>
+					<div class="row">				
+					        <!-- Sorting -->
+				            <div class="<%= !isset($_GET['class']) ? 'col-md-6':'col-md-12'%>">
+								<div class="searchby search-box">
+									<form class="form-inline pull-left" method="get" action="/shs/getalbum">
+										<div class="form-group">
+											<label for="sortby" class="kobby">Select Class : </label>
+											<select class="form-control" id="sortby" name="class">
+											   <% 
+												   if(!empty($albumstd)){ 
+													 foreach($albumstd as $st){ %>
+												       <option value="<%= $st['id'];%>"><%= $st['className'];%></option>
+											   <% }
+												    }%>
+											</select>
+										</div>										
+										<button type="submit" class="btn btn-default btn-color-shadow" onclick="if(!confirm('View Class Album & Listing!'))return false;"><span>Fetch Class</span></button>
+									</form>
+									
+									 
+									<div class="clearfix visible-xs"></div>
+									<% if(isset($_GET['class'])){%>
+											<a href="<%= @$app->urlFor('addconduct',['id' => $std[0]['classCode']]);%>" onclick="if(!confirm('Report on Students' conduct and performance!'))return false;" class="pull-right btn btn-default btn-color-shadow" style="margin-left:15px;"> <i class="fa fa-edit"></i> Report on Students </a> 
+											<a target="_blank" href="ui/report/pdfRank.php?class=<%= $std[0]['classCode']%>&cl=<%= $albumstd[0]['className']%>" class="pull-right btn btn-default btn-color-shadow"> <i class="fa fa-print"></i> Class Ranking </a>								
+									<% }%>
+									</div>
+							</div>
+							
+							<% if(!isset($_GET['class'])):%>
+							<div class="col-md-6">
+								<div class="searchby search-box">
+									<form class="form-inline pull-left" method="get" action="/shs/albumstd">
+										<div class="form-group">
+											<label for="sortby" class="kobby">Subject Rank : </label>
+											<select class="form-control" id="sortby" name="subjrank">
+											   <% 
+												   $sj = $db->getAllRecord("select distinct(rj.subjectCode),sj.* from result rj,subject sj where rj.subjectCode = sj.subjCode and rj.SiteID = '{$_SESSION['SiteID']}' and rj.academCode = '{$_SESSION['settings']['academ']}'");
+												   if(!is_null($sj)){ 
+													 foreach($sj as $st){ %>
+												       <option value="<%= $st['subjCode'];%>"><%= $st['subjName'];%></option>
+											   <% }
+												    }%>
+											</select>
+										</div>							
+										<button type="submit" class="btn btn-default btn-color-shadow" onclick="if(!confirm('View Subject Ranking!'))return false;"><span>Fetch</span></button>
+									</form>									
+								</div>	
+							</div>
+							
+							<% endif;%>
+					</div>		
+							
+							
+					<!-- Subject Ranking of Student -->
+					<% if(isset($_GET['subjrank'])){%>
+					   <div class="row">  		
+							<div class="col-md-12">
+							   <section class="newsletter">							
+									 <blockquote class="success">
+										<h4>LIST OF FORMS</h4>
+										<!--<p><em>Students listed below are understudy for promotion consideration or repetion by the committee</em></p>-->
+									</blockquote>
+                                    <ul class="media-list">                                							 
+										<li class="media">										
+											<div class="media-body">																				
+												<ul class="tags">
+												<%	
+													$xs = $db->getAllRecord("select distinct(date_format(cl.admitDate,'%Y')) as year,cl.id from class cl,result rt where cl.gradDate IS NULL and cl.id = rt.classCode and cl.SiteID = '{$_SESSION['SiteID']}' and rt.academCode = '{$_SESSION['settings']['academ']}'");
+													 if(!is_null($xs)){
+													 foreach($xs as $ms){
+														 $cldate = date('Y-m-d',strtotime($ms['year'].'-09-01'));
+														 $sj = $db->getOneRecord("select * from subject where subjCode = '{$_GET['subjrank']}' and SiteID = '{$_SESSION['SiteID']}'");
+														 $sjx = $db->getAllRecord("select * from class cl where date_format(cl.admitDate,'%Y') = '{$ms['year']}' and SiteID = '{$_SESSION['SiteID']}'");
+														 $classes = null;
+														 if(!is_null($sjx)){
+														   $i = 1;
+														   foreach($sjx as $cl){ $classes .= $cl['id'].(count($sjx) == $i ? '':','); $i++;}
+														 }
+												%>
+													 <li><a target="_blank" href="/shs/ui/report/pdfSubjRank.php?subj=<%= $_GET['subjrank'];%>&cno=<%= urlencode($classes);%>" onclick="if(!confirm('View Subject Ranking!'))return false;">Form <%= $db->getYear($cldate,$_SESSION['settings']['startDate']);%><%= !is_null($sj) ? ' - '.$sj['subjName']:'';%></a></li>
+												<% }}%>
+												</ul>											
+											</div><hr/>
+										</li>					 
+							        </ul>									
+									
+								</section>
+					
+							 
+							</div>
+				  			<% }%>
+							
+							
+							
+							
+							
+							<% if(isset($std)){ %>
+							
+							<!-- Album column 1 -->
+							<div class="col-md-4 product-details">
+							<% 
+							     $i = 3;
+							     foreach($std as $st){	
+							       if(($i%3) == 0){
+							%>
+								
+								<div class="product-details-item">
+									<figure class="item-thumbnail">
+										<!--<img class="img-responsive" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										<img class="img-responsive" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										<span class="overthumb"></span>										
+									</figure>
+									<p class="subtitle"><%= $st['fName']." ".$st['lName'];%></p>
+                                    <% 									
+									    $sl = $db->getOneRecord("select * from performance where SiteID = '{$_SESSION['SiteID']}' and academCode = '{$_SESSION['settings']['academ']}' and academTerm = 3 and studentCode = '{$st['studentCode']}'");
+									    if(!is_null($sl)){
+										  switch($sl['promoteTo']){
+											  case 1 : echo '<p class="subtitle" style="color:green;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\'Promoted to Next level\')" title="Promoted to Next level">Promoted to Next level</p>';break;
+											  case 2 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\'Repeating\')" title="Repeating">Repeating</p>';break;
+										  }										  
+									    }										  
+									%>										
+								</div>
+							<% }$i++;}%>								
+							</div>
+							
+							<!-- Album column 2 -->
+							<div class="col-md-4 product-details">
+							<% 
+							     $i = 3;
+							     foreach($std as $st){	
+							       if(($i%3) == 1){
+							%>
+								
+								<div class="product-details-item">
+									<figure class="item-thumbnail">
+										<!--<img class="img-responsive" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										<img class="img-responsive" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										<span class="overthumb"></span>										
+									</figure>
+									<p class="subtitle"><%= $st['fName']." ".$st['lName'];%></p>
+									<% 									
+									    $sl = $db->getOneRecord("select * from performance where SiteID = '{$_SESSION['SiteID']}' and academCode = '{$_SESSION['settings']['academ']}' and academTerm = 3 and studentCode = '{$st['studentCode']}'");
+									    if(!is_null($sl)){
+										  switch($sl['promoteTo']){
+											  case 1 : echo '<p class="subtitle" style="color:green;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\'Promoted to Next level\')" title="Promoted to Next level">Promoted to Next level</p>';break;
+											  case 2 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\'Repeating\')" title="Repeating">Repeating</p>';break;
+										  }										  
+									    }										  
+									%>	
+								</div>
+							<% }$i++;}%>								
+							</div>
+							
+							<!-- Album column 3 -->
+							<div class="col-md-4 product-details">
+							<% 
+							     $i = 3;
+							     foreach($std as $st){	
+							       if(($i%3) == 2){
+							%>
+								
+								<div class="product-details-item">
+									<figure class="item-thumbnail">
+										<!--<img class="img-responsive" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										<img class="img-responsive" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										<span class="overthumb"></span>										
+									</figure>
+									<p class="subtitle"><%= $st['fName']." ".$st['lName'];%></p>
+									<% 									
+									    $sl = $db->getOneRecord("select * from performance where SiteID = '{$_SESSION['SiteID']}' and academCode = '{$_SESSION['settings']['academ']}' and academTerm = 3 and studentCode = '{$st['studentCode']}'");
+									    if(!is_null($sl)){
+										  switch($sl['promoteTo']){
+											  case 1 : echo '<p class="subtitle" style="color:green;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\'Promoted to Next level\')" title="Promoted to Next level">Promoted to Next level</p>';break;
+											  case 2 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\'Repeating\')" title="Repeating">Repeating</p>';break;
+										  }										  
+									    }										  
+									%>	
+								</div>
+							<% }$i++;}%>								
+								<div class="clearfix"></div>
+							</div>
+							
+							<!-- Album Pagination -->
+							
+							<div class="col-md-12">
+								<div class="searchby search-box">
+									<form class="form-inline pull-left">
+										<span><%= $rows;%> members</span>										
+									</form>
+									<!--<div class="clearfix visible-xs"></div>
+									<div class="pull-right">
+										<ul class="pagination">
+											<li><a href="">&lt;</a></li>
+											<li><a href="#">1</a></li>
+											<li ><a href="#">2</a></li>
+											<li><a href="#">3</a></li>
+											<li><a href="#">4</a></li>
+											<li><a href="#">&gt;</a></li>
+										</ul>
+									</div>
+									-->
+								</div>
+							</div>
+							<% }%>
+							
+						</div>
+				<% }%>	
+				
+				
+					
+					<!-- # End of Class Album -->
+					
+					
+					
+					
+					
+			   <% if(isset($groupstd)){%>
+				
+					<!-- Class Album -->
+					<h5 class="sidebar-title">Year Group Manager | <%= isset($_GET['class']) ? $_GET['class'].' Admitted Batch of Students':'';%></h5>
+					<div class="row">				
+					        <!-- Sorting -->
+				            <div class="col-md-12">
+								<div class="searchby search-box">
+									<form class="form-inline pull-left" method="get" action="/shs/getbatch">
+										<div class="form-group">
+											<label for="sortby" class="kobby">Select Year Group : </label>
+											<select class="form-control" id="sortby" name="class">
+											   <% 
+												   if(!empty($groupstd)){ 
+													 foreach($groupstd as $st){ %>
+												       <option value="<%= $st['year'];%>" <%= isset($_GET['class']) && $_GET['class'] == $st['year'] ? 'selected="selected"':'';%>><%= $st['year'];%> Admitted Batch</option>
+											   <% }
+												    }%>
+											</select>
+										</div>
+										<!--<div class="form-group">
+											<label for="show-item" class="kobby">Limit To</label>
+											<select class="form-control" id="show-item" name="limit">
+												<option value="1,12">Show: 12 members</option>
+												<option value="1,60">Show: 60 members</option>
+												<option value="">Show: All members</option>
+											</select>
+										</div>-->
+										
+										<button type="submit" class="btn btn-default btn-color-shadow"><span>Fetch Batch</span></button>
+									</form>
+									
+									 
+									<div class="clearfix visible-xs"></div>
+									
+									</div>
+							</div>
+							
+							<% if(isset($std)){ %>
+							
+							<!-- Album column 1 -->
+							<div class="col-md-4 product-details">
+							<% 
+							     $i = 3;
+							     foreach($std as $st){	
+							       if(($i%3) == 0){									  
+									   
+							%>
+								
+								<div class="product-details-item">
+									<figure class="item-thumbnail">
+										<!--<img class="img-responsive" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										<img class="img-responsive" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										<span class="overthumb"></span>										
+									</figure> 
+									
+									<p class="subtitle"><%= $st['fName']." ".$st['lName'];%></p>
+									<p class="subtitle" style="text-align:center;font-size:9px;font-weight:bolder;color:#999;"><%= $st['classDesc'];%></p>
+									<% 
+									if(!is_null($st['sanction'])){
+										  $sa = explode(',',$st['sanction']);
+										  foreach($sa as $sid){
+											  $sl = $db->getOneRecord("select * from sanction where SiteID = '{$_SESSION['SiteID']}'");
+										      if(!is_null($sl)){
+												  switch($sl['type']){
+													  case 1 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Sacked by Authorities</p>';break;
+												      case 2 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Debordernized by Authorities</p>';break;
+												      case 3 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Sanctioned by Authorities</p>';break;
+												  }
+												  
+											  }
+										  }
+									  }
+									
+									%>	
+								</div>
+							<% }$i++;}%>								
+							</div>
+									
+									
+							<!-- Album column 2 -->
+							<div class="col-md-4 product-details">
+							<% 
+							     $i = 3;
+							     foreach($std as $st){	
+							       if(($i%3) == 1){
+							%>
+								
+								<div class="product-details-item">
+									<figure class="item-thumbnail">
+										<!--<img class="img-responsive" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										<img class="img-responsive" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										<span class="overthumb"></span>										
+									</figure>
+									<p class="subtitle"><%= $st['fName']." ".$st['lName'];%></p>
+									<p class="subtitle" style="text-align:center;font-size:9px;font-weight:bolder;color:#999;"><%= $st['classDesc'];%></p>
+								   <% 
+									if(!is_null($st['sanction'])){
+										  $sa = explode(',',$st['sanction']);
+										  foreach($sa as $sid){
+											  $sl = $db->getOneRecord("select * from sanction where SiteID = '{$_SESSION['SiteID']}'");
+										      if(!is_null($sl)){
+												  switch($sl['type']){
+													  case 1 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Sacked by Authorities</p>';break;
+												      case 2 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Debordernized by Authorities</p>';break;
+												      case 3 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Sanctioned by Authorities</p>';break;
+												  }
+												  
+											  }
+										  }
+									  }
+									
+									%>	
+								</div>
+							<% }$i++;}%>								
+							</div>
+							
+							<!-- Album column 3 -->
+							<div class="col-md-4 product-details">
+							<% 
+							     $i = 3;
+							     foreach($std as $st){	
+							       if(($i%3) == 2){
+							%>
+								
+								<div class="product-details-item">
+									<figure class="item-thumbnail">
+										<!--<img class="img-responsive" src="<%= $st['photo']=='' ? '/shs/ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">-->
+										<img class="img-responsive" src="<%= is_null($st['pic']) ? '/shs/ad_assets/img/blank.jpg' : 'data:image;base64,'.$st['pic'];%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+										<span class="overthumb"></span>										
+									</figure>
+									<p class="subtitle"><%= $st['fName']." ".$st['lName'];%></p>
+									<p class="subtitle" style="text-align:center;font-size:9px;font-weight:bolder;color:#999;"><%= $st['classDesc'];%></p>
+                                    <% 
+									if(!is_null($st['sanction'])){
+										  $sa = explode(',',$st['sanction']);
+										  foreach($sa as $sid){
+											  $sl = $db->getOneRecord("select * from sanction where SiteID = '{$_SESSION['SiteID']}'");
+										      if(!is_null($sl)){
+												  switch($sl['type']){
+													  case 1 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Sacked by Authorities</p>';break;
+												      case 2 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Debordernized by Authorities</p>';break;
+												      case 3 : echo '<p class="subtitle" style="color:red;font-size:9px;font-weight:bolder;text-align:center;cursor:pointer;" onclick="alert(\''.$sl['sanction'].'\\n\n'.$sl['context'].'\')" title="'.$sl['sanction'].'">Sanctioned by Authorities</p>';break;
+												  }
+												  
+											  }
+										  }
+									  }
+									
+									%>									
+								</div>
+							<% }$i++;}%>								
+								<div class="clearfix"></div>
+							</div>
+							
+							<!-- Album Pagination -->
+							
+							<div class="col-md-12">
+								<div class="searchby search-box">
+									<form class="form-inline pull-left">
+										<span><%= $rows;%> members</span>										
+									</form>
+									<!--<div class="clearfix visible-xs"></div>
+									<div class="pull-right">
+										<ul class="pagination">
+											<li><a href="">&lt;</a></li>
+											<li><a href="#">1</a></li>
+											<li ><a href="#">2</a></li>
+											<li><a href="#">3</a></li>
+											<li><a href="#">4</a></li>
+											<li><a href="#">&gt;</a></li>
+										</ul>
+									</div>
+									-->
+								</div>
+							</div>
+							<% }%>
+							
+						</div>
+				<% }%>	
+				
+				
+					
+					<!-- # End of Year Group Album -->
+                     					 
+				</div>						
+			</div>
+			
+			
+	</section>
+	<!-- End Icon -->
+	
+
+<% include 'footer.php';%>

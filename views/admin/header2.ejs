@@ -1,0 +1,420 @@
+<% 
+    if(!isset($_SESSION)){
+		session_start();
+	}
+	
+	 require_once 'class/class.php';
+     $db = new DbHandler();
+	
+	if(!isset($_SESSION['settings'])){
+		$app->redirect($app->urlFor('logout'));
+	}
+	
+		
+	
+	
+%>
+<!DOCTYPE html>
+<html>
+<meta http-equiv="expires" content="Sun, 01 Jan 2014 00:00:00 GMT" />
+<meta http-equiv="pragma" content="no-cache"/>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+<head>
+	<meta charset="utf-8">
+	
+	<!-- Define Charset -->
+    <meta charset="utf-8">
+
+    <!-- Page Title -->
+    <title>eSHS Manager</title>
+
+    <!-- Responsive Metatag -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=9" />-->
+
+  
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/shs/ad_assets/css/style.css">
+	<!-- Tooltip Files @kobby Kay -->
+	<link rel="stylesheet" type="text/css" href="ad_assets/lib/tooltipster/css/tooltipster.bundle.min.css" />   
+	
+    <style type="text/css">	
+	      .alert-success {
+				background-color: #9ed566;
+				border-color: transparent;
+				color: #456b1d;
+		  }
+		  
+		  .alert-info {
+				background-color: #56c2e8;
+				border-color: transparent;
+				color: #0e4e64;
+		  }
+		  
+		  .alert-warning {
+				background-color: #fdcc51;
+				border-color: transparent;
+				color: #815c01;
+		  }
+		 
+          .alert-danger {
+			background-color: #e55869;
+			border-color: transparent;
+			color: #ffffff;
+		  }	
+
+         .fade.in {
+			opacity: 1;
+		  }
+			
+		 .nomargin {
+			margin: 0;
+		  }		 
+		  
+		 .mb15 {
+			margin-bottom: 15px;
+		 } 
+		 
+		 .btn-primary {
+			color: #ffffff;
+			background-color: <%=$_SESSION['settings']['primecolor']%>;
+			border-color: transparent;
+		 }
+		 
+		 .btn-color-border-solid{
+			background-color: <%=$_SESSION['settings']['primecolor']%>;
+			border-color: <%=$_SESSION['settings']['primecolor']%>;
+			color: #fff;
+		}
+		 
+		 .btn-color-border-solid:hover {
+			background-color: #ffffff;
+			border-color: <%=$_SESSION['settings']['primecolor']%>;
+			color: <%=$_SESSION['settings']['primecolor']%>;
+		}
+		
+		.newsletter .btn {
+		   background-color: <%=$_SESSION['settings']['primecolor']%>;
+           line-height:45px;		   
+		}
+		
+		.newsletter .btn:hover {
+		   background-color: <%=$_SESSION['settings']['subcolor']%>; 
+		}
+		
+		.btn {
+			padding: 10px 12px 9px;			
+			transition: all 0.2s ease-out 0s;
+			display: inline-block;
+			margin-bottom: 0;
+			font-weight: normal;
+			text-align: center;
+			vertical-align: middle;
+			touch-action: manipulation;
+			cursor: pointer;
+			background-image: none;
+			border: 1px solid transparent;
+			white-space: nowrap;			
+			font-size: 12px;
+			line-height: 1.42857143;
+			border-radius: 2px;			
+			user-select: none;
+		}
+			
+		.alert {
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12px;
+			line-height: 1.42857143;
+			padding: 15px;
+			margin-bottom: 17px;
+			border: 1px solid transparent;
+			border-radius: 2px;
+		}
+		
+		
+		/ * Camera Photo Capture Styling */
+		
+			.camcontent{
+			  display: block;
+			  position: relative;
+			  overflow: hidden;
+			  height: 480px;
+			  margin: auto;
+			  }
+			.cambuttons button {
+			  border-radius: 15px;
+			  font-size: 18px;
+			  }
+			.cambuttons button:hover {
+			  cursor: pointer;
+			  border-radius: 15px;
+			  background: #00dd00 ;    /* green */ 
+			  }
+			  
+			/* Override */
+			
+			input[type="date"].form-control, input[type="time"].form-control, input[type="datetime-local"].form-control, input[type="month"].form-control {
+				line-height: 1em !important;
+			}
+
+             .kobby{
+				color:<%=$_SESSION['settings']['primecolor']%>;
+                 font-family: calibri,verdana,'Droid sans',raavi,helvetica;
+               /* font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+				font-weight:300;
+                outline: 0;
+                transition: all 0.2s ease-in-out;				*/
+			 }	             
+            
+			
+			.signpanel {
+				  position: fixed;
+				  left: 0;
+				  top: 0;
+				  width: 100%;
+				  height: 100%;
+				  background: url(<%= $_SESSION['settings']['teaser'].'?'.rand()%>) no-repeat center center fixed;
+				  background-size: cover;
+				  -webkit-filter: blur(4px);  
+			}
+			
+			
+			.sub-nav{
+				background-color:<%=$_SESSION['settings']['subcolor']%>;
+				border-radius:0  0 40px 40px;
+				margin-right:50px;
+				padding:0px 20px;
+				
+			}
+			
+			.sub-nav .dash-links li a:hover, .sub-nav .dash-links li a.active, .sub-nav .dash-links li a.active:first-child{
+				color: <%=$_SESSION['settings']['subcolor']%>;
+				background-color:#eee !important;
+			}
+			
+			.sub-nav .dash-links li a {
+				height: 50px;
+				width: 50px;
+				position: relative;
+				padding: 10px 10px;		
+			}
+			
+			.copy{
+			  position:relative;
+              background-color: <%=$_SESSION['settings']['primecolor']%>; 			  
+			}
+			
+			.profile-nav{
+				background-color: <%=$_SESSION['settings']['subcolor']%>; 
+				border-radius:40px;
+				margin-left:15%;
+				padding:8px 20px;
+				position:absolute;
+				top:20%;
+				right: 3%;
+				clear:both;
+			}
+            
+			.profile-nav p{
+				display:inline;
+				line-height: 55px;
+				text-align: center;
+			}
+	   
+	        .profile-nav img{
+				float:right;
+				width:54px;
+				height:54px;
+				border-radius:50%;
+			}
+			
+			
+			/* Theme */
+			
+			.icon-simple.default {
+                background-color: <%=$_SESSION['settings']['primecolor']%>;     
+            }
+			
+			.dash-links li a:hover,.social-links li a:hover {
+				color: <%=$_SESSION['settings']['subcolor']%>;
+			}
+			
+			a{
+				color: <%=$_SESSION['settings']['subcolor']%>;
+			}
+			
+			a:hover,a:active,.tags li a:focus{
+				color: <%=$_SESSION['settings']['primecolor']%>;
+				text-decoration:none;
+			}
+			
+			.tags li a:hover {
+				background-color: <%=$_SESSION['settings']['primecolor']%>;
+			}
+			
+								
+			.sidebar-title:before,.alternative-title:before {
+                background-color: <%=$_SESSION['settings']['primecolor']%>;
+			}
+			
+			p.down{
+				color: #fff !important;
+			}
+			
+			fade,top,bottom,in{
+				background-color: <%=$_SESSION['settings']['subcolor']%>;
+			}
+			
+			*:focus{
+				text-decoration:none;
+				color: #666;
+			}
+			
+			.media-heading a {
+				color: <%=$_SESSION['settings']['primecolor']%>;
+			}
+			
+			.media-heading a:hover {
+				color: <%=$_SESSION['settings']['subcolor']%>;
+			}
+			  
+	</style>
+	
+	
+		
+</head>
+<body>	
+
+	
+	
+	<!-- Footer -->
+	<footer>
+		<div class="copy">
+			<div class="container">
+				<div class="row" style="clear:both;">
+					<div class="col-md-6 col-xs-12 hidden-xs" >
+						<ul class="dash-links">
+						<% if($_SESSION['user']['privilege'] < 2):%>	
+							<li>
+								<a href="<%= $app->urlFor('admin');%>" title="Dashboard" class="tooltips">
+									<i class="fa fa-home fa-2x"></i>
+								</a>
+							</li>
+							<li>
+								<a href="<%= $app->urlFor('institute');%>" title="Institution" class="tooltips">
+									<i class="fa fa-university fa-2x"></i>
+								</a>
+							</li>
+							<li>
+								<a href="<%= $app->urlFor('academ');%>" title="Settings" class="tooltips">
+									<i class="fa fa-gear fa-2x"></i>
+								</a>
+							</li>
+							
+							<% if($_SESSION['settings']['sms_active']):%>
+							<li>
+								<a href="#" title="SMS | <%= $_SESSION['settings']['sms']%>" class="tooltips">
+									<i class="fa fa-commenting-o fa-2x"></i>
+								</a>
+							</li>
+                            <% endif;%>
+							<% else:%>
+							
+							<li>
+								<a href="<%= $app->urlFor('emarker');%>" title="Dashboard" class="tooltips">
+									<i class="fa fa-home fa-2x"></i>
+								</a>
+							</li>
+							
+							<% endif;%>
+							
+							<li>
+								<a href="<%= $app->urlFor('logout');%>" onclick="if(!confirm('You are logging out!'))return false;" title="Logout" class="tooltips">
+									<i class="fa fa-power-off fa-2x"></i>
+								</a>
+							</li>							
+						</ul>
+					</div>
+					<div class="col-md-2">&nbsp;</div>
+					
+					<div class="col-md-4 profile-nav col-xs-12 hidden-xs">
+					    <p class="down"><strong><em>Welcome <%= $_SESSION['user']['fName'].' | '.$_SESSION['user']['userCode'].' | '.($_SESSION['user']['privilege'] == 1 ? 'Admin' : 'Tutor');%> </em></strong><p>
+                        <img src="<%= $_SESSION['user']['photo'].'?'.rand();%>"	id="user_photo" />					
+					</div><!---->
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- End Footer -->
+	
+	<% if(isset($entry)){%>
+	
+	    <div class="alert alert-success">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			<strong>Welcome <%= $_SESSION['user']['fName'];%></strong><em> to </em><strong>eSHS</strong> <sup>&reg;</sup></a>.
+	   </div>
+	   
+   <% }%>
+   
+   <!--   <div class="alert alert-info fade in nomargin">
+			<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+			<h4>Announcements!</h4>
+			<p>Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p>
+			<div class="mb15"></div>
+			<p>
+			  <button class="btn btn-primary" type="button">Take this action</button>
+			</p>
+	</div>-->
+	
+	<!-- Sub Navigation -->
+	<% if(isset($active) && $_SESSION['user']['privilege'] < 2):%>
+	  <div class="row">
+	        <div class="col-sm-4 pull-right sub-nav">
+	           <ul class="dash-links">
+							<li>
+								<a href="<%= $app->urlFor('listd');%>" title="Students" class="tooltips <% if(isset($active) && ($active == 'listd' || $active == 'albumstd' || $active == 'scstd')){ echo 'active';}%>">
+									<i class="glyphicon glyphicon-user"></i>
+								</a>
+							</li>
+							<li>
+								<a href="<%= $app->urlFor('emarker');%>" title="Results" class="tooltips <% if(isset($active) && ($active == 'emarker' || $active == 'tempres')){ echo 'active';}%>">
+									<i class="glyphicon glyphicon-list-alt"></i>
+								</a>
+							</li>
+							<li>
+								<a href="<%= $app->urlFor('stbills');%>" title="Fees" class="tooltips <% if(isset($active) && ($active == 'stbills' || $active == 'feesrp' || $active == 'receipt' || $active == 'debtors')){ echo 'active';}%>">
+									<i class="glyphicon fa fa-money"></i>
+								</a>
+							</li>
+							<li>
+								<a href="<%= $app->urlFor('dbtable');%>" title="Timetables" class="tooltips <% if(isset($active) && ($active == 'ctable' || $active == 'etable' || $active == 'dbtable')){ echo 'active';}%>">
+									<i class="glyphicon fa fa-calendar"></i>
+								</a>
+							</li>
+							<li>
+								<a href="<%= $app->urlFor('subj');%>" title="Course" class="tooltips <% if(isset($active) && ($active == 'subj' || $active == 'course' || $active == 'dept')){ echo 'active';}%>">
+									<i class="fa fa-language"></i>
+								</a>
+							</li>
+							<li>
+								<a href="<%= $app->urlFor('cl');%>" title="Class" class="tooltips <% if(isset($active) && ($active == 'class')){ echo 'active';}%>">
+									<i class="fa fa-tasks"></i>
+								</a>
+							</li>							
+							<li>
+								<a href="<%= $app->urlFor('users');%>" title="Users" class="tooltips <% if(isset($active) && ($active == 'users')){ echo 'active';}%>">
+									<i class="fa fa-users"></i>
+								</a>
+							</li>
+                           <li class="visible-xs" style="float:left;">
+								<a href="<%= $app->urlFor('logout');%>" onclick="if(!confirm('You are logging out!'))return false;" title="Logout" class="tooltips">
+									<i class="fa fa-power-off fa-lg"></i>
+								</a>
+							</li>							
+						</ul>
+	        </div>
+	  </div>
+	  <% endif;%>
+	

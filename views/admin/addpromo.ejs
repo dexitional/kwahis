@@ -1,0 +1,56 @@
+<form name="" action="/promote/remark" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">
+		  <%
+		      if(rows.length>0){
+		  %>
+			<h2><b style="color:<%= settings.primaryColor; %>">CLASS <%= rows[0].gname.toUpperCase() %></b> | <%= rows[0].acad %> ACADEMIC YEAR - TERM <%= rows[0].term %></h2><hr>	
+				<!-- All Subjects Update  -->
+			   <% 				 
+			      let j = 1;			   
+			      rows.map(row => {
+			   %>
+			   			
+					<div class="col-sm-12" style="background: <%= settings.secondColor; %>;margin:5px 0;border:2px solid <%= settings.primaryColor; %>;padding-top:15px">									
+						<!-- Add form -->
+						<ul class="tags col-sm-4">												
+						    <label class="kobby" style="font-size:15px"><%- (row.fname+' '+row.lname).toUpperCase() +' <br><em>( '+row.index_number+' ) </em>'%></label>										
+						</ul>
+						<div class="form-group col-sm-4">
+							<label for="subject" class="kobby">REMARKS</label>
+							<textarea class="form-control" rows="3" id="remark" name="r<%= j%>"  style="margin:5px;background:<%= settings.accentColor; %>;color:#333;padding:10px 15px;font-weight:bolder;border-color:#999;font-size:13px"><%- row.remark;%></textarea>
+						</div>
+						<% if(rows[0].term == 3){ %>
+						<div class="form-group col-sm-4">
+							<label for="subject" class="kobby">STATUS</label><br><br>
+							<label for="subject" class="kobby" style="margin-right:10px;"><input type="radio" <%- row.status == '1' ? 'checked':''%> name="s<%= j%>" value="1"> PROMOTE</label>
+                            <label for="subject" class="kobby" style="margin-right:10px;"><input type="radio" <%- row.status == '-1' ? 'checked':''%> name="s<%= j%>" value="-1"> REPEAT</label>
+                        </div>
+						<% }else{ %>
+							<input type="hidden"  name="s<%= j%>" value="0">
+						<% } %>
+						<input type="hidden"  name="t<%= j%>" value="<%= row.pid%>">										
+					</div>
+			    <% j++;	})	 %>				
+						
+					<hr>				
+					    		
+					<div class="col-sm-12">   
+						<div class="form-group">	
+							<input type="hidden"  name="id" value="<%- stat%>">									
+							<input type="hidden"  name="total" value="<%- j-1%>">	
+							<input type="hidden"  name="academ" value="<%= rows[0].academ %>">	
+							<button type="submit" class="btn btn-success btn-large" onclick="return confirm('Save changes?')">SAVE CHANGES</button>
+							<a href="/assess/list" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+							<% if(rows[0].term == 3){ %>
+							<!--<a href="/promoto/class/<%= rows[0].gname.toLowerCase() %>" class="btn btn-warning btn-large pull-right" onclick="return confirm('This action is irreversible?')">COMMIT PROMOTIONS</a>-->
+						    <% } %>
+						</div>
+					</div>	
+					<%
+			          	}else{
+					%>	
+					<h2><b style="color:palevioletred"><a href="/assess/list" class="btn btn-xs btn-warning"><i class="fa fa-chevron-left"></i> Back</i></a></b> <em>Class has no members yet!</em></h2><hr>	
+			
+					<%  } %>
+	</div>
+</form>

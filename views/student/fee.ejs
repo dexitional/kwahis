@@ -1,0 +1,46 @@
+
+            <div class="page-inner">
+			<%- include('../student/breadcrump.ejs'); %>
+				
+                <div id="main-wrapper">
+                    <div class="row">
+                           <!-- # Fees Records -->												
+                                                
+							 <div class="col-md-12">															 
+									 <div class="panel panel-white">
+												<div class="panel-body">
+												   <div class="table-responsive"><table id="st_fee_table" class="display table dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+														<thead>
+															<tr><th >TITLE OF PAYMENT</th><th rowspan="1" colspan="1">DATE OF PAYMENT</th><th rowspan="1" colspan="1">AMOUNT PAID (GHC)</th><th rowspan="1" colspan="1">&nbsp;</th></tr>
+														</thead>
+														<!--<tfoot>
+															<tr><th rowspan="1" colspan="1">Title of Payment</th><th rowspan="1" colspan="1">Date of Payment</th><th rowspan="1" colspan="1">Amount Paid</th><th rowspan="1" colspan="1">&nbsp;</th></tr>
+														</tfoot>
+														<tbody>	-->
+															  <%
+															      if(rows.length > 0){ 
+															          rows.map(row =>{
+															  %>
+														  		  
+																		  <tr role="row" class="odd">
+																			<td class="sorting_1"><%- row.bill.toUpperCase() %></td>
+																			<td><%- row.pdate %></td>
+																			<td>GHC <b><%- row.amount %></b></td>
+																			<td><a target="_blank" href="/receipt/<%- row.tid %>" class="btn btn-success" onclick="if(!confirm('Do you want to Print Fees Receipt ?')) return false;"><b><i class="fa fa-print"></i> PRINT RECEIPT</b></a></td>																		
+																		  </tr>
+															  <%
+																	 }); 
+																	}else{
+															  %>																										
+																		 <%-' <tr><td colspan="4" style="text-align:center;" class="sorting_1"><em>Sorry, No payments recorded!</em></td></tr>';%>
+															     <% } %>
+															</tbody>
+													   </table>  
+													</div>
+												</div>
+											</div>
+							 </div>        
+
+                    </div><!-- Row -->
+                </div><!-- Main Wrapper -->
+			

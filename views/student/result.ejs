@@ -1,0 +1,171 @@
+
+            <div class="page-inner">
+			<%- include('../student/breadcrump.ejs'); %>
+				
+                <div id="main-wrapper">
+                    <div class="row">
+                           <!-- # Fees Records -->												
+                                                
+							 <div class="col-md-12">															 
+									 <div class="panel panel-white">
+												<div class="panel-body">
+												   <div class="table-responsive">													
+													  <table id="st_result_table" class="display table dataTable" cellspacing="0" width="100%" role="grid" aria-describedby="example_info" style="width: 100%;">
+														<thead>
+															<tr><th rowspan="1" colspan="1">TITLE OF RESULT</th><th rowspan="1" colspan="1">ACADEMIC YEAR</th><th rowspan="1" colspan="1">CLASS</th><th rowspan="1" colspan="1">TERM</th><th rowspan="1" colspan="1">&nbsp;</th></tr>
+														</thead>
+														<tbody>	                                                      
+															<% if(rows.length > 0){ 						
+																 rows.map(row =>{ 
+															%>
+														
+																<tr role="row" class="odd">
+																		<td class="sorting_1"><b><%- row[0].name %> ACADEMIC YEAR, TERM <%- row[0].term %> - RESULTS</b></td>
+																		<td>2018</td>
+																		<td><b><%- row[0].classx %></b></td>
+																		<td>TERM <%- row[0].term %></td>
+																		<td><button type="button" class="btn btn-default btn-addon m-b-0" data-toggle="modal" data-target=".res<%= row[0].id+row[0].academ %>"><i class="fa fa-plus"></i> VIEW RESULTS</button>
+																			<div class="modal fade res<%= row[0].id+row[0].academ %>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+																						<div class="modal-dialog modal-lg">
+																							<div class="modal-content">
+																								<div class="modal-header">
+																									<button type="button" class="close hidden-print" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+																									<h4 class="modal-title hidden-print" id="myModalLabel">STUDENT TERMINAL REPORT</h4>
+																								</div>
+																								<div class="modal-body" id="res<%= row[0].id+row[0].academ %>">
+																										  <div>
+																												 <table style="width:100%;margin:5px;padding:5px;border:3px solid <%- settings.primaryColor; %>;border-radius:10px;">
+																													  <tr>																														  
+																														   <td colspan="2" align="left">																								  																										  
+																															  <h2><%- row[0].name %> ACADEMIC YEAR, TERM <%- row[0].term %></h2>																															 																														   																														 
+																														   </td>																																						   
+																													  </tr>
+																													   <tr>
+																														   <td colspan="3" align="center"><h3>STUDENT TERMINAL REPORT</h3><em><strong>CLASS <%- row[0].classx %></strong></em></td>																																						   
+																													  </tr>
+																													   <tr>
+																														   <td colspan="3" align="center">
+																															     <table style="border:2px solid #eee;background-color:#eee;">
+																																		<thead>
+																																			<tr>
+																																				<th>Subjects</th>
+																																				<th>Class (30%)</th>
+																																				<th>Exams (70%)</th>
+																																				<th>Total (100%)</th>
+																																				<th>Grade</th>
+																																				<th>Remarks</th>
+																																			</tr>
+																																		</thead>
+																																
+																																		<tbody>
+																																		    <% 
+																																				var r = 0, sum = 0;
+																																				row.map(rex => { 											  
+																																			%>
+																																		        <tr>
+																																					<th scope="row"><%- rex.course.toUpperCase() %></th>
+																																					<td><%- rex.class == '-1' ? 'IC': rex.class %></td>
+																																					<td><%- rex.exams == '-1' ? 'IC': rex.exams %></td>
+																																					<th scope="row"><%- rex.exams == '-1' || rex.class == '-1' ? 'IC': (rex.exams+rex.class) %></th>
+																																					<th scope="row"><%
+																																						sum += rex.total;
+																																						let score = rex.score.split(',');
+																																						let grade = rex.grade.split(',');
+																																						let remark = rex.detail.split(',');
+																																						let j = 0;
+																																						for(var i = 0; i < score.length; i++){
+																																							let ms = score[i].split(':');
+																																							console.log(ms[0]);      
+																																											
+																																							let gt = Number(ms[0]);
+																																							let lt = Number(ms[1]);                        
+																																							let sd = {};
+																																						  
+																																							if((gt >= rex.total) && (rex.total >= lt)){                            
+																																								sd.grade = grade[i];
+																																								sd.remark= remark[i];
+																																								if(j==0){
+																																				%>
+																																							 <%- rex.total < 0 ? 'IC' : sd.grade %>
+																																				<%		        }  j++;																	                   			  
+																																							}                    
+																																						}	
+																																					
+																																				 %></th>
+																																					<td><%													
+																																						j = 0;
+																																					   for(var i = 0; i < score.length; i++){
+																																						   let ms = score[i].split(':');
+																																						   console.log(ms[0]);      
+																																										   
+																																						   let gt = Number(ms[0]);
+																																						   let lt = Number(ms[1]);                        
+																																						   let sd = {};
+																																						 
+																																						   if((gt >= rex.total) && (rex.total >= lt)){                            
+																																							   sd.grade = grade[i];
+																																							   sd.remark= remark[i];
+																																							   if(j==0){
+																																			   %>
+																																							<%- rex.total < 0 ? 'IC' : sd.remark %>
+																																			   <%		        }  j++;																	                   			  
+																																						   }                    
+																																					   }	
+																																				   
+																																				%></td>
+																																				</tr>
+																																				<%  r++; }) %>   																										
+																																		 
+																																		
+																																			<tr>																																				
+																																				<th scope="row" colspan="6">
+																																					 <div class="col-md-4">
+																																						  <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+																																									<a href="#" class="btn panel-custom" role="button">Average : <%- (sum/r) %></a>
+																																									<!--<a href="#" class="btn btn-primary hidden-print" role="button">Rank : 1</a>-->
+																																						  </div>
+																																					 </div>
+																																					 <div class="col-md-4">
+																																						&nbsp;																								
+																																					 </div>
+																																					 <div class="col-md-4 hidden-print">
+																																							 <img src="" class="img-circle img-responsive" style="height:80px;">																								 
+																																							 <h4 class="m-b-md"><%- (rows[0][0].fname+' '+rows[0][0].lname).toUpperCase() %> <br/>     (<em><%- rows[0][0].index_number %>  </em>)</h4>
+																																					 </div>
+																																				</th>
+																																				
+																																			</tr>
+																																			
+																	                                                                       																																		
+																																		</tbody>
+																																	</table>																														   
+																														    </td>
+																													  </tr>																								   
+																												 </table>
+																										  </div>
+																								</div>
+																								<div class="modal-footer hidden-print">
+																									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+																									<a target="_blank" href="/result/print/<%- row[0].index_number.split('/').join('_') %>/<%- row[0].academ %>" class="btn panel-custom" onclick="if(!confirm('Do you want to Print Result?')) return false;"><i class="fa fa-print"></i> Print</a>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																		</td>																		
+																	</tr>
+
+																	<%
+																		});
+																	  }else{
+																	%>
+																    <%- '<tr><th scope="row" colspan="5" style="text-align:center"><em>No results found!</em></th></tr>';%>
+																    <% }%>
+															</tbody>
+													   </table>  
+													</div>
+												</div>
+											</div>
+							 </div>        
+
+                    </div><!-- Row -->
+                </div><!-- Main Wrapper -->

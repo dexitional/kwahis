@@ -1,0 +1,41 @@
+<form name="" action="/result/postx" method="post" enctype="application/x-www-form-urlencoded">	
+	<div class="row">
+			<h2><b style="color:palevioletred"><%= rows[0].fname+' '+rows[0].lname+' ('+rows[0].index_number+')' %></b> | <%= rows[0].acad %> ACADEMIC YEAR - TERM <%= rows[0].semester %></h2><hr>	
+				<!-- All Subjects Update  -->
+			   <% 				 
+			      let j = 1;			   
+			      rows.map(row => {
+			   %>
+			   			
+					
+					<div class="col-sm-6" style="background: rgba(228, 74, 145, 0.1);margin:5px 0;border:2px solid pink;padding-top:15px">									
+							<!-- Add form -->
+							<ul class="tags col-sm-6">												
+									<label class="kobby" ><%- row.course.toUpperCase() +' <em>( '+row.code+' ) </em>'%></label>										
+							</ul>
+							<div class="form-group col-sm-3">
+								<label for="subject" class="kobby">CLASS SCORE</label>
+								<input type="number" step="any" min="-1" max="30" class="form-control subject" id="subject" name="c<%= j%>" value="<%= row.class;%>" placeholder="Class" style="margin:5px;background:pink;color:#333;padding:10px 15px;font-weight:bolder;border-color:#999;font-size:20px">
+							</div>
+							<div class="form-group col-sm-3">
+								<label for="subject" class="kobby">EXAM SCORE</label>
+								<input type="number" step="any" min="-1" max="70" class="form-control subject" id="subject" name="e<%= j%>" value="<%= row.exams;%>" placeholder="Exams" style="margin:5px;background:palevioletred;color:#fff;padding:10px 15px;font-weight:bolder;border-color:#999;font-size:20px">
+								<input type="hidden"  name="t<%= j%>" value="<%= row.lid%>">
+							</div>										
+						</div>
+			    <% j++;	})	 %>				
+						
+					<hr>				
+					    		
+					<div class="col-sm-12">   
+						<div class="form-group">	
+							<input type="hidden"  name="id" value="<%- stat%>">									
+							<input type="hidden"  name="total" value="<%- j-1%>">	
+							<input type="hidden"  name="academ" value="<%= rows[0].academ %>">	
+							<input type="hidden"  name="index_number" value="<%= rows[0].index_number %>">					       
+							<button type="submit" class="btn btn-success btn-large" onclick="return confirm('Save changes?')">SAVE CHANGES</button>
+							<a href="/transcript/<%- rows[0].index_number.split('/').join('_')%>" class="btn btn-primary btn-large" onclick="return confirm('Do you want to Cancel?')">CANCEL</a>
+						</div>
+					</div>				
+	</div>
+</form>

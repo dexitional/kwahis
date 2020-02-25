@@ -1,0 +1,1057 @@
+<% include 'header.php';%>
+	
+
+	<!-- Icons -->
+	<section class="generic">
+		
+			<div class="row">				
+				
+                <div class="col-sm-12">
+				
+				<!-- Main Content -->
+				
+					 <!-- Exam Markers -->
+					
+				
+				<% if(isset($emarker)){%>
+				     <% if($_SESSION['user']['privilege'] == 2): %>
+					 
+					          <h5 class="sidebar-title">  <!--  })-->
+								<a href="<%= $app->urlFor('regsubj');%>" onclick="if(!confirm('Register Subjects for Term in various Classes!')){return false;}" class="pull-left btn btn-default btn-color-shadow" style="margin-bottom:5px;margin-right:10px;"> <i class="fa fa-edit"></i> <%= is_null($std)? 'Begin taught Subject Registration':'Update Registered taught Subjects';%> </a>				
+					            <a target="_blank" onclick="if(!confirm('Do you want to Change Password!')){return false;}else{var ins = prompt('Enter New Password'); if(ins != null){ var xns = prompt('Confirm New Password');}else{return false;} if(xns == ins){ alert('Password changed successfully!');window.location='/shs/setpwd/<%= $_SESSION['user']['userCode']%>/'+ins;}else{ alert('Passwords don\'t match!\n\nRe-try again');return false;}}" class="pull-left btn btn-default btn-color-shadow" style="margin-bottom:5px;"> <i class="fa fa-edit"></i> Change Password </a>				
+					            <a href="<%= $app->urlFor('edituser',array('id' => $_SESSION['user']['id']));%>" style="margin-left:15px;" onclick="if(!confirm('Update tutor profile!'))return false;" class="pull-left btn btn-default btn-color-shadow"> <i class="fa fa-edit"></i> Update Profile </a>								
+					            <a onclick="if(!confirm('Please take snapshot of User or Tutor!')){return false;}else{ window.open('ad_assets/webcam/photo.php?id=<%= $_SESSION['user']['userCode']%>&loc=users','Photo Album','height=350,width=300'); }" title="Take Snapshot" style="margin-left:15px;" class="pull-left btn btn-default btn-color-shadow"><i class="fa fa-camera"></i></a>
+								<a onclick="if(!confirm('Please upload photo of a user or Tutor!')){return false;}else{document.getElementById('p<%= $_SESSION['user']['id']%>').click();}" title="Upload photo" style="margin-left:5px;" class="pull-left btn btn-default btn-color-shadow"><i class="fa fa-photo"></i></a><form style="display:inline;clear:both;" action="ad_assets/webcam/logo.php" method="post" enctype="multipart/form-data" id="f<%= $_SESSION['user']['id']%>"><input type="file" name="std" id="p<%= $_SESSION['user']['id']%>" style="display:none;" onchange="this.form.submit();"/><input type="hidden" name="id" value="<%= $_SESSION['user']['userCode']%>"/><input type="hidden" name="loc" value="users"/></form>
+							    
+								<% if(!is_null($_SESSION['user']['review']) && ($_SESSION['user']['review'] == 1)): %>
+								  <a href="<%= $app->urlFor('review');%>" style="margin-left:15px;" title="This section allows Tutors with privilege to assist with the Promotion consideration and Repetition of Students!"  onclick="if(!confirm('Goto Review Dashboard!\n\nThis section allows Tutors with privilege to assist with the Promotion consideration and Repetition of Students!'))return false;" class="pull-left btn btn-default btn-color-shadow"> <i class="fa fa-pie-chart"></i> Review Dashboard </a>								
+					            <% endif;%>
+							  </h5><br><hr>
+						   
+
+					<% else:%>
+					    <h5 class="sidebar-title">Tutor Roles - <a href="<%= $app->urlFor('addmarker');%>" onclick="if(!confirm('Assign New Tutor Roles!'))return false;">[ <i class="fa fa-plus"></i> Assign  New Tutor ]</a></h5>					 
+					 <% endif;%>	
+					 			
+					 <ul class="media-list">
+                            
+							<% 						      
+						      if(!is_null($std)){
+							%>
+							<h3>Registered Subjects and Classes for Term - <%= $_SESSION['settings']['academTerm']%><small><b><em></em></b></small></h3><hr/>
+													
+							<% 
+							     foreach($std as $st){									 
+									if(($_SESSION['user']['userCode'] == $st['userCode']) && ($_SESSION['user']['privilege'] == 2)){									 
+						    %>
+							
+							<li class="media">
+								<a class="pull-left" href="javascript:;">
+									<img class="media-object img-circle" src="<%= $st['photo']=='' ? 'ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['fName']." ".$st['lName'];%> </a><small> | Tutor Code: <%= $st['tutor'];%> | Created: <%= date('F j, Y',strtotime($st['dateCreated']));%><%= $st['deptCode'] != ''? ' | Department: '.$st['deptCode']:'';%></small></h5>									
+									<ul class="tags">
+
+										<!-- Subjects and Classes to mark -->
+										<% 
+										   $subj = explode(',',$st['classArray']);
+										   $s2 = $db->getOneRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' and active = 1");
+			 
+										
+										   foreach($subj as $mk){
+											   $nw = explode(':',$mk);
+											   $cs = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$nw[0]}'");
+											   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$nw[1]}'");
+											   $mj = $db->getAllRecord("select * from temp where (classScore = '-1' or examScore = '-1') and classCode = '{$nw[0]}' and SiteID = '{$_SESSION['SiteID']}' and subjectCode = '{$nw[1]}'");
+											   //var_dump($mj);var_dump($nw);
+											   
+											   //Set Excel Query
+											     $sql = "select st.studentCode as 'STUDENT ID',st.lName as 'SURNAME',st.fName as 'OTHER NAME(S)',rd.classScore as 'CLASS SCORE (30%)',rd.examScore as 'EXAM SCORE (70%)',rd.scheme as 'MARKING SCHEME NO.',sj.subjName as 'SUBJECT',cl.className as 'CLASS',rd.id as 'UNIQUE IDENTIFIER' from temp rd,student st,subject sj,class cl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.studentCode = st.studentCode and rd.subjectCode = sj.subjCode and cl.id = rd.classCode and rd.classCode = '{$cs['id']}' and rd.subjectCode = '{$nw[1]}' and academCode = '{$st['academ']}'";
+										         $sr = $db->getAllRecord($sql);
+										   %>
+										        <li><a href="<%= $app->urlFor('assessment',array('class'=> $cs['id'],'academ' => $st['academ'],'subj' => $nw[1])); %>" onclick="if(!confirm('Enter Results Data for <%= $cs['className'];%> - <%= $sj['subjName'];%>?'))return false;" style="color:#666;display:inline-block;margin-right:0;<%= is_null($mj)? 'background:pink;color:#333;font-weight:bolder;' : 'background:#eee;';%>"><%= $cs['className'].' - '.$sj['subjShort'];%></a><a href="<%= (!is_null($sr) ? $app->urlFor('putxls',['name' => $cs['className'].'_'.$sj['subjShort'],'query' => urlencode($sql)]) : 'javascript:;');%>" style="display:inline-block;margin-left:0;margin-right:0;" title="Download Class Assessment File" onclick="if(!confirm('Download ( <%= $cs['className'];%> ) Assessment sample for <%= $sj['subjName'];%>?\n\n Instructions for Excel Assessment Procedure are :\n\n1. Download the .xml file.\n2.Open the .xml file with  Microsoft Excel application.\n3.Fill and complete your assessment entries.\n4.Save the .xml file into .xls format for upload.'))return false;"><i class="fa fa-cloud-download"></i></a><form style="display:inline;clear:both;margin:0;float:left;" action="/shs/ad_assets/excel_setup.php" method="post" enctype="multipart/form-data" id="formclassubj"><input type="file" name="classubj" style="display:none;" id="classubj" onchange="this.form.submit();"/><input type="hidden" name="subjectCode" value="<%= $nw[1];%>" /><input type="hidden" name="classCode" value="<%= $cs['id'];%>" /></form><a href="javascript:;" onclick="if(!confirm('Upload ( <%= $cs['className'];%> ) Complete Assessment File for <%= $sj['subjName'];%>?\n\nUpload Instructions\n\n1.Please ensure that the file is in microsoft excel 2003 format (.xls).\n2.Only upload for the particular subject where the .xml file was downloaded!')){return false;}else{ document.getElementById('classubj').click();}" style="display:inline-block;margin-left:0;margin-right:0;margin-right:10px;" title="Upload Class Assessment File"><i class="fa fa-cloud-upload"></i></a><a href="" style="display:none;" onclick="if(!confirm('View Calendar for <%= $cs['className'];%> - <%= $sj['subjName'];%>'))return false;" style="background:#eee;color:#666;display:inline-block;margin-left:0;margin-right:10px;"><i class="fa fa-calendar"></i></a>
+											  
+									  <% }%>										  
+						  
+									</ul>
+									
+								</div><hr/>
+							</li>
+							
+							<!-- Form Master Privileges -->
+								 <% 										 										  
+									$cs = $db->getAllRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and tutorCode = '{$_SESSION['user']['userCode']}'");
+									if(!is_null($cs) && ($_SESSION['user']['privilege'] == 2)){
+								 %>
+									<li class="media">								
+										<div class="media-body">
+											<h5 class="media-heading"><a href="javascript:;">Form/Class Tutor Control </a></h5>									
+											<ul class="tags">									 								
+												<!-- Classes to Appraise -->												
+												<li>
+												 <% 
+												     foreach($cs as $cx){
+												 %>
+												  <a href="clist/<%= $cx['id'];%>" onclick="if(!confirm('View Members of <%= $cx['className']%> class!'))return false;" title="View Members of <%= $cx['className']%> class" style="background:#eee;color:#666;display:inline-block;margin-right:0;"><%= $cx['className'].' - Members';%></a><a href="addconduct/<%= $cx['id'];%>" style="display:inline-block;margin-left:0;margin-right:0;" title="Student Appraisal & Terminal Disciplinary Reports update" onclick="if(!confirm('Student Appraisal & Terminal Disciplinary Reports update!'))return false;"><i class="fa fa-edit"></i></a><a target="_blank" href="ui/report/pdfRank.php?class=<%= $cx['id'];%>&cl=<%= urlencode($cx['className']);%>" title="Class Most Current Ranking" onclick="if(!confirm('View Class listing & Ranking'))return false;" style="background:#eee;color:#666;display:inline-block;margin-left:0;margin-right:10px;"><i class="fa fa-bars "></i></a>
+												 <% }%>
+												</li>
+											</ul>											
+										</div><hr/>
+							        </li>
+								<% }%>
+							<!-- # End of Form Master Privileges -->
+							
+							
+							<% }elseif(($_SESSION['user']['privilege'] < 2)){ %>
+							
+							<li class="media">
+								<a class="pull-left" href="javascript:;">
+									<img class="media-object img-circle" src="<%= $st['photo']=='' ? 'ad_assets/img/blank.jpg' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="javascript:;"><%= $st['fName']." ".$st['lName'];%> </a><small> | Tutor Code: <%= $st['tutor'];%> | Created: <%= date('F j, Y',strtotime($st['dateCreated']));%><%= $st['deptCode'] != ''? ' | Department: '.$st['deptCode']:'';%></small></h5>									
+									<ul class="tags">
+									  <% if($_SESSION['user']['privilege'] != 2): %>
+									    <li><a href="<%= $app->urlFor('delmarker',array('id'=> $st['mid'])); %>" onclick="if(!confirm('Do you want to delete record?'))return false;" style="background:pink;color:#fff;border-radius:18px;"><i class="fa fa-trash fa-lg"></i></a></li>
+										<li><a href="<%= $app->urlFor('editmarker',array('id'=> $st['mid'])); %>" onclick="if(!confirm('Do you want to edit record?'))return false;" style="background:green;color:#fff;border-radius:18px;"><i class="fa fa-edit fa-lg"></i></a></li>
+									   <% endif;%>								
+										<!-- Subjects and Classes to mark -->
+									   <% 
+										   $subj = explode(',',$st['classArray']);
+										   $s2 = $db->getOneRecord("select * from academ where SiteID = '{$_SESSION['SiteID']}' and active = 1");
+			 
+										
+										   foreach($subj as $mk){
+											   $nw = explode(':',$mk);
+											   $cs = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$nw[0]}'");
+											   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$nw[1]}'");
+											   $mj = $db->getAllRecord("select * from temp where (classScore = '-1' or examScore = '-1') and classCode = '{$nw[0]}' and SiteID = '{$_SESSION['SiteID']}' and subjectCode = '{$nw[1]}'");
+											   //var_dump($mj);var_dump($nw);
+											   
+											   //Set Excel Query
+											     $sql = "select st.studentCode as 'STUDENT ID',st.lName as 'SURNAME',st.fName as 'OTHER NAME(S)',rd.classScore as 'CLASS SCORE (30%)',rd.examScore as 'EXAM SCORE (70%)',rd.scheme as 'MARKING SCHEME NO.',sj.subjName as 'SUBJECT',cl.className as 'CLASS',rd.id as 'UNIQUE IDENTIFIER' from temp rd,student st,subject sj,class cl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.studentCode = st.studentCode and rd.subjectCode = sj.subjCode and cl.id = rd.classCode and rd.classCode = '{$cs['id']}' and rd.subjectCode = '{$nw[1]}' and academCode = '{$st['academ']}'";
+										         $sr = $db->getAllRecord($sql);
+										   %>
+										        <li><a href="<%= $app->urlFor('assessment',array('class'=> $cs['id'],'academ' => $st['academ'],'subj' => $nw[1])); %>" onclick="if(!confirm('Enter Results Data for <%= $cs['className'];%> - <%= $sj['subjName'];%>?'))return false;" style="color:#666;display:inline-block;margin-right:0;<%= is_null($mj)? 'background:pink;color:#333;font-weight:bolder;' : 'background:#eee;';%>"><%= $cs['className'].' - '.$sj['subjShort'];%></a><a href="<%= (!is_null($sr) ? $app->urlFor('putxls',['name' => $cs['className'].'_'.$sj['subjShort'],'query' => urlencode($sql)]) : 'javascript:;');%>" style="display:inline-block;margin-left:0;margin-right:0;" title="Download Class Assessment File" onclick="if(!confirm('Download ( <%= $cs['className'];%> ) Assessment sample for <%= $sj['subjName'];%>?\n\n Instructions for Excel Assessment Procedure are :\n\n1. Download the .xml file.\n2.Open the .xml file with  Microsoft Excel application.\n3.Fill and complete your assessment entries.\n4.Save the .xml file into .xls format for upload.'))return false;"><i class="fa fa-cloud-download"></i></a><form style="display:inline;clear:both;margin:0;float:left;" action="/shs/ad_assets/excel_setup.php" method="post" enctype="multipart/form-data" id="formclassubj"><input type="file" name="classubj" style="display:none;" id="classubj" onchange="this.form.submit();"/><input type="hidden" name="subjectCode" value="<%= $nw[1];%>" /><input type="hidden" name="classCode" value="<%= $cs['id'];%>" /></form><a href="javascript:;" onclick="if(!confirm('Upload ( <%= $cs['className'];%> ) Complete Assessment File for <%= $sj['subjName'];%>?\n\nUpload Instructions\n\n1.Please ensure that the file is in microsoft excel 2003 format (.xls).\n2.Only upload for the particular subject where the .xml file was downloaded!')){return false;}else{ document.getElementById('classubj').click();}" style="display:inline-block;margin-left:0;margin-right:0;margin-right:10px;" title="Upload Class Assessment File"><i class="fa fa-cloud-upload"></i></a><a href="" style="display:none;" onclick="if(!confirm('View Calendar for <%= $cs['className'];%> - <%= $sj['subjName'];%>'))return false;" style="background:#eee;color:#666;display:inline-block;margin-left:0;margin-right:10px;"><i class="fa fa-calendar"></i></a>
+											  
+									    <% }									
+										echo '</ul>';
+										
+										%>									
+								</div><hr/>
+							</li>
+							
+							<% }}}%>											
+					   </ul>
+					
+					
+					  
+                                       <!-- Codes or Script of unassigned subjects of various classes -->
+                                       <% 
+									   if($_SESSION['user']['privilege'] < 2):
+										   
+									       $sl = $db->getAllRecord("select * from marker where SiteID = '{$_SESSION['SiteID']}' and academ = '{$_SESSION['settings']['academ']}' and active = 1");
+									       if(!is_null($sl)){
+											   $mr = null;$reg = array();$j = 1;
+											   foreach($sl as $sr){
+												   $mr .= $sr['classArray'].(count($sl) == $j ? '':',');
+												   $j++;
+											   }
+											   
+											   $mr = explode(",",$mr);
+											   foreach($mr as $qs){
+												   $reg[$qs] = $qs;
+											   }											   
+											   $left = $all = explode(',',$db->getSubjTerm());
+											   
+											   for($i = 0; $i < count($all); $i++){
+												   foreach($reg as $vx){
+													   if($all[$i] == $vx){ unset($left[$i]);}
+												   }
+											   }
+                                               
+											  											   
+											   
+											   // Echoing View of unregistered Subjects
+											   echo '</ul></ul><hr/><h3>Un-Registered Subjects or Classes ( Not Assigned to Any Tutor ) <small><b><em>( Needs to be assigned to particular tutors or floating tutor )</em></b></small></h3><ul class="media-list"><ul class="tags">';
+                                               //var_dump($reg);var_dump($all);var_dump($left);										   
+											   
+											   foreach($left as $mk){
+											      $nw = explode(':',$mk);
+											      $cs = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$nw[0]}'");
+											      $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$nw[1]}'");
+											      $mj = $db->getAllRecord("select * from temp where (classScore = '-1' or examScore = '-1') and classCode = '{$nw[0]}' and SiteID = '{$_SESSION['SiteID']}' and subjectCode = '{$nw[1]}'");
+											   //var_dump($mj);var_dump($nw);
+											   
+											   //Set Excel Query
+											     $sql = "select st.studentCode as 'STUDENT ID',st.lName as 'SURNAME',st.fName as 'OTHER NAME(S)',rd.classScore as 'CLASS SCORE (30%)',rd.examScore as 'EXAM SCORE (70%)',rd.scheme as 'MARKING SCHEME NO.',sj.subjName as 'SUBJECT',cl.className as 'CLASS',rd.id as 'UNIQUE IDENTIFIER' from temp rd,student st,subject sj,class cl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.studentCode = st.studentCode and rd.subjectCode = sj.subjCode and cl.id = rd.classCode and rd.classCode = '{$cs['id']}' and rd.subjectCode = '{$nw[1]}' and academCode = '{$st['academ']}'";
+										         $sr = $db->getAllRecord($sql);
+										   %>
+										        <li><a href="<%= $app->urlFor('assessment',array('class'=> $cs['id'],'academ' => $st['academ'],'subj' => $nw[1])); %>" onclick="if(!confirm('Enter Results Data for <%= $cs['className'];%> - <%= $sj['subjName'];%>?'))return false;" style="color:#666;display:inline-block;margin-right:0;<%= is_null($mj)? 'background:pink;color:#333;font-weight:bolder;' : 'background:#eee;';%>"><%= $cs['className'].' - '.$sj['subjShort'];%></a><a href="<%= (!is_null($sr) ? $app->urlFor('putxls',['name' => $cs['className'].'_'.$sj['subjShort'],'query' => urlencode($sql)]) : 'javascript:;');%>" style="display:inline-block;margin-left:0;margin-right:0;" title="Download Class Assessment File" onclick="if(!confirm('Download ( <%= $cs['className'];%> ) Assessment sample for <%= $sj['subjName'];%>?\n\n Instructions for Excel Assessment Procedure are :\n\n1. Download the .xml file.\n2.Open the .xml file with  Microsoft Excel application.\n3.Fill and complete your assessment entries.\n4.Save the .xml file into .xls format for upload.'))return false;"><i class="fa fa-cloud-download"></i></a><form style="display:inline;clear:both;margin:0;float:left;" action="/shs/ad_assets/excel_setup.php" method="post" enctype="multipart/form-data" id="formclassubj"><input type="file" name="classubj" style="display:none;" id="classubj" onchange="this.form.submit();"/><input type="hidden" name="subjectCode" value="<%= $nw[1];%>" /><input type="hidden" name="classCode" value="<%= $cs['id'];%>" /></form><a href="javascript:;" onclick="if(!confirm('Upload ( <%= $cs['className'];%> ) Complete Assessment File for <%= $sj['subjName'];%>?\n\nUpload Instructions\n\n1.Please ensure that the file is in microsoft excel 2003 format (.xls).\n2.Only upload for the particular subject where the .xml file was downloaded!')){return false;}else{ document.getElementById('classubj').click();}" style="display:inline-block;margin-left:0;margin-right:0;margin-right:10px;" title="Upload Class Assessment File"><i class="fa fa-cloud-upload"></i></a><a href="" style="display:none;" onclick="if(!confirm('View Calendar for <%= $cs['className'];%> - <%= $sj['subjName'];%>'))return false;" style="background:#eee;color:#666;display:inline-block;margin-left:0;margin-right:10px;"><i class="fa fa-calendar"></i></a>
+											  
+										<% }}else{
+											    
+												echo '</ul></ul><hr/><h3>No Tutor has Registered His or Her Subjects Yet! <small><b><em>( A Mandatory procedure to carried by all subject tutors! )</em></b></small></h3><ul class="media-list"><ul class="tags">';
+                                              }
+										
+										/*
+										       # Complete and Incomplete Assessments for the Term
+											   $all = explode(',',$db->getSubjTerm());
+											   $left = $right = array();
+											    //var_dump($all);
+											   
+											   foreach($all as $ex){
+												  $mx = explode(':',$ex);
+												  $sq2 = $db->getOneRecord("select count(*) as num from temp where classScore =  -1 or examScore = -1 and classCode = '{$mx[0]}' and subjectCode = '{$mx[1]}' and SiteID = '{$_SESSION['SiteID']}'");
+											      if(!is_null($sq2)){
+													 if($sq2['num'] > 0){
+														 $left[] = $ex;
+													 }else{
+														 $right[] = $ex;
+													 } 
+												  }												  											  
+											   }
+										         //var_dump($right);var_dump($left);
+										
+										      // Echoing View of Incomplete Assessments
+											  
+											   echo '</ul></ul><hr/><h3>In-complete Assessments<small><b><em> ( Needs to be completed before publishing else may Fail final result publication for the term! )</em></b></small></h3><ul class="media-list"><ul class="tags">';
+                                               foreach($left as $mk){
+											      $nw = explode(':',$mk);
+											      $cs = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$nw[0]}'");
+											      $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$nw[1]}'");
+											   
+											   
+											     //Set Excel Query
+											      $sql = "select st.studentCode as 'STUDENT ID',st.lName as 'SURNAME',st.fName as 'OTHER NAME(S)',rd.classScore as 'CLASS SCORE (30%)',rd.examScore as 'EXAM SCORE (70%)',rd.scheme as 'MARKING SCHEME NO.',sj.subjName as 'SUBJECT',cl.className as 'CLASS',rd.id as 'UNIQUE IDENTIFIER' from temp rd,student st,subject sj,class cl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.studentCode = st.studentCode and rd.subjectCode = sj.subjCode and cl.id = rd.classCode and rd.classCode = '{$cs['id']}' and rd.subjectCode = '{$nw[1]}' and academCode = '{$_SESSION['settings']['academ']}'";
+										          $sr = $db->getAllRecord($sql);
+										*/
+										   %>
+										       
+										    <!--    <li><a href="<% //echo $app->urlFor('assessment',array('class'=> $cs['id'],'academ' => $st['academ'],'subj' => $nw[1])); %>" onclick="if(!confirm('Enter Results Data for <% //echo $cs['className'];%> - <% //echo $sj['subjName'];%>?'))return false;" style="background:#eee;color:#666;display:inline-block;margin-right:0;"><% //echo $cs['className'].' - '.$sj['subjShort'];%></a><a href="<% //echo (!is_null($sr) ? $app->urlFor('putxls',['name' => $cs['className'].'_'.$sj['subjShort'],'query' => urlencode($sql)]) : 'javascript:;');%>" style="display:inline-block;margin-left:0;margin-right:0;" title="Download Class Assessment File" onclick="if(!confirm('Download ( <% //echo $cs['className'];%> ) Assessment sample for <% //echo $sj['subjName'];%>?\n\n Instructions for Excel Assessment Procedure are :\n\n1. Download the .xml file.\n2.Open the .xml file with  Microsoft Excel application.\n3.Fill and complete your assessment entries.\n4.Save the .xml file into .xls format for upload.'))return false;"><i class="fa fa-cloud-download"></i></a><form style="display:inline;clear:both;margin:0;float:left;" action="/shs/ad_assets/excel_setup.php" method="post" enctype="multipart/form-data" id="formclassubj"><input type="file" name="classubj" style="display:none;" id="classubj" onchange="this.form.submit();"/><input type="hidden" name="subjectCode" value="<% //echo $nw[1];%>" /><input type="hidden" name="classCode" value="<% //echo $cs['id'];%>" /></form><a href="javascript:;" onclick="if(!confirm('Upload ( <% //echo $cs['className'];%> ) Complete Assessment File for <% //echo $sj['subjName'];%>?\n\nUpload Instructions\n\n1.Please ensure that the file is in microsoft excel 2003 format (.xls).\n2.Only upload for the particular subject where the .xml file was downloaded!')){return false;}else{ document.getElementById('classubj').click();}" style="display:inline-block;margin-left:0;margin-right:0;margin-right:10px;" title="Upload Class Assessment File"><i class="fa fa-cloud-upload"></i></a><a href="" style="display:none;" onclick="if(!confirm('View Calendar for <% //echo $cs['className'];%> - <% //echo $sj['subjName'];%>'))return false;" style="background:#eee;color:#666;display:inline-block;margin-left:0;margin-right:10px;"><i class="fa fa-calendar"></i></a>-->
+											  
+										<% 
+										/* }
+										
+										
+										       // Echoing View of Complete Assessments
+											  
+											   echo '</ul></ul><hr/><h3>Completed Assessments <small><b><em>( Shall Pass verification and publication! )</em></b></small></h3><ul class="media-list"><ul class="tags">';
+                                               foreach($right as $mk){
+											      $nw = explode(':',$mk);
+											      $cs = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$nw[0]}'");
+											      $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$nw[1]}'");
+											   
+											   
+											     //Set Excel Query
+											      $sql = "select st.studentCode as 'STUDENT ID',st.lName as 'SURNAME',st.fName as 'OTHER NAME(S)',rd.classScore as 'CLASS SCORE (30%)',rd.examScore as 'EXAM SCORE (70%)',rd.scheme as 'MARKING SCHEME NO.',sj.subjName as 'SUBJECT',cl.className as 'CLASS',rd.id as 'UNIQUE IDENTIFIER' from temp rd,student st,subject sj,class cl where rd.SiteID = '{$_SESSION['SiteID']}' and rd.studentCode = st.studentCode and rd.subjectCode = sj.subjCode and cl.id = rd.classCode and rd.classCode = '{$cs['id']}' and rd.subjectCode = '{$nw[1]}' and academCode = '{{$_SESSION['settings']['academ']}}'";
+										          $sr = $db->getAllRecord($sql);
+										   */
+										   %>
+										       
+										       <!-- <li><a href="<% //echo $app->urlFor('assessment',array('class'=> $cs['id'],'academ' => $st['academ'],'subj' => $nw[1])); %>" onclick="if(!confirm('Enter Results Data for <% //echo $cs['className'];%> - <% //echo $sj['subjName'];%>?'))return false;" style="background:#eee;color:#666;display:inline-block;margin-right:0;"><% //echo $cs['className'].' - '.$sj['subjShort'];%></a><a href="<% //echo (!is_null($sr) ? $app->urlFor('putxls',['name' => $cs['className'].'_'.$sj['subjShort'],'query' => urlencode($sql)]) : 'javascript:;');%>" style="display:inline-block;margin-left:0;margin-right:0;" title="Download Class Assessment File" onclick="if(!confirm('Download ( <% //echo $cs['className'];%> ) Assessment sample for <% //echo $sj['subjName'];%>?\n\n Instructions for Excel Assessment Procedure are :\n\n1. Download the .xml file.\n2.Open the .xml file with  Microsoft Excel application.\n3.Fill and complete your assessment entries.\n4.Save the .xml file into .xls format for upload.'))return false;"><i class="fa fa-cloud-download"></i></a><form style="display:inline;clear:both;margin:0;float:left;" action="/shs/ad_assets/excel_setup.php" method="post" enctype="multipart/form-data" id="formclassubj"><input type="file" name="classubj" style="display:none;" id="classubj" onchange="this.form.submit();"/><input type="hidden" name="subjectCode" value="<% //echo $nw[1];%>" /><input type="hidden" name="classCode" value="<% //echo $cs['id'];%>" /></form><a href="javascript:;" onclick="if(!confirm('Upload ( <% //echo $cs['className'];%> ) Complete Assessment File for <% //echo $sj['subjName'];%>?\n\nUpload Instructions\n\n1.Please ensure that the file is in microsoft excel 2003 format (.xls).\n2.Only upload for the particular subject where the .xml file was downloaded!')){return false;}else{ document.getElementById('classubj').click();}" style="display:inline-block;margin-left:0;margin-right:0;margin-right:10px;" title="Upload Class Assessment File"><i class="fa fa-cloud-upload"></i></a><a href="" style="display:none;" onclick="if(!confirm('View Calendar for <% //echo $cs['className'];%> - <% //echo $sj['subjName'];%>'))return false;" style="background:#eee;color:#666;display:inline-block;margin-left:0;margin-right:10px;"><i class="fa fa-calendar"></i></a> -->
+											  
+										<% //}	%>
+										
+										
+									</ul>
+					
+					               <% endif;%>
+					
+					
+					
+					
+				<% }%>	
+				
+				
+					 <!-- Exam markers Add & Update  -->
+				<% if(isset($addmarker)){ 
+				
+							$all = $db->getSubjTerm();
+								 $x = explode(',',$all);
+								
+								 $ls = array();$f1a = $f2a = $f3a = array();
+								 $f1 = $f2 = $f3 = $d1 = $d2 = $d3 = null;
+								 $j = 1;$i = 1;
+								 
+								 foreach($x as $y){
+									 $m = explode(':',$y);
+									 $f = $db->getForm($m[0]);
+									 
+									 if($f == 1){
+										
+										$f1 .= $m[0].(count($x)== $j ? '':',');
+										$d1['c'.$m[0]] = $m[0];	
+										$ls['c'.$m[0]][] = $m[1];
+										$f1a['c'.$m[0]][] = $m[1];
+										
+									 }elseif($f == 2){
+										 
+										$f2 .= $m[0].(count($x)== $j ? '':',');
+										$d2['c'.$m[0]] = $m[0];	
+										$ls['c'.$m[0]][] = $m[1];
+										$f2a['c'.$m[0]][] = $m[1];
+										
+									 }elseif($f == 3){
+										 
+										$f3 .= $m[0].(count($x)== $j ? '':',');
+										$d3['c'.$m[0]] = $m[0];	
+										$ls['c'.$m[0]][] = $m[1];
+										$f3a['c'.$m[0]][] = $m[1]; 
+									 }						 
+									 $j++;						 
+								 }
+														
+				%>
+				
+					 <h5 class="sidebar-title">Tutor Role Registration</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/postmarker" method="post">								
+								<div class="row">
+									<div class="col-sm-12">										
+                                        <div class="form-group">
+											<label for="classCode" class="kobby">Tutor</label>
+											<select class="form-control" id="tutor" name="tutor">
+											   <option value="" <%= isset($std) && $std['tutor'] == ''? 'selected="selected"' : '';%>>Select Tutor</option>
+											<% 
+											   $cl = $db->getAllRecord("select * from user where SiteID = '{$_SESSION['SiteID']}' and privilege = 2 order by fName asc");
+											   foreach($cl as $op){
+												   echo '<option value="'.$op['userCode'].'" '.(isset($std) && $std['tutor'] == $op['userCode'] ? 'selected="selected"' : '').'>'.$op['fName'].' '.$op['lName'].'</option>';
+											   }
+											%>											 												
+											</select>
+										</div>
+                                        </hr/>										
+									</div>
+									
+									<!--<div class="col-sm-6">
+										<div class="form-group">
+											<label for="subject" class="kobby">Classes</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control subject" id="subject" name="classArray" value="<%= isset($std)? $std['classArray'] : '';%>" placeholder="Class [ ex: classCode:subjectCode,...]"></i>
+										</div>										
+									</div>-->
+									
+									<div class="col-sm-12">
+									
+									       <%  if(!is_null($f1)){ %>
+						 
+												<div class="col-sm-4">
+													<fieldset><legend>Form 1</legend>
+													<% 								
+													   // $bs = explode(',',$f1);
+														foreach($d1 as $cs){
+																$cl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$cs}'");
+													%>
+														   <h5><%= $cl['classDesc'];%></h5>
+													 <% 
+														   foreach($ls['c'.$cs] as $sx){
+															   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$sx}'");
+													 
+													 %>
+															   <label class="kobby" for="n<%= $i;%>">
+																  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $cs.':'.$sx;%>"
+																	<% 
+																	       if(isset($std['tutor'])){  
+																			  $mr = $db->getOneRecord("select * from marker where SiteID = '{$_SESSION['SiteID']}' and academ = '{$_SESSION['settings']['academ']}' and tutor = '{$std['tutor']}' and active = 1");
+																			  $mk = explode(",",$mr['classArray']);
+																			  foreach($mk as $clx){
+																				   if($clx == $cs.':'.$sx){
+																					   echo 'checked="checked"';																   
+																				   }
+																			  }
+																		   }
+																	%>>
+																  <span><%= $sj['subjName'];%></span>										 
+															   </label><hr/>
+													<%  $i++;}}%>									 
+													 </fieldset>
+												</div>
+											 <% }%>
+											 
+											 
+											<%  if(!is_null($f2)){ %>
+											 
+												<div class="col-sm-4">
+													<fieldset><legend>Form 2</legend>
+													<% 								
+														//$bs = explode(',',$f2);
+														foreach($d2 as $cs){
+																$cl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$cs}'");
+													%>
+														   <h5><%= $cl['classDesc'];%></h5>
+													 <% 
+														   foreach($ls['c'.$cs] as $sx){
+															   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$sx}'");
+													 %>
+															   <label class="kobby" for="n<%= $i;%>">
+																  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $cs.':'.$sx;%>"
+																   <% 
+																          if(isset($std['tutor'])){  
+																			  $mr = $db->getOneRecord("select * from marker where SiteID = '{$_SESSION['SiteID']}' and academ = '{$_SESSION['settings']['academ']}' and tutor = '{$std['tutor']}' and active = 1");
+																			  $mk = explode(",",$mr['classArray']);
+																			  foreach($mk as $clx){
+																				   if($clx == $cs.':'.$sx){
+																					   echo 'checked="checked"';																   
+																				   }
+																			  }
+																		  }
+																	%>>
+																  <span><%= $sj['subjName'];%></span>										 
+															   </label><hr/>
+													<%  $i++;}}%>									 
+													 </fieldset>
+												</div>
+											 <% }%>
+											 
+											 
+											 <%  if(!is_null($f3)){ %>
+											 
+												<div class="col-sm-4">
+													<fieldset><legend>Form 3</legend>
+													<% 								
+														//$bs = explode(',',$f3);
+														foreach($d3 as $cs){
+																$cl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$cs}'");
+													%>
+														   <h5><%= $cl['classDesc'];%></h5>
+													 <% 
+														   foreach($ls['c'.$cs] as $sx){
+															   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$sx}'");
+													 %>
+															   <label class="kobby" for="n<%= $i;%>">
+																  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $cs.':'.$sx;%>"
+																   <% 
+																		  if(isset($std['tutor'])){  
+																			  $mr = $db->getOneRecord("select * from marker where SiteID = '{$_SESSION['SiteID']}' and academ = '{$_SESSION['settings']['academ']}' and tutor = '{$std['tutor']}' and active = 1");
+																			  $mk = explode(",",$mr['classArray']);
+																			  foreach($mk as $clx){
+																				   if($clx == $cs.':'.$sx){
+																					   echo 'checked="checked"';																   
+																				   }
+																			  }
+																		  }
+																	%>>
+																  <span><%= $sj['subjName'];%></span>										 
+															   </label><hr/>
+													<%  $i++;}}%>									 
+													 </fieldset>
+												</div>
+											 <% }%>
+											 
+														
+									</div>
+								</div>
+								    <input type="hidden" name="id" value="<%= isset($std)? $std['id'] : 0;%>">
+									<input type="submit"  onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save marker">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+							
+							</form>
+						</div>
+					 </div>
+				<% }%> 
+					
+					
+					
+					 <!-- Temporal Results Search -->
+				<% if(isset($tempres)){%>
+				
+					 <h5 class="sidebar-title">Temporal Results Search</h5>
+					 <section class="newsletter">
+						 <form id="newsletters" class="input-group" action="searchtres" method="get" accept-charset="utf-8" role="form">
+							<input type="text" class="form-control" name="searchtres" placeholder="Enter Student Reference Number ( ID )...">
+							<button type="submit" class="btn btn-send" data-loading-text="Sending...">Search Student</button>
+						</form><hr/>
+					</section>
+					
+					<% 
+					     if(isset($scstdc)){
+					%>
+					<blockquote class="info">
+						<h4>Results</h4>
+						<p><em>Search results for "<%= isset($typed)? $typed : '';%>"</em></p>
+					</blockquote>
+					
+					 <ul class="media-list">
+					 
+				   <% 
+						 if(isset($scstdc) && ($scstdc > 0)){ 						      
+							foreach($tempres as $st){	%>
+								
+							<li class="media">
+								<a class="pull-left" href="javascript:;">
+									<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ui/kobby_webcam/saved_images/students/none.png' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>" alt="//">
+								</a>
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html"><%= $st['fName']." ".$st['lName'];%></a><small> | Academ : <%= $st['academCode'];%> | Year : <%= $st['academYear'];%> | Term : <%= $st['academTerm'];%></small></h5>									
+									<ul class="tags">										
+										<li><a href="<%= $app->urlFor('editsubjres',array('id'=> $st['studentCode'],'class' => $st['classCode'],'academ' => $st['academCode'],'typed' => $typed)); %>">Subjects scores</a></li>
+										<li><a href="<%= $app->urlFor('addclassres',array('class'=> $st['classCode'],'academ' => $st['academCode'],'typed' => $typed)); %>">Class scores</a></li>										
+										<!--<li><a href="#">Transcript</a></li>-->																			
+									</ul>									
+								</div><hr/>
+							</li>
+							
+							<%  }}elseif(isset($scstdc) && $scstdc == 0){%>
+                            <li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html">No results found!!!</a></h5>							
+								</div><hr/>
+							</li>
+                            <% }elseif(isset($scstdc) && $scstdc == -1){ %>
+                            <li class="media">								
+								<div class="media-body">
+									<h5 class="media-heading"><a href="blog-left-sidebar.html">Please enter a search keyword!!!</a></h5>							
+								</div><hr/>
+							</li>								
+							<% }%>
+					</ul>					
+                <% }}%>
+
+                   <!-- Results Add & Update  -->
+				   
+				<% if(isset($addsingleres)){%>
+				
+					 <h5 class="sidebar-title">Results Add/Update</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="">
+									<div class="row">
+									<div class="col-sm-6">
+									
+									   <!-- Add form -->
+										<div class="form-group">
+											<label for="name" class="kobby">Student Code</label>
+											<i class="glyphicon glyphicon-user"><input type="text" class="form-control" id="name" placeholder="Student Code"></i>
+										</div>
+										
+										<!-- Edit form -->
+										 <ul class="media-list">				 
+											<li class="media">
+												<a class="pull-left" href="blog-left-sidebar.html">
+													<img class="media-object img-circle" src="img/news/news-thumbnail-144x144-01.jpg" alt="//">
+												</a>
+												<div class="media-body">
+												    <blockquote class="warning">											
+														<p>Ebenezer Kwabena Blay Ackah</p>											
+													</blockquote>								
+												</div>
+											</li>
+                                         </ul>	
+										
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group col-sm-2">
+											<label for="subject" class="kobby">Class score</label>
+											<input type="text" class="form-control subject" id="subject" placeholder="Class score">
+										</div>
+                                        <div class="form-group col-sm-2">
+											<label for="subject" class="kobby">Exam score</label>
+											<input type="text" class="form-control subject" id="subject" placeholder="Exam score">
+										</div>
+										<div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Subject Code</label>
+											<input type="text" class="form-control subject" id="subject" placeholder="Subject Code">
+										</div>
+                                        <div class="form-group col-sm-2">
+											<label for="subject" class="kobby">Academic year</label>
+											<input type="text" class="form-control subject" id="subject" placeholder="Academic year">
+										</div>										
+                                        <div class="form-group col-sm-2">
+											<label for="subject" class="kobby">Scoring Scheme</label>
+											<input type="text" class="form-control subject" id="subject" placeholder="Scoring Scheme">
+										</div>
+										
+									</div>
+								</div>
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+							
+							</form>						
+						</div>
+					 </div>	
+					<% }%>
+					
+
+					<% if(isset($addsubjres)){%> 
+					  <!-- All Subjects Update  -->
+					 
+					 <h5 class="sidebar-title">All Subjects results</h5>
+					 <div class="row">
+						<div class="col-sm-12">
+						    
+							<form action="/shs/subjresave" method="post">
+								<div class="row">
+									<div class="col-sm-6">
+									   	 <ul class="media-list">				 
+											<li class="media">
+												<a class="pull-left" href="javascript:;">
+													<img class="media-object img-circle" src="<%= isset($std) && $std[0]['photo']=='' ? '/shs/ui/kobby_webcam/saved_images/students/none.png' : $std[0]['photo'].'?'.rand();%>" alt="<%= isset($std)? $std[0]['fName']." ".$std[0]['lName'] :'';%>">
+												</a>
+												<div class="media-body">
+												    <blockquote class="warning">											
+														<p><%= isset($std)? $std[0]['fName'].' '.$std[0]['lName']:''%></p>											
+													</blockquote>								
+												</div>
+											</li>
+                                         </ul>	
+										
+									</div>
+									<div class="col-sm-6">										
+
+                                         <div class="form-group">
+												<label for="classCode" class="kobby">Scoring Scheme</label>
+												<select class="form-control" id="scheme" name="scheme">
+												<% 
+												   $cl = $db->getAllRecord("select * from scheme where SiteID = '{$_SESSION['SiteID']}' and active = 1 order by id desc");
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['id'].'" '.(isset($std) && ($std[0]['scheme'] == $op['id']) ? 'selected="selected"' : '').'>'.$op['title'].' ( '.$op['id'].' )'.'</option>';
+												   }
+												%>											 												
+												</select>
+										</div>										
+									</div>
+								</div><hr>
+								
+								<% 											    
+										  if(!is_null($std)){
+											$i = 1;											 												
+								%>	
+								<div class="row">
+								
+								   <% 
+								         $j = 2;
+										 foreach($std as $st){
+								              if($j%2 == 0){
+								   %>
+									<div class="col-sm-6">									
+									   <!-- Add form -->
+										<ul class="tags col-sm-6">												
+												<li><%= $st['subjName'];%></li>										
+										</ul>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Class Scs.</label>
+											<input type="number" step="any" min="-1" max="30" class="form-control subject" id="subject" name="c<%= $j%>" value="<%= $st['classScore'];%>" placeholder="Class score">
+										</div>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Exam Scs.</label>
+											<input type="number" step="any" min="-1" max="70" class="form-control subject" id="subject" name="e<%= $j%>" value="<%= $st['examScore'];%>" placeholder="Exam score">
+											<input type="hidden"  name="t<%= $j%>" value="<%= $st['id'];%>">
+										</div>										
+									</div>
+								   <% $i++;}$j++;}%>
+									
+									 <% 
+								         $j = 2;
+										 foreach($std as $st){
+								              if($j%2 == 1){
+								   %>
+									<div class="col-sm-6">									
+									   <!-- Add form -->
+										<ul class="tags col-sm-6">												
+												<li><%= $st['subjName'];%></li>										
+										</ul>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Class Scs.</label>
+											<input type="number" step="any" min="-1" max="30" class="form-control subject" id="subject" name="c<%= $j%>" value="<%= $st['classScore'];%>" placeholder="Class score">
+										</div>
+                                        <div class="form-group col-sm-3">
+											<label for="subject" class="kobby">Exam Scs.</label>
+											<input type="number" step="any" min="-1" max="70" class="form-control subject" id="subject" name="e<%= $j%>" value="<%= $st['examScore'];%>" placeholder="Exam score">
+											<input type="hidden"  name="t<%= $j%>" value="<%= $st['id'];%>">
+										</div>												
+									</div>
+								   <% $i++;}$j++;}%>
+								</div><hr>
+								<% }%>
+								
+								    <input type="hidden"  name="total" value="<%= @$i%>">	
+                                    <input type="hidden"  name="typed" value="<%= isset($typed) ? $typed : '';%>">									
+									<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+									<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+							
+							</form>						
+						</div>
+					 </div>	
+                    <% }%>
+
+
+                     <!-- Class Results Update  -->
+					<% if(isset($addclassres)){%>
+					
+					 <h5 class="sidebar-title">Class Results</h5>
+					 <div class="row">
+					    <div class="col-md-12">
+								<div class="searchby search-box">
+									<form class="form-inline pull-left" action="/shs/fetchclres" method="get">
+										<div class="form-group">
+											<label for="sortby" class="kobby">Sort by: Subjects</label>
+											<select class="form-control" id="sortby" name="subj">
+												<% 
+												   if(!empty($subj)){ 
+													 foreach($subj as $st){ %>
+												       <option value="<%= $st['subjCode'];%>"><%= $st['subjName'];%></option>
+											   <% }
+												    }%>
+											</select>
+										</div>
+                                        <input type="hidden"  name="academ" value="<%= isset($academ)? $academ : '';%>">	
+                                        <input type="hidden"  name="class" value="<%= isset($addclassres)? $addclassres : '';%>">											
+										<button type="submit" class="btn btn-default btn-color-shadow"><span>Fetch Class Data</span></button>
+									</form>
+									<div class="clearfix visible-xs"></div>									
+								</div>
+						</div>
+						
+						<% if(isset($std)){ %>
+						
+						<div class="col-sm-12">
+						    
+							<form action="/shs/classave" method="post">
+									<div class="row">
+									     <div class="form-group col-sm-6">
+											 <div class="section-title">
+												<h5><small><%= isset($std)? $std[0]['className'].' - '.$std[0]['subjName']:''%></small></h5>
+											 </div>
+									     </div>
+										 <div class="form-group col-sm-6">
+												<label for="scheme" class="kobby">Scoring Scheme</label>
+												<select class="form-control" id="scheme" name="scheme">
+												<% 
+												   $cl = $db->getAllRecord("select * from scheme where SiteID = '{$_SESSION['SiteID']}' and active = 1 order by id desc");
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['id'].'" '.(isset($std) && ($std[0]['scheme'] == $op['id']) ? 'selected="selected"' : '').'>'.$op['title'].' ( '.$op['id'].' )'.'</option>';
+												   }
+												%>											 												
+												</select>
+										</div>	
+									</div>					
+									 <% 											    
+										  if(!is_null($std)){
+											$i = 1;
+											 foreach($std as $st){													
+									 %>	
+									<div class="row">									
+									<div class="col-sm-6">									 
+										<!-- Edit form -->
+										 <ul class="media-list">
+                                          										 
+											<li class="media">
+												<a class="pull-left" href="javascript:;">
+													<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ui/kobby_webcam/saved_images/students/none.png' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+												</a>
+												<div class="media-body">
+												    <blockquote class="warning">											
+														<p><%= $st['fName']." ".$st['lName'];%><br>
+                                                           <small>Student ID: <%= $st['studentCode'];%></small>
+														</p>											
+													</blockquote>								
+												</div>
+											</li>											
+                                         </ul>	
+										
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group col-sm-4">
+											<label for="subject" class="kobby">Class score</label>
+											<input type="number" step="any" min="-1" max="30" class="form-control subject" id="subject" name="c<%= $i%>" value="<%= $st['classScore'];%>" placeholder="Class score">
+										</div>
+                                        <div class="form-group col-sm-4">
+											<label for="subject" class="kobby">Exam score</label>
+											<input type="number" step="any" min="-1" max="70" class="form-control subject" id="subject" name="e<%= $i%>" value="<%= $st['examScore'];%>" placeholder="Exam score">
+											<input type="hidden"  name="t<%= $i%>" value="<%= $st['id'];%>">
+										</div>
+                                                                               										
+									</div>
+								</div><hr>
+										  <% $i++;}}%>	
+								
+								<input type="hidden"  name="total" value="<%= $i%>">
+								<input type="hidden"  name="academ" value="<%= isset($academ)? $academ : '';%>">	
+                                <input type="hidden"  name="class" value="<%= isset($addclassres)? $addclassres : '';%>">
+								<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+							    <input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="Cancel">
+							
+							</form>						
+						</div>
+						
+					 </div>	<hr>	
+
+					<% }}%>
+					
+					
+					
+					
+					
+					 <!-- Class Results Update  -->
+					<% if(isset($assessment)){%>
+					
+					 <h5 class="sidebar-title">Class Assessment</h5>
+					 <div class="row">
+					   
+						<div class="col-sm-12">
+						    
+							<form action="/shs/assessave" method="post">
+									<div class="row">
+									 <% 											    
+										  if(!is_null($std)){																					
+									 %>
+									     <div class="form-group col-sm-6">
+											 <div class="section-title">
+												<h5><small><b><%= isset($std)? $std[0]['className'].' - '.$std[0]['subjName']:''%><input type="hidden" name="title" value="<%= isset($std)? $std[0]['className'].' - '.$std[0]['subjName']:''%>"/></b></small></h5>
+											 </div>
+									     </div>
+										 <div class="form-group col-sm-6">
+												<label for="scheme" class="kobby">Scoring Scheme</label>
+												<select class="form-control" id="scheme" name="scheme">
+												<% 
+												   $cl = $db->getAllRecord("select * from scheme where SiteID = '{$_SESSION['SiteID']}' and active = 1 order by id desc");
+												   foreach($cl as $op){
+													   echo '<option value="'.$op['id'].'" '.(isset($std) && ($std[0]['scheme'] == $op['id']) ? 'selected="selected"' : '').'>'.$op['title'].' ( '.$op['id'].' )'.'</option>';
+												   }
+												%>											 												
+												</select>
+										</div>	
+									</div>					
+									 <% 											    
+										     $i = 1;
+											 foreach($std as $st){													
+									 %>	
+									<div class="row">									
+									<div class="col-sm-6">									 
+										<!-- Edit form -->
+										 <ul class="media-list">
+                                          										 
+											<li class="media">
+												<a class="pull-left" href="javascript:;">
+													<img class="media-object img-circle" src="<%= $st['photo']=='' ? '/shs/ui/kobby_webcam/saved_images/students/none.png' : $st['photo'].'?'.rand();%>" alt="<%= $st['fName']." ".$st['lName'];%>">
+												</a>
+												<div class="media-body">
+												    <blockquote class="warning">											
+														<p><%= $st['fName']." ".$st['lName'];%><br>
+                                                           <small>Student ID: <%= $st['studentCode'];%></small>
+														</p>											
+													</blockquote>								
+												</div>
+											</li>											
+                                         </ul>	
+										
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group col-sm-4">
+											<label for="subject" class="kobby">Class score</label>
+											<input type="number" step="any" min="-1" max="30" class="form-control subject" id="subject" name="c<%= $i%>" value="<%= $st['classScore'];%>" placeholder="Class score">
+										</div>
+                                        <div class="form-group col-sm-4">
+											<label for="subject" class="kobby">Exam score</label>
+											<input type="number" step="any" min="-1" max="70" class="form-control subject" id="subject" name="e<%= $i%>" value="<%= $st['examScore'];%>" placeholder="Exam score">
+											<input type="hidden"  name="t<%= $i%>" value="<%= $st['id'];%>">
+										</div>
+                                                                               										
+									</div>
+								</div><hr>
+										  <% $i++;}%>	
+								
+								<input type="hidden"  name="total" value="<%= @$i%>">
+								<input type="submit" name="submit" onclick="if(!confirm('Save!'))return false;" class="btn btn-default btn-color-border-solid" value="Save">
+								<% }else{
+									  echo '<h4>There are no students registered to this Subject in this Class!</h4><hr/>';
+								}%>
+								<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{history.back();}" value="<%= isset($std)? 'Cancel':'<< Go Back'%>">
+							
+							</form>						
+						</div>
+					 </div>	<hr>	
+
+					<% }%>
+					
+					
+					
+					
+					 <!-- Class Results Update  -->
+					<% if(isset($regsubj)){
+					 
+					 $all = $db->getSubjTerm();
+					 $x = explode(',',$all);
+					 $ls = $f1a = $f2a = $f3a = array();
+					 $f1 = $f2 = $f3 = $d1 = $d2 = $d3 = null;
+					 $j = 1;$i = 1;
+					 
+					 foreach($x as $y){
+						 $m = explode(':',$y);
+						 $f = $db->getForm($m[0]);
+						 if($f == 1){
+    						
+							$f1 .= $m[0].(count($x)== $j ? '':',');
+							$d1['c'.$m[0]] = $m[0];	
+                            $ls['c'.$m[0]][] = $m[1];
+							$f1a['c'.$m[0]][] = $m[1];
+							
+						 }elseif($f == 2){
+							 
+							$f2 .= $m[0].(count($x)== $j ? '':',');
+                            $d2['c'.$m[0]] = $m[0];	
+                            $ls['c'.$m[0]][] = $m[1];
+							$f2a['c'.$m[0]][] = $m[1];
+							
+						 }elseif($f == 3){
+							 
+							$f3 .= $m[0].(count($x)== $j ? '':',');
+                            $d3['c'.$m[0]] = $m[0];	
+                            $ls['c'.$m[0]][] = $m[1];
+							$f3a['c'.$m[0]][] = $m[1]; 
+						 }						 
+                         $j++;						 
+					 }
+					 
+					//  var_dump($f1); var_dump($f2); var_dump($f3);exit;
+						
+						
+					%>
+					
+					 <h5 class="sidebar-title">Subject Registration</h5>
+					 <div class="row">
+					   <div class="col-sm-12">
+					         <blockquote class="warning">
+								<h4>Instructions! </h4>
+								<p><em>The registration procedure allows you to select the subjects you teach in the various classes for each year group once every term!</em></p><br>
+							    <p><em><b>You are not permitted to select subjects you don't teach for the term unless otherwise instructed by administrator! Note that this might invade a teacher's students assessment privacy!<br><br> So only choose the subjects for the classes assigned to you by the administation or department.</b></em></p>
+							
+							</blockquote>
+					   </div>
+					   
+					   <form action="/shs/postregsubj" method="post">
+					     
+						 <%  if(!is_null($f1)){ %>
+						 
+							<div class="col-sm-4">
+                                <fieldset><legend>Form 1</legend>
+								<% 								
+								   // $bs = explode(',',$f1);
+								    foreach($d1 as $cs){
+											$cl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$cs}'");
+								%>
+									   <h5><%= $cl['classDesc'];%></h5>
+								 <% 
+								       foreach($ls['c'.$cs] as $sx){
+										   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$sx}'");
+								 
+								 %>
+										   <label class="kobby" for="n<%= $i;%>">
+											  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $cs.':'.$sx;%>"
+												<% 
+														  $mr = $db->getOneRecord("select * from marker where SiteID = '{$_SESSION['SiteID']}' and academ = '{$_SESSION['settings']['academ']}' and tutor = '{$_SESSION['user']['userCode']}' and active = 1");
+														  if(!is_null($mr)){
+															  $mk = explode(",",$mr['classArray']);
+															  foreach($mk as $clx){
+																   if($clx == $cs.':'.$sx){
+																	   echo 'checked="checked"';																   
+																   }
+															  }
+														  }
+												%>>
+											  <span><%= $sj['subjName'];%></span>										 
+										   </label><hr/>
+								<%  $i++;}}%>									 
+								 </fieldset>
+							</div>
+						 <% }%>
+						 
+						 
+						<%  if(!is_null($f2)){ %>
+						 
+							<div class="col-sm-4">
+                                <fieldset><legend>Form 2</legend>
+								<% 								
+								    //$bs = explode(',',$f2);
+								    foreach($d2 as $cs){
+											$cl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$cs}'");
+								%>
+									   <h5><%= $cl['classDesc'];%></h5>
+								 <% 
+								       foreach($ls['c'.$cs] as $sx){
+										   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$sx}'");
+								 %>
+										   <label class="kobby" for="n<%= $i;%>">
+											  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $cs.':'.$sx;%>"
+											   <% 
+														  $mr = $db->getOneRecord("select * from marker where SiteID = '{$_SESSION['SiteID']}' and academ = '{$_SESSION['settings']['academ']}' and tutor = '{$_SESSION['user']['userCode']}' and active = 1");
+														  if(!is_null($mr)){
+															  $mk = explode(",",$mr['classArray']);
+															  foreach($mk as $clx){
+																   if($clx == $cs.':'.$sx){
+																	   echo 'checked="checked"';																   
+																   }
+															  }
+														  }
+												%>>
+											  <span><%= $sj['subjName'];%></span>										 
+										   </label><hr/>
+								<%  $i++;}}%>									 
+								 </fieldset>
+							</div>
+						 <% }%>
+						 
+						 
+						 <%  if(!is_null($f3)){ %>
+						 
+							<div class="col-sm-4">
+                                <fieldset><legend>Form 3</legend>
+								<% 								
+								    //$bs = explode(',',$f3);
+								    foreach($d3 as $cs){
+											$cl = $db->getOneRecord("select * from class where SiteID = '{$_SESSION['SiteID']}' and id = '{$cs}'");
+								%>
+									   <h5><%= $cl['classDesc'];%></h5>
+								 <% 
+								       foreach($ls['c'.$cs] as $sx){
+										   $sj = $db->getOneRecord("select * from subject where SiteID = '{$_SESSION['SiteID']}' and subjCode = '{$sx}'");
+								 %>
+										   <label class="kobby" for="n<%= $i;%>">
+											  <input type="checkbox" class="form-control" id="n<%= $i;%>" name="n<%= $i;%>" value="<%= $cs.':'.$sx;%>"
+											   <% 
+														  $mr = $db->getOneRecord("select * from marker where SiteID = '{$_SESSION['SiteID']}' and academ = '{$_SESSION['settings']['academ']}' and tutor = '{$_SESSION['user']['userCode']}' and active = 1");
+														  if(!is_null($mr)){
+															  $mk = explode(",",$mr['classArray']);
+															  foreach($mk as $clx){
+																   if($clx == $cs.':'.$sx){
+																	   echo 'checked="checked"';																   
+																   }
+															  }
+														  }
+												%>>
+											  <span><%= $sj['subjName'];%></span>										 
+										   </label><hr/>
+								<%  $i++;}}%>									 
+								 </fieldset>
+							</div>
+						 <% }%>
+						 
+							<div class="col-sm-12">	
+								<!--<input type="hidden"  name="total" value="<%= $i;%>">-->
+								<input type="submit" onclick="if(!confirm('Register Subjects!'))return false;" class="btn btn-default btn-color-border-solid" value="Register Subjects">
+								<input type="button"  class="btn btn-default btn-color-border-solid" onclick="if(!confirm('Cancel!')){return false;}else{ history.back();}" value="Cancel">
+							</div>
+							
+					   </form>																			
+					</div>
+					
+										  	
+								
+					
+					<% }%>
+
+					 
+				</div>				
+			</div>			
+		
+	</section>
+	<!-- End Icon -->
+	
+
+	
+
+<% include 'footer.php';%>
